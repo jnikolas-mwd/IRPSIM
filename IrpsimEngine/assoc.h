@@ -1,0 +1,37 @@
+// assoc.h : header file
+//
+// Copyright © 1998-2015 Casey McSpadden   
+//		mailto:casey@crossriver.com
+//		http://www.crossriver.com/
+//
+
+// ==========================================================================  
+// HISTORY:	
+// ==========================================================================
+//			1.00	09 March 2015	- Initial re-write and release.
+// ==========================================================================
+//
+/////////////////////////////////////////////////////////////////////////////
+#pragma once
+
+#include "irp.h"
+#include "cmdefs.h"
+#include "strval.h"
+#include "smparray.h"
+
+typedef class _IRPCLASS CMStringValue<CMString> CMSTRINGVALUESTRING;
+typedef class _IRPCLASS CMPSmallArray<CMSTRINGVALUESTRING> CMPSMALLSTRINGVALUESTRINGARRAY;
+
+class _IRPCLASS	CMAssociations : public CMPSMALLSTRINGVALUESTRINGARRAY
+{
+public:
+	CMAssociations(unsigned short sz=0,unsigned short d=16) : CMPSmallArray< CMStringValue<CMString> > (sz,d) {}
+	void   AddAssociation(const CMString& aName,const CMString& val);
+	CMString GetName(unsigned short n);
+	CMString GetValue(unsigned short n);
+	CMString GetValue(const CMString& aName);
+    int	 GetAssociationIndex(const CMString& aName);
+	int  GetAssociation(unsigned short n,CMString& s1,CMString& s2);
+	int  IsAssociation(CMString& s1,CMString& s2);
+    void   Compact();
+};
