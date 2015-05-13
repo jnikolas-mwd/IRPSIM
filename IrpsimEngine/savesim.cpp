@@ -336,7 +336,6 @@ int CMSaveSimulation::Outcomes(const CMString& fname)
    aggindex = new unsigned[arrayindex.Count()];
 
 	get_data_from_simulation();
-	if (app) app->PercentCompleteMessage(0,(message_header+fname).c_str());
 
 	output_header(OutRealizations);
 
@@ -363,20 +362,14 @@ int CMSaveSimulation::Outcomes(const CMString& fname)
 		for (trialno=trialbeg;trialno<=trialend;trialno++) {
 			for (tm=outbeg;tm<=outend;tm.inc(outincsteps,outincunits))
 				output_realizations_record(tm,trialno,row++);
-			if (app && app->PercentCompleteMessage((int)((100*row)/nrows)))
-				break;
 		}
 	}
 	else {
 		for (tm=outbeg;tm<=outend;tm.inc(outincsteps,outincunits)) {
 			for (trialno=trialbeg;trialno<=trialend;trialno++)
 				output_realizations_record(tm,trialno,row++);
-			if (app && app->PercentCompleteMessage((int)(100*row/nrows)))
-				break;
 		}
 	}
-
-	if (app) app->PercentCompleteMessage(100);
 
 	output_footer(OutRealizations);
 
@@ -399,9 +392,8 @@ int CMSaveSimulation::Summary(const CMString& fname)
    	return -1;
 	wchar_t buffer[128];
 	get_data_from_simulation();
-	if (app) app->PercentCompleteMessage(0,(message_header+fname).c_str());
 
-   output_header(OutSummary);
+	output_header(OutSummary);
 
 	long row=0;
 
@@ -417,8 +409,6 @@ int CMSaveSimulation::Summary(const CMString& fname)
 		double val;
       unsigned varindex = accumindex[i]->index;
 	  const wchar_t* vname = accum->GetVariableName(varindex).c_str();
-		if (app && app->PercentCompleteMessage(100*row/nrows))
-			break;
 		for (CMTime tm=outbeg;tm<=outend;tm.inc(simincsteps,simincunits),row++) {
 		   output_item(OutSummary,vname,row,0,maxnamelength,0);
 		   output_item(OutSummary,_wtof(tm.GetString(buffer, 128)),row,1,fieldwidth,0);
@@ -437,7 +427,6 @@ int CMSaveSimulation::Summary(const CMString& fname)
 
 	output_footer(OutSummary);
 
-	if (app) app->PercentCompleteMessage(100);
 	CMTime::SetOutputFormat(oldformat);
 	delete fout;
    fout=0;
@@ -453,7 +442,6 @@ int CMSaveSimulation::ReliabilitySeries(const CMString& fname)
 	wchar_t buffer[128];
 	get_data_from_simulation();
 	int oldformat = CMTime::SetOutputFormat(simincunits);
-	if (app) app->PercentCompleteMessage(0,(message_header+fname).c_str());
 
    output_header(OutReliabilitySeries);
 
@@ -469,8 +457,6 @@ int CMSaveSimulation::ReliabilitySeries(const CMString& fname)
 	for (i=0;i<reliability->Targets();i++) {
 		const wchar_t* tname = reliability->Target(i)->GetString().c_str();
 		for (CMTime tm=outbeg;tm<=outend;tm.inc(simincsteps,simincunits),row++) {
-			if (app && app->PercentCompleteMessage((int)(100*row/nrows)))
-				break;
 		   output_item(OutReliabilitySeries,tname,row,0,maxtargetlength,0);
 		   output_item(OutReliabilitySeries,_wtof(tm.GetString(buffer, 128)),row,1,fieldwidth,0);
 		   output_item(OutReliabilitySeries,reliability->FailPct(tm,i),row,2,fieldwidth,1);
@@ -479,7 +465,6 @@ int CMSaveSimulation::ReliabilitySeries(const CMString& fname)
    }
 
 	output_footer(OutReliabilitySeries);
-   if (app) app->PercentCompleteMessage(100);
 
 	CMTime::SetOutputFormat(oldformat);
    delete fout;
@@ -493,7 +478,6 @@ int CMSaveSimulation::ReliabilityDetail(const CMString& fname)
    	return -1;
 	get_data_from_simulation();
 	int oldformat = CMTime::SetOutputFormat(outincunits);
-	if (app) app->PercentCompleteMessage(0,(message_header+fname).c_str());
 
    int i,j;
    int step;
@@ -528,7 +512,6 @@ int CMSaveSimulation::ReliabilityDetail(const CMString& fname)
 
 	for (tm=outbeg;tm<=outend;tm.inc(outincsteps,outincunits),step++) {
 		for (long trial=trialbeg;trial<=trialend;trial++) {
-			if (app) app->PercentCompleteMessage(int((100*step*outtrials+trial-trialbeg)/(outtimesteps*outtrials)));
 			for (i=0;i<(int)reldetailtargets;i++) {
 				CMReliabilityTarget* target = reliability->Target(reldetailindex[i]);
 				unsigned sindex = array->VariableIndex(target->ShortageVariable());
@@ -587,9 +570,7 @@ int CMSaveSimulation::ReliabilityDetail(const CMString& fname)
    delete fout;
    fout = 0;
 
-	if (app) app->PercentCompleteMessage(100);
-
-	CMTime::SetOutputFormat(oldformat);
+   CMTime::SetOutputFormat(oldformat);
    return 0;
 }
 

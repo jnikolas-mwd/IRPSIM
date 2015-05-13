@@ -55,11 +55,9 @@ loadedfiles(),
 //attachedfiles(),
 variables(0),
 oldvariables(0),
-logfile(),
 currentscript(0),
 currentscenario(0),
 errorcode(0),
-slog(0),
 vartypes()
 {
 	casesensitiveflag = CMString::set_case_sensitive(0);
@@ -71,44 +69,10 @@ vartypes()
 CMIrpApplication::~CMIrpApplication()
 {
 	ResetApplication();
-   CMVariable::SetCollectionContext(oldvariables);
-   delete variables;
-	if (slog) delete slog;
+    CMVariable::SetCollectionContext(oldvariables);
+    delete variables;
 	CMString::set_case_sensitive(casesensitiveflag);
 	CMString::skip_whitespace(skipwhitespaceflag);
-}
-
-void CMIrpApplication::SetLogFile(const CMString& fname)
-{
-	if (!fname.is_null() && fname != logfile) {
-		logfile = fname;
-		if (slog) delete slog;
-		slog = new wofstream(logfile.c_str(),ios::out|IOS_BINARY);
-	}
-}
-
-/*
-void CMIrpApplication::LogMessage(const CMString& message,int timestamp)
-{
-	CMString msg;
-	if (timestamp) {
-   	int oldformat = CMTime::SetOutputFormat(CMTime::formatFull);
-		msg += CMTime().GetString() + L"  ";
-   	CMTime::SetOutputFormat(oldformat);
-   }
-	msg += message + ENDL;
-	if (slog) *slog << msg;
-	log_message(msg);
-}
-*/
-
-int CMIrpApplication::PercentCompleteMessage(int pctcomplete, const wchar_t* title)
-{
-	return CMNotifier::Notify(CMNotifier::PROGRESS, title ? title : L"");
-	//_pct_complete_struct pc;
-	//pc.nVal = pctcomplete;
-	//pc.pTitle = title;
-	//return CMIrpApplication::Synchronize(SYNC_PCT_COMPLETE, &pc);
 }
 
 unsigned CMIrpApplication::SimulationsCount()
@@ -327,8 +291,8 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
                	delete v;
                else {
 		            variables->Add(v);
-						v->SetApplicationId(currfile);
-						CMNotifier::Notify(CMNotifier::INFO, messageheader + v->GetName());
+					v->SetApplicationId(currfile);
+					CMNotifier::Notify(CMNotifier::INFO, messageheader + v->GetName());
                }
             }
 			}
@@ -409,7 +373,6 @@ void CMIrpApplication::update_variable_links()
 	
 	iter.Reset();
 	CMNotifier::Notify(CMNotifier::LOG, L"\r\nLooking for missing variables:");
-	PercentCompleteMessage(0,L"Looking for Missing Variables");
 	iter.Reset();
 	long vcount = variables->Count();
 	for (long n=0;;n++) {
@@ -418,7 +381,6 @@ void CMIrpApplication::update_variable_links()
 		if (v->GetState(CMVariable::vsAggregate | CMVariable::vsSystem))
 			continue;
 		int pct = (int)(100*n/vcount);
-		PercentCompleteMessage(pct>99 ? 99 : pct);
 		CMVNameIterator* ni = v->CreateIterator();
 		const wchar_t* vname;
 		int first=1;
@@ -431,7 +393,6 @@ void CMIrpApplication::update_variable_links()
 			}
 		}
 	}
-	PercentCompleteMessage(100);
 	CMNotifier::Notify(CMNotifier::LOG, L"\r\nFinished\r\n");
 	CMNotifier::Notify(CMNotifier::INFO, L"");
 }

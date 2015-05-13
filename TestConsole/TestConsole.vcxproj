@@ -92,8 +92,8 @@
     <ClCompile Include="TestConsole.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\IrpsimEngine\IrpsimEngine.vcxproj">
-      <Project>{c2373396-ad44-4219-81df-b12136225486}</Project>
+    <ProjectReference Include="..\IrpsimEngineWrapper\IrpsimEngineWrapper.vcxproj">
+      <Project>{95243521-1858-4a9f-8418-869d85bcea41}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

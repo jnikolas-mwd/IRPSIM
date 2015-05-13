@@ -8,40 +8,17 @@
 #include <irpapp.h>
 #include <notify.h>
 
+using namespace IrpsimEngineWrapper;
+
 static wofstream sdebug("debug_testconsole.txt",ios::binary);
 
-class CMTestNotifier : public CMNotifier
-{
-	virtual int notify(ntype type, const CMString& msg) { 
-		sdebug << msg << ENDL; return 0; 
-	}
-};
 
+int notify(int type, const wchar_t* msg, int data) 
+{ 
+		sdebug << msg << ENDL; 
+		return 0; 
+}
 
-class CMTestApp : public CMIrpApplication
-{
-protected:
-	virtual void log_message(const CMString& msg) { sdebug << L"log_message: " << msg << ENDL; }
-	virtual CMString get_file_info(const wifstream& fname) { sdebug << L"get_file_info called" << ENDL; return L""; };
-
-public:
-	// use InfoMessage for "quick and dirty" messages
-	/*
-	virtual void InfoMessage(const CMString& message)
-	{
-		sdebug << L"InfoMessage: " << message << ENDL;
-	}
-	virtual void ErrorMessage(const CMString& msg) {
-		sdebug << L"ErrorMessage: " << msg << ENDL;
-	}
-	*/
-	// use ProgressMessage to add to previous messages. Call with message=0 to terminate
-
-	// Synchronize is called by various threads for various reasons
-	// lpParameter is set depending on syncType
-	// return TRUE if user has cancelled operation
-	virtual BOOL Synchronize(int syncType, const void* lpParameter) {return FALSE; }
-};
 
 using namespace std;
 
@@ -49,27 +26,30 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	try {
 
-		CMNotifier::SetNotifier(new CMTestNotifier());
+		CMNotifier::SetDelegate(notify);
 
-		CMTestApp *app = new CMTestApp();
+		CMWrappedIrpApplication^ app = gcnew  CMWrappedIrpApplication();
+		//CMIrpApplication *app = new CMIrpApplication();
 
 		app->OpenProject(L"C:\\Users\\Casey\\Documents\\IRPSIM Project Test\\Inputs\\Configuration\\IRP Resource Strategy.cfg");
 	
 
-		sdebug << "Scenarios: " << app->ScenariosCount() << ENDL;
+		//sdebug << "Scenarios: " << app->ScenariosCount() << ENDL;
 
-		sdebug << "Scripts: " << app->ScriptsCount() << ENDL;
+		//sdebug << "Scripts: " << app->ScriptsCount() << ENDL;
 
 		app->UseScenario(L"dsm_input");
 		app->UseScript(L"basemix-cra-ondemand");
-		app->Script(0)->Parse(*app);
-		sdebug << *app->Script(0) << ENDL;
 
-		for (int i = 0; i < app->LoadedFilesCount(); i++)
-			sdebug << app->LoadedFile(i) << ENDL;
+		app->RunSimulation();
+		//app->Script(0)->Parse(*app);
+		//debug << *app->Script(0) << ENDL;
 
-		CMSimulation* pSim = app->CreateSimulation();
-		app->RunSimulation(pSim);	
+		//for (int i = 0; i < app->LoadedFilesCount(); i++)
+			//sdebug << app->LoadedFile(i) << ENDL;
+
+		//CMSimulation* pSim = app->CreateSimulation();
+		//app->RunSimulation(pSim);	
 		
 		/*
 		CMVariableIterator iter(app->VariableCollection());

@@ -66,18 +66,12 @@ protected:
 	class _IRPCLASS CMVSmallArray<CMString> loadedfiles;
 	//class _IRPCLASS CMVSmallArray<CMString> attachedfiles;
 
-	CMString logfile;
-	wofstream* slog;
-
 	int casesensitiveflag;
 	int skipwhitespaceflag;
 
 	//********
 
 	// Protected virtual functions
-
-	//virtual void log_message(const CMString& msg) = 0;
-	virtual CMString get_file_info(const wifstream& fname) = 0;
 
 	//static DWORD WINAPI add_file_proc(LPVOID lpParameter);
 	void CMIrpApplication::update_variable_links();
@@ -185,10 +179,5 @@ public:
 	// Synchronize is called by various threads for various reasons
 	// lpParameter is set depending on syncType
 	// return TRUE if user has cancelled operation
-	virtual BOOL Synchronize(int syncType, const void* lpParameter) { return FALSE; }
-	// PercentCompleteMessage returns TRUE if process should be cancelled
-	// call with pctcomplete=0 at beginning of process and 100 at end of process
-	// return TRUE to cancel process
-	int PercentCompleteMessage(int pctcomplete, const wchar_t* title = 0);
-	//void LogMessage(const CMString& message,int timestamp=0);
+	//virtual BOOL Synchronize(int syncType, const void* lpParameter) { return FALSE; }
 };

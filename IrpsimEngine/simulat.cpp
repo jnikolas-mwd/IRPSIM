@@ -656,13 +656,16 @@ BOOL CMSimulation::Run()
 		if (reliability) reliability->Process(timemachine);
 
 		elapsedtime = initelapsed + (long)time(NULL) - (long)inittime;
-		if (pApp) pApp->Synchronize(CMIrpApplication::SYNC_SIMULATION_UPDATE, this);
+
+		CMNotifier::Notify(CMNotifier::PROGRESS, L"", (int)((double)trialno / (double)ntrials));
+		//if (pApp) pApp->Synchronize(CMIrpApplication::SYNC_SIMULATION_UPDATE, this);
 
 		timemachine->Step();
 	}
 	
 	elapsedtime = initelapsed + (long)time(NULL) - (long)inittime;
 	if (trialno >= ntrials) {
+		CMNotifier::Notify(CMNotifier::PROGRESS, L"Completed", 100);
 		state |= sStopped;
 		trialno--;
 		if (pApp) {

@@ -16,13 +16,21 @@ namespace IRPSIM.ViewModels
     {
         private ObservableCollection<FileViewModel> openFiles = new ObservableCollection<FileViewModel>();
         private int openFileIndex;
-        private CMWrappedIrpApplication irpApp = new CMWrappedIrpApplication();
-        private Thread workerThread;
-        private string fileName;
 
+        /*
+        private int test(int ntype, byte* msg, int data)
+        {
+           // Debug.WriteLine(msg);
+            return 0;
+        }
+        */
+
+        private CMWrappedIrpApplication irpApp = null;
+ 
         public MainViewModel()
         {
-            // irpApp = new CMWrappedIrpApplication();
+             irpApp = new CMWrappedIrpApplication(); 
+            
             //  irpApp.OpenProject("C:\\Users\\Casey\\Documents\\IRPSIM Project Test\\Inputs\\Configuration\\IRP Resource Strategy.cfg");
         }
 
@@ -71,9 +79,7 @@ namespace IRPSIM.ViewModels
         {
             irpApp.UseScenario("dsm_input");
             irpApp.UseScript("basemix-cra-ondemand");
-            workerThread = new Thread(new ThreadStart(this.taskRunSimulation));
-            workerThread.IsBackground = true;
-            workerThread.Start();
+            new Thread(() => { irpApp.RunSimulation(); Debug.WriteLine("Simulation Completed"); }).Start();     
         }
 
         private void openProjectDelegate()
@@ -82,26 +88,9 @@ namespace IRPSIM.ViewModels
 
             if (dlg.ShowDialog() == true)
             {
-                fileName = dlg.FileName;
-                workerThread = new Thread(new ThreadStart(this.taskOpenProject));
-                workerThread.IsBackground = true;
-                workerThread.Start();
+                string filename = dlg.FileName;
+                new Thread(() => { irpApp.OpenProject(filename); Debug.WriteLine("Loaded"); }).Start();              
             }
         }
-
-        #region Thread Tasks
-
-        private void taskOpenProject()
-        {
-            irpApp.OpenProject(fileName);
-            Debug.WriteLine("Project Loaded");
-        }
-       
-        private void taskRunSimulation()
-        {
-            irpApp.RunSimulation();
-            Debug.WriteLine("Simulation Completed");
-        }
-        #endregion
     }
 }

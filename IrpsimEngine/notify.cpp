@@ -21,24 +21,24 @@
 #include "notify.h"
 #include "cmtime.h"
 
-CMNotifier* CMNotifier::pNotifier = NULL;
+CMNotifyDelegatePointer CMNotifier::pDelegate = nullptr;
 
-int CMNotifier::Notify(ntype type, const CMString& msg)
+int CMNotifier::Notify(ntype type, const CMString& msg, int data)
 {
-	if (!pNotifier)
+	if (pDelegate==nullptr)
 		return 0;
-
+	
 	if (type==CMNotifier::LOGTIME) {
 		int oldformat = CMTime::SetOutputFormat(CMTime::formatFull);
 		CMString newmsg = CMTime().GetString() + L": " + msg;
 		CMTime::SetOutputFormat(oldformat);
-		return pNotifier->notify(type, newmsg);
+		return pDelegate(type, newmsg.c_str(), data);
 	}
-
-	return pNotifier->notify(type, msg);
+	
+	return pDelegate(type, msg.c_str(), data);
 }
 
 int CMNotifier::Notify(ntype type)
 {
-	return Notify(type, L"");
+	return Notify(type, L"", 0);
 }
