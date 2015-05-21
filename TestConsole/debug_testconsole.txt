@@ -149,4 +149,4630 @@ Reading groundwater_blended
 Reading blended_put
 Reading storage_surface_inside
 Reading storage_surface_inside_start
-Reading storag
+Reading storage_surface_inside_put
+Reading storage_surface_inside_take
+Reading storage_surface_inside_cap
+Reading storage_surface_outside
+Reading storage_surface_outside_start
+Reading storage_surface_outside_put
+Reading storage_surface_outside_take
+Reading storage_surface_outside_cap
+Reading storage_surface
+Reading storage_surface_start
+Reading storage_surface_put
+Reading storage_surface_take
+Reading storage_surface_cap
+Reading storage_gw_inside
+Reading storage_gw_inside_start
+Reading storage_gw_inside_put
+Reading storage_gw_inside_take
+Reading storage_gw_inside_cap
+Reading prop13_end
+Reading prop13_start
+Reading prop13_put
+Reading prop13_take
+Reading prop13_cap
+Reading storage_gw_outside
+Reading storage_gw_outside_start
+Reading storage_gw_outside_put
+Reading storage_gw_outside_take
+Reading storage_gw_outside_cap
+Reading storage_gw
+Reading storage_gw_start
+Reading storage_gw_put
+Reading storage_gw_take
+Reading storage_gw_cap
+Reading storage_inbasin_begin
+Reading storage_inbasin
+Reading storage_inbasin_put
+Reading storage_inbasin_take
+Reading storage_inbasin_cap
+Reading storage_swp_begin
+Reading storage_swp
+Reading storage_swp_put
+Reading storage_swp_take
+Reading storage_swp_cap
+Reading storage_cra_begin
+Reading storage_cra
+Reading storage_cra_put
+Reading storage_cra_take
+Reading storage_cra_cap
+Reading storage_total_start
+Reading storage_total
+Reading storage_total_put
+Reading storage_total_take
+Reading storage_total_cap
+Reading storage_gw_percent_full
+Reading storage_surface_percent_full
+Reading storage_percent_full
+Reading storage_mwd_emergency
+Reading storage_emergency_total
+Reading storage_pvid
+Reading storage_pvid_cap
+Reading transfer_total
+Reading wasted_total
+Reading total_shortage
+Reading total_supply
+Reading initial_shortage
+Reading initial_surplus
+Reading initial_balance
+Reading swp_west_shortage
+Reading swp_east_shortage
+Reading blended_west_shortage
+Reading blended_east_shortage
+Reading balance_check
+Reading net_balance
+Reading ..\Relationships\phased_blending.rel
+Reading blend_cap_array
+Reading skinner_blend_cap
+Reading diemer_blend_cap
+Reading weymouth_blend_cap
+Reading critical_blend
+Reading critical_blend_percent
+Reading cra_blended_demand
+Reading cra_blended_demand_min
+Reading critical_blend_ratio
+Reading swp_limit_intermediate
+Reading swp_limit
+Reading swp_limit2_intermediate
+Reading swp_limit2
+Reading system_blend
+Reading ..\Relationships\script_tracking.rel
+Reading net_surpA
+Reading net_surpB
+Reading swpcarryover_takeC
+Reading swp_reservoirC
+Reading net_surpC
+Reading cra_reservoir_putD
+Reading cra_reservoirD
+Reading net_surpD
+Reading net_surp1
+Reading net_surp2
+Reading net_surp3
+Reading net_surp4
+Reading net_surp5
+Reading swp_reservoir_take6
+Reading sbvmwd_option_take6
+Reading yuba_take6
+Reading semitropic_take6
+Reading arvin_take6
+Reading sbvmwd_carryover_take6
+Reading kerndelta_take6
+Reading mojave_take6
+Reading castaic_take6
+Reading central_valley_exclusive_transfer_take6
+Reading swp_exclusive_transfer_take6
+Reading swp_exclusive_shortage_take6
+Reading net_surp6
+Reading cra_reservoir7
+Reading cra_reservoir_take7
+Reading net_surp7
+Reading cra_reservoir_take8
+Reading swp_reservoir_take8
+Reading snwa_take8
+Reading mwd_drop_2_take8
+Reading lake_mead_take8
+Reading dwcv_transfer1_take8
+Reading dwcv_transfer_reservoir_take8
+Reading dwcv_transfer2_take8
+Reading cra_reservoir_put8
+Reading dvl_carryover_take8
+Reading mathews_take8
+Reading lake_skinner_take8
+Reading sbvmwd_option_take8
+Reading yuba_take8
+Reading semitropic_take8
+Reading arvin_take8
+Reading sbvmwd_carryover_take8
+Reading kerndelta_take8
+Reading mojave_take8
+Reading cyclic_take8
+Reading blended_gw_take8
+Reading castaic_take8
+Reading perris_take8
+Reading central_valley_blended_transfer_take8
+Reading net_surp8
+Reading cra_transfer_take9
+Reading net_surp9
+Reading swp_reservoir_take10
+Reading sbvmwd_option_take10
+Reading yuba_take10
+Reading semitropic_take10
+Reading arvin_take10
+Reading sbvmwd_carryover_take10
+Reading kerndelta_take10
+Reading mojave_take10
+Reading castaic_take10
+Reading net_surp10
+Reading central_valley_blended_transfer_take11
+Reading swp_blended_transfer_take11
+Reading blended_shortage_take11
+Reading net_surp11
+Reading cra_reservoir11
+Reading dvl_emergency_put12
+Reading dvl_carryover_put12
+Reading mathews_put12
+Reading lake_skinner_put12
+Reading dwcv_put12
+Reading lake_mead_put12
+Reading blended_gw_put12
+Reading cra_reservoir12
+Reading cra_reservoir2_take12
+Reading net_surp12
+Reading swp_reservoir12
+Reading dvl_emergency_put13
+Reading dvl_carryover_put13
+Reading castaic_put13
+Reading perris_put13
+Reading swp_reservoir13
+Reading net_surp13
+Reading blended_gw_put14
+Reading semitropic_put15
+Reading arvin_put15
+Reading sbvmwd_carryover_put15
+Reading kerndelta_put15
+Reading mojave_put15
+Reading swp_reservoir15
+Reading net_surp15
+Reading swpcarryover_put16
+Reading cyclic_put16
+Reading swp_reservoir16
+Reading net_surp16
+Reading mathews_put17
+Reading lake_skinner_put17
+Reading dwcv_put17
+Reading lake_mead_put17
+Reading swp_reservoir17
+Reading net_surp17
+Reading castaic_put18
+Reading perris_put18
+Reading semitropic_put18
+Reading arvin_put18
+Reading sbvmwd_carryover_put18
+Reading kerndelta_put18
+Reading mojave_put18
+Reading swpcarryover_put18
+Reading cyclic_put18
+Reading cra_reservoir18
+Reading net_surp18
+Reading ..\Relationships\swp.rel
+Reading swp
+Reading swp_constraint
+Reading swp_maxsupply
+Reading swp_maxput
+Reading swp_maxtake
+Reading swp_alloc
+Reading swp_alloc_percent
+Reading swp_remain
+Reading total_edmonston
+Reading swp_east
+Reading swp_west
+Reading swp_service_area
+Reading swp_to_blend
+Reading swp_dsm
+Reading ..\Relationships\uncertainty_parameters.rel
+Reading yield_groundwater
+Reading yield_recycling
+Reading yield_consv
+Reading cost_increase_energy
+Reading cost_increase_treatment
+Reading cost_increase_swp_transfer
+Reading cost_increase_gw_recovery
+Reading cost_increase_recycling_om
+Reading cost_increase_recycling_capital
+Reading cost_increase_desal_om
+Reading cost_increase_desal_capital
+Reading delay_desal
+Reading delay_mwd_alloc
+Reading delay_recycling
+Reading delay_consv
+Reading test_uniform
+Reading test_normal
+Reading test_poisson
+Reading test_binomial
+Reading test_weibull
+Reading ..\Relationships\water_quality.rel
+Reading total_salinity
+Reading total_wq
+Reading L_per_af
+Reading mg_per_ton
+Reading ..\Relationships\year_type.rel
+Reading yeartype_local
+Reading yeartype_wet
+Reading yeartype_dry
+Reading current_rain
+Reading rain_lag_1
+Reading rain_lag_2
+Reading rain_1_yr
+Reading rain_2_yr
+Reading la_rain
+Reading yeartype_sd
+Reading yeartype_sd_wet
+Reading yeartype_sd_dry
+Reading current_sd_rain
+Reading rain_sd_lag_1
+Reading rain_sd_lag_2
+Reading rain_sd_1_yr
+Reading rain_sd_2_yr
+Reading sd_rain
+Reading laa_lakemary_precip
+Reading laa_lakemary_precip_array
+Reading downey_precip
+Reading downey_precip_array
+Reading san_bernardino_precip
+Reading san_bernardino_precip_array
+Reading ..\Supplies\Colorado_River_Aqueduct\all_american_lining.sup
+Reading all_american_lining_sd
+Reading all_american_lining_sd_array
+Reading all_american_lining_slr
+Reading all_american_lining_slr_array
+Reading ..\Supplies\Colorado_River_Aqueduct\basic_apportionment.sup
+Reading basic_apportionment
+Reading basic_apportionment_array
+Reading ..\Supplies\Colorado_River_Aqueduct\coachella_lining.sup
+Reading coachella_lining_sd
+Reading coachella_lining_sd_array
+Reading coachella_lining_slr
+Reading coachella_lining_slr_array
+Reading ..\Supplies\Colorado_River_Aqueduct\cra_pseudo_reservoir.sto
+Reading cra_reservoir
+Reading cra_reservoir2
+Reading cra_wasted
+Reading ..\Supplies\Colorado_River_Aqueduct\cra_transfers.trn
+Reading cra_transfer
+Reading cra_transfer_take
+Reading cra_programs
+Reading ..\Supplies\Colorado_River_Aqueduct\cvwd_35_transfer.sup
+Reading cvwd_35_transfer
+Reading cvwd_35_transfer_array
+Reading ..\Supplies\Colorado_River_Aqueduct\dwcv.sto
+Reading start_dwcv
+Reading dwcv_cap
+Reading dwcv_put
+Reading dwcv_put_temp
+Reading dwcv_putmax
+Reading dwcv_take
+Reading dwcv_loss
+Reading dwcv_remaining_obligation
+Reading original_remaining_obligation
+Reading transfer_remaining_obligation
+Reading dwcv_gain
+Reading dwcv_FP
+Reading dwcv_FT
+Reading dwcv
+Reading ..\Supplies\Colorado_River_Aqueduct\dwcv_callback.sup
+Reading start_dwcv_transfer
+Reading end_dwcv_transfer
+Reading callback_year
+Reading dwcv_transfer_initial
+Reading dwcv_table_a_exchange
+Reading dwcv_transfer_take_temp
+Reading dwcv_transfer_capacity
+Reading dwcv_transfer_take
+Reading callback_maintain_dwcv
+Reading callback_delivered
+Reading dwcv_transfer_reservoir
+Reading dwcv_transfer_reservoir_put
+Reading dwcv_transfer_reservoir_putmax
+Reading dwcv_transfer_reservoir_take
+Reading dwcv_transfer_reservoir_delivered
+Reading dwcv_transfer_reservoir_loss
+Reading dwcv_transfer1
+Reading dwcv_transfer_take1
+Reading dwcv_transfer_take1_step1
+Reading dwcv_transfer_take1_step2
+Reading dwcv_transfer_take1_step3
+Reading dwcv_transfer_take1_counter
+Reading dwcv_transfer_take1_check
+Reading dwcv_transfer2
+Reading dwcv_transfer_take2
+Reading dwcv_transfer_take2_step1
+Reading dwcv_transfer_take2_step2
+Reading dwcv_transfer_take2_counter
+Reading dwcv_transfer_take2_check
+Reading ..\Supplies\Colorado_River_Aqueduct\iid_mwd.sup
+Reading iid_mwd
+Reading iid_mwd_array
+Reading ..\Supplies\Colorado_River_Aqueduct\iid_sdcwa.sup
+Reading iid_sdcwa
+Reading iid_sdcwa_array
+Reading ..\Supplies\Colorado_River_Aqueduct\lake_mead.sto
+Reading start_lake_mead
+Reading stop_lake_mead
+Reading lake_mead_cap
+Reading lake_mead_put
+Reading lake_mead_putmax
+Reading lake_mead_put_initial
+Reading lake_mead_take
+Reading lake_mead_surplus_loss
+Reading lake_mead_put_loss
+Reading lake_mead_evap
+Reading lake_mead_loss
+Reading lake_mead
+Reading ..\Supplies\Colorado_River_Aqueduct\lower_colorado_wsp.sup
+Reading lower_colorado_wsp
+Reading lower_colorado_wsp_array
+Reading ..\Supplies\Colorado_River_Aqueduct\mwd_drop_2.sup
+Reading start_mwd_drop_2
+Reading stop_mwd_drop_2
+Reading mwd_drop_2_take
+Reading mwd_drop_2_take_temp
+Reading mwd_drop_2_take_array
+Reading mwd_drop_2
+Reading ..\Supplies\Colorado_River_Aqueduct\nevada.sup
+Reading snwa_start
+Reading snwa_end
+Reading snwa
+Reading snwa_take
+Reading snwa_array
+Reading snwa_cumulative
+Reading snwa_cumulative_2020
+Reading snwa_payback
+Reading snwa_payback_array
+Reading snwa_payback_cumulative
+Reading snwa_payback_remain
+Reading snwa_historical
+Reading snwa_activity_array
+Reading snwa_take_2004
+Reading snwa_take_2005
+Reading snwa_take_2006
+Reading snwa_take_2007
+Reading snwa_take_2008
+Reading snwa_take_2009
+Reading snwa_take_2010
+Reading snwa_take_2011
+Reading snwa_take_2012
+Reading snwa_take_2013
+Reading snwa_take_2014
+Reading snwa_take_2015
+Reading snwa_take_2016
+Reading snwa_take_2017
+Reading ..\Supplies\Colorado_River_Aqueduct\no_hayfield.sup
+Reading hayfield
+Reading hayfield_array
+Reading hayfield_cumulative_end
+Reading hayfield_cumulative_start
+Reading hayfield_start_balance
+Reading hayfield_end_balance
+Reading ..\Supplies\Colorado_River_Aqueduct\no_salton_sea.sup
+Reading salton_sea_start
+Reading salton_sea_end
+Reading salton_sea
+Reading salton_sea_array
+Reading ..\Supplies\Colorado_River_Aqueduct\ppr.sup
+Reading ppr
+Reading ppr_array
+Reading ..\Supplies\Colorado_River_Aqueduct\pvid.sup
+Reading pvid_start
+Reading pvid_end
+Reading pvid_total
+Reading pvid_minimum
+Reading pvid_minimum_array
+Reading pvid_option
+Reading pvid_option_1
+Reading pvid_option_2
+Reading pvid_option_array
+Reading pvid_option_1_temp
+Reading pvid_option_level_1
+Reading pvid_option_2_temp
+Reading pvid_option_level_2
+Reading pvid_option_level_temp
+Reading pvid_option_evaluate_level
+Reading pvid_option_evaluate_level_begin_sim
+Reading pvid_option_consecutive_check_1
+Reading pvid_option_consecutive_check_2
+Reading pvid_option_take_count
+Reading pvid_option_check
+Reading pvid_max_take_count
+Reading pvid_max_check
+Reading ..\Supplies\Colorado_River_Aqueduct\quechan.sup
+Reading quechan
+Reading quechan_array
+Reading ..\Supplies\Colorado_River_Aqueduct\shortage.sup
+Reading shortage
+Reading shortage_array
+Reading ..\Supplies\Colorado_River_Aqueduct\surplus.sup
+Reading surplus_step1
+Reading surplus_array
+Reading surplus_cap
+Reading surplus
+Reading full_surplus
+Reading full_surplus_year
+Reading fds_counter
+Reading full_surplus_year_array
+Reading flood_surplus
+Reading flood_control_year
+Reading flood_control_counter
+Reading flood_control_year_array
+Reading partial_surplus_year
+Reading ..\Supplies\In_Region\chino.sto
+Reading start_chino
+Reading chino_cap
+Reading chino_put_temp
+Reading chino_take_temp
+Reading chino_put
+Reading chino_putmax
+Reading chino_take
+Reading chino_FT
+Reading chino_FP
+Reading chino
+Reading ..\Supplies\In_Region\compton.sto
+Reading start_compton_cup
+Reading compton_cup_cap
+Reading compton_cup_put_temp
+Reading compton_cup_take_temp
+Reading compton_cup_put
+Reading compton_cup_putmax
+Reading compton_cup_take
+Reading compton_cup_FT
+Reading compton_cup_FP
+Reading compton_cup
+Reading ..\Supplies\In_Region\cyclic.sto
+Reading start_cyclicgroundwater
+Reading cyclicgroundwater_cap
+Reading cyclicgroundwater_put
+Reading cyclicgroundwater_putmax
+Reading cyclicgroundwater_take
+Reading cyclicgroundwater_take_temp
+Reading cyclicgroundwater_FT
+Reading cyclicgroundwater_FP
+Reading cyclicgroundwater
+Reading ..\Supplies\In_Region\dvl_one_third_rule.sto
+Reading dvl_carryover_cap
+Reading dvl_carryover_put_temp
+Reading dvl_carryover_take_temp
+Reading dvl_carryover_put
+Reading dvl_carryover_putmax
+Reading dvl_carryover_take
+Reading dvl_carryover_indicator
+Reading dvl_carryover_takelimit
+Reading dvl_carryover_takelimit_initial
+Reading dvl_carryover_FT
+Reading dvl_carryover_FP
+Reading dvl_carryover_gain
+Reading dvl_carryover_loss
+Reading dvl_carryover_evap
+Reading dvl_carryover_loss_total
+Reading dvl_carryover
+Reading dvl_emergency_cap
+Reading dvl_emergency_put_temp
+Reading dvl_emergency_take_temp
+Reading dvl_emergency_put
+Reading dvl_emergency_putmax
+Reading dvl_emergency_take
+Reading dvl_emergency_FT
+Reading dvl_emergency_FP
+Reading dvl_emergency_gain
+Reading dvl_emergency_loss
+Reading dvl_emergency_evap
+Reading dvl_emergency_loss_total
+Reading dvl_emergency
+Reading dvl_put_total
+Reading dvl_take_total
+Reading dvl_loss_total
+Reading dvl_level
+Reading dvl_level_start
+Reading dvl_put
+Reading dvl_evap
+Reading ..\Supplies\In_Region\elsinore.sto
+Reading start_elsinore
+Reading elsinore_cap
+Reading elsinore_put_temp
+Reading elsinore_take_temp
+Reading elsinore_put
+Reading elsinore_putmax
+Reading elsinore_take
+Reading elsinore_FT
+Reading elsinore_FP
+Reading elsinore
+Reading ..\Supplies\In_Region\emergency.sto
+Reading mathews_emergency
+Reading lake_skinner_emergency
+Reading perris_emergency
+Reading dwr_emergency
+Reading sdcwa_emergency
+Reading dvl_emergency_demand
+Reading dvl_emergency_demand_array
+Reading ..\Supplies\In_Region\foothill.sto
+Reading start_foothill_cup
+Reading foothill_cup_cap
+Reading foothill_cup_put_temp
+Reading foothill_cup_take_temp
+Reading foothill_cup_put
+Reading foothill_cup_putmax
+Reading foothill_cup_take
+Reading foothill_cup_FT
+Reading foothill_cup_FP
+Reading foothill_cup
+Reading ..\Supplies\In_Region\local.sup
+Reading groundwater_array
+Reading groundwater
+Reading surface_array
+Reading surface
+Reading laa_array
+Reading laa
+Reading desal_array
+Reading desal
+Reading gw_recovery_array
+Reading gw_recovery
+Reading recycling_array
+Reading recycling
+Reading ..\Supplies\In_Region\lake_castaic.sto
+Reading castaic_cap
+Reading castaic_put
+Reading castaic_putmax
+Reading castaic_take
+Reading castaic_FT
+Reading castaic_FP
+Reading castaic
+Reading ..\Supplies\In_Region\lake_perris.sto
+Reading perris_cap
+Reading perris_put
+Reading perris_putmax
+Reading perris_take
+Reading perris_FT
+Reading perris_FP
+Reading perris
+Reading ..\Supplies\In_Region\lakewood.sto
+Reading start_lakewood
+Reading lakewood_cap
+Reading lakewood_put_temp
+Reading lakewood_take_temp
+Reading lakewood_put
+Reading lakewood_putmax
+Reading lakewood_take
+Reading lakewood_FT
+Reading lakewood_FP
+Reading lakewood
+Reading ..\Supplies\In_Region\live_oak.sto
+Reading start_live_oak
+Reading live_oak_cap
+Reading live_oak_put_temp
+Reading live_oak_take_temp
+Reading live_oak_put
+Reading live_oak_putmax
+Reading live_oak_take
+Reading live_oak_FT
+Reading live_oak_FP
+Reading live_oak
+Reading ..\Supplies\In_Region\long_beach.sto
+Reading start_long_beach
+Reading long_beach_cap
+Reading long_beach_put_temp
+Reading long_beach_take_temp
+Reading long_beach_put
+Reading long_beach_putmax
+Reading long_beach_take
+Reading long_beach_FT
+Reading long_beach_FP
+Reading long_beach
+Reading ..\Supplies\In_Region\longterm_cutback.sup
+Reading longterm_cut
+Reading longterm_cut_limit
+Reading longterm_delivered
+Reading longterm_percent
+Reading ..\Supplies\In_Region\mathews.sto
+Reading mathews_cap
+Reading mathews_put
+Reading mathews_putmax
+Reading mathews_take
+Reading mathews_FT
+Reading mathews_FP
+Reading mathews
+Reading ..\Supplies\In_Region\orange_county.sto
+Reading start_orange_county
+Reading orange_county_cap
+Reading orange_county_put_temp
+Reading orange_county_take_temp
+Reading orange_county_put
+Reading orange_county_putmax
+Reading orange_county_take
+Reading orange_county_FT
+Reading orange_county_FP
+Reading orange_county
+Reading ..\Supplies\In_Region\skinner.sto
+Reading lake_skinner_cap
+Reading lake_skinner_put
+Reading lake_skinner_putmax
+Reading lake_skinner_take
+Reading lake_skinner_FT
+Reading lake_skinner_FP
+Reading lake_skinner
+Reading ..\Supplies\In_Region\upper_claremont.sto
+Reading start_upper_claremont
+Reading upper_claremont_cap
+Reading upper_claremont_put_temp
+Reading upper_claremont_take_temp
+Reading upper_claremont_put
+Reading upper_claremont_putmax
+Reading upper_claremont_take
+Reading upper_claremont_FT
+Reading upper_claremont_FP
+Reading upper_claremont
+Reading ..\Supplies\State_Water_Project\arvin_edison.sto
+Reading start_arvin
+Reading stop_arvin
+Reading arvin_cap
+Reading arvin_take
+Reading arvin_take_temp
+Reading arvin_take_row
+Reading arvin_take_row_array
+Reading arvin_take_counter1
+Reading arvin_take_counter
+Reading arvin_take_array
+Reading arvin_put
+Reading arvin_put_temp
+Reading arvin_putmax
+Reading arvin_FT
+Reading arvin_FP
+Reading arvin_contractual_loss
+Reading arvin_2027_loss
+Reading arvin_loss
+Reading arvin
+Reading arvin_cumulative_begin
+Reading arvin_cumulative_end
+Reading arvin_historical_take
+Reading arvin_take_target
+Reading arvin_om_activity_array
+Reading arvin_take_1997
+Reading arvin_take_1998
+Reading arvin_take_1999
+Reading arvin_take_2000
+Reading arvin_take_2001
+Reading arvin_take_2002
+Reading arvin_take_2003
+Reading arvin_take_2004
+Reading arvin_take_2005
+Reading arvin_take_2006
+Reading arvin_take_2007
+Reading arvin_take_2008
+Reading arvin_take_2009
+Reading arvin_take_2010
+Reading arvin_take_2011
+Reading arvin_take_2012
+Reading ..\Supplies\State_Water_Project\dwcv_allocation.sup
+Reading dwcv_swp
+Reading original_dwcv_swp
+Reading dwcv_table_a_contract
+Reading ..\Supplies\State_Water_Project\kern_delta.sto
+Reading start_kerndelta
+Reading stop_kerndelta
+Reading kerndelta_cap
+Reading kerndelta_put
+Reading kerndelta_putmax
+Reading kerndelta_cumulative_put
+Reading kerndelta_put_remain
+Reading kerndelta_put_target
+Reading kerndelta_put_purchase
+Reading kerndelta_put_credits_purchased
+Reading kerndelta_put_credits_cumulative
+Reading kerndelta_take
+Reading kerndelta_take_counter1
+Reading kerndelta_take_counter
+Reading kerndelta_take_array
+Reading kerndelta_loss
+Reading kerndelta_FT
+Reading kerndelta_FP
+Reading kerndelta
+Reading kerndelta_cumulative_begin
+Reading kerndelta_cumulative_end
+Reading kerndelta_historical_put
+Reading kerndelta_om_activity_array
+Reading kerndelta_put_2003
+Reading kerndelta_put_2004
+Reading kerndelta_put_2005
+Reading kerndelta_put_2006
+Reading kerndelta_put_2007
+Reading kerndelta_put_2008
+Reading kerndelta_put_2009
+Reading kerndelta_put_2010
+Reading kerndelta_put_2011
+Reading kerndelta_put_2012
+Reading kerndelta_credit_2004
+Reading kerndelta_credit_2005
+Reading kerndelta_credit_2006
+Reading kerndelta_credit_2007
+Reading kerndelta_credit_2008
+Reading kerndelta_credit_2009
+Reading kerndelta_credit_2010
+Reading ..\Supplies\State_Water_Project\mojave.sto
+Reading start_mojave
+Reading stop_mojave
+Reading mojave_cap
+Reading mojave_put
+Reading mojave_put_remain
+Reading mojave_cumulative_put
+Reading mojave_historical_put
+Reading mojave_take
+Reading mojave_take_temp
+Reading mojave_loss
+Reading mojave_FT
+Reading mojave_FP
+Reading mojave_putmax
+Reading mojave
+Reading ..\Supplies\State_Water_Project\mwd_allocation.sup
+Reading swp_existing
+Reading swp_existing_temp
+Reading existing_array
+Reading swp_end_dwcv_transfer
+Reading mwd_table_a_contract
+Reading ..\Supplies\State_Water_Project\mwd_article21.sup
+Reading mwd_article21
+Reading article21_array
+Reading ..\Supplies\State_Water_Project\san_bernardino.sto
+Reading start_sbvmwd
+Reading stop_sbvmwd
+Reading sbvmwd_transfer_min
+Reading sbvmwd_transfer_min_undelivered
+Reading sbvmwd_option_take
+Reading sbvmwd_option_take_temp
+Reading sbvmwd_swp
+Reading sbvmwd_swp_available
+Reading sbvmwd_demand
+Reading sbvmwd_transfer
+Reading sbvmwd_option
+Reading sbvmwd_carryover_cap
+Reading sbvmwd_carryover_put
+Reading sbvmwd_carryover_putmax
+Reading sbvmwd_carryover_take
+Reading sbvmwd_carryover_loss
+Reading sbvmwd_carryover_FT
+Reading sbvmwd_carryover_FP
+Reading sbvmwd_carryover
+Reading sbvmwd_take_remain
+Reading sbvmwd_take_capacity
+Reading sbvmwd_pumpback_take
+Reading sbvmwd_exchange_take
+Reading ..\Supplies\State_Water_Project\semitropic.sto
+Reading start_semitropic
+Reading stop_semitropic
+Reading semitropic_cap_calc
+Reading semitropic_cap
+Reading semitropic_entitlement
+Reading semitropic_alloc
+Reading semitropic_exchange
+Reading semitropic_put_temp
+Reading semitropic_take_temp
+Reading semitropic_put
+Reading semitropic_putmax
+Reading semitropic_take
+Reading semitropic_loss
+Reading semitropic_FT
+Reading semitropic_FP
+Reading semitropic
+Reading semitropic_cumulative_end
+Reading semitropic_cumulative_begin
+Reading semitropic_om_historical
+Reading semitropic_om_cumulative
+Reading semitropic_om_activity
+Reading semitropic_take_historical
+Reading semitropic_take_cumulative
+Reading semitropic_om_average
+Reading semitropic_extraction_target
+Reading semitropic_om_activity_array
+Reading semitropic_om_1993
+Reading semitropic_take_1993
+Reading semitropic_om_1994
+Reading semitropic_take_1994
+Reading semitropic_om_1995
+Reading semitropic_take_1995
+Reading semitropic_om_1996
+Reading semitropic_take_1996
+Reading semitropic_om_1997
+Reading semitropic_take_1997
+Reading semitropic_om_1998
+Reading semitropic_take_1998
+Reading semitropic_om_1999
+Reading semitropic_take_1999
+Reading semitropic_om_2000
+Reading semitropic_take_2000
+Reading semitropic_om_2001
+Reading semitropic_take_2001
+Reading semitropic_om_2002
+Reading semitropic_take_2002
+Reading semitropic_om_2003
+Reading semitropic_take_2003
+Reading semitropic_om_2004
+Reading semitropic_take_2004
+Reading semitropic_om_2005
+Reading semitropic_take_2005
+Reading semitropic_om_2006
+Reading semitropic_take_2006
+Reading semitropic_om_2007
+Reading semitropic_take_2007
+Reading semitropic_om_2008
+Reading semitropic_take_2008
+Reading semitropic_om_2009
+Reading semitropic_take_2009
+Reading semitropic_om_2010
+Reading semitropic_take_2010
+Reading semitropic_om_2011
+Reading semitropic_take_2011
+Reading semitropic_om_2012
+Reading semitropic_take_2012
+Reading semitropic_om_10
+Reading semitropic_om_9
+Reading semitropic_om_8
+Reading semitropic_om_7
+Reading semitropic_om_6
+Reading semitropic_om_5
+Reading semitropic_om_4
+Reading semitropic_om_3
+Reading semitropic_om_2
+Reading semitropic_om_1
+Reading ..\Supplies\State_Water_Project\swp_carryover.sto
+Reading start_swpcarryover
+Reading swpcarryover_cap
+Reading swpcarryover_put_temp
+Reading swpcarryover_take_temp
+Reading swpcarryover_put
+Reading swpcarryover_putmax
+Reading swpcarryover_take
+Reading swpcarryover_FT
+Reading swpcarryover_FP
+Reading swpcarryover
+Reading ..\Supplies\State_Water_Project\swp_pseudo_reservoir.sto
+Reading swp_reservoir
+Reading swp_wasted
+Reading ..\Supplies\State_Water_Project\swp_transfers_100.trn
+Reading swp_transfer
+Reading swp_exclusive_transfer
+Reading swp_exclusive_shortage
+Reading swp_blended_transfer
+Reading blended_shortage
+Reading central_valley_blended_transfer
+Reading central_valley_exclusive_transfer
+Reading central_valley_exclusive_take
+Reading central_valley_blended_take
+Reading central_valley_transfer_total
+Reading spot_transfer
+Reading swp_total_transfer
+Reading transfer_cap_remain
+Reading other_transfers
+Reading swp_transfer_cap
+Reading swp_transfer_cap_array
+Reading ..\Supplies\State_Water_Project\yuba.sup
+Reading start_yuba
+Reading stop_yuba
+Reading yuba
+Reading yuba_component_2_temp_2
+Reading yuba_component_2_temp_1
+Reading yuba_component_2_temp
+Reading yuba_component_2
+Reading yuba_component_3_temp
+Reading yuba_component_3
+Reading yuba_component_4
+Reading yuba_component_4_take
+Reading ..\Demands\retail.dem
+Reading retail_demand
+Reading retail_array
+Reading ..\Demands\longterm.dem
+Reading total_lt_replenishment
+Reading total_lt_replenishment_array
+Reading swp_excl_lt
+Reading swp_excl_lt_array
+Reading cra_excl_lt
+Reading cra_excl_lt_array
+Reading blended_lt
+Reading blended_lt_array
+Reading cp_lt
+Reading cp_lt_array
+Reading w_excl_lt
+Reading w_excl_lt_array
+Reading d_excl_lt
+Reading d_excl_lt_array
+Reading j_excl_lt
+Reading j_excl_lt_array
+Reading s_excl_lt
+Reading s_excl_lt_array
+Reading m_excl_lt
+Reading m_excl_lt_array
+Reading upper_feeder1_lt
+Reading upper_feeder1_lt_array
+Reading cr_aqueduct_lt
+Reading cr_aqueduct_lt_array
+Reading upper_feeder2_lt
+Reading upper_feeder2_lt_array
+Reading lower_feeder_lt
+Reading lower_feeder_lt_array
+Reading rialto_lt
+Reading rialto_lt_array
+Reading savpl_sgp_sbv_lt
+Reading savpl_sgp_sbv_lt_array
+Reading lakeview_lt
+Reading lakeview_lt_array
+Reading la35_lt
+Reading la35_lt_array
+Reading s_untreated_lt
+Reading s_untreated_lt_array
+Reading ..\Demands\agricultural.dem
+Reading swp_excl_ag
+Reading swp_excl_ag_array
+Reading cra_excl_ag
+Reading cra_excl_ag_array
+Reading blended_ag
+Reading blended_ag_array
+Reading cp_ag
+Reading cp_ag_array
+Reading w_excl_ag
+Reading w_excl_ag_array
+Reading d_excl_ag
+Reading d_excl_ag_array
+Reading j_excl_ag
+Reading j_excl_ag_array
+Reading s_excl_ag
+Reading s_excl_ag_array
+Reading m_excl_ag
+Reading m_excl_ag_array
+Reading upper_feeder1_ag
+Reading upper_feeder1_ag_array
+Reading cr_aqueduct_ag
+Reading cr_aqueduct_ag_array
+Reading upper_feeder2_ag
+Reading upper_feeder2_ag_array
+Reading lower_feeder_ag
+Reading lower_feeder_ag_array
+Reading rialto_ag
+Reading rialto_ag_array
+Reading savpl_sgp_sbv_ag
+Reading savpl_sgp_sbv_ag_array
+Reading lakeview_ag
+Reading lakeview_ag_array
+Reading la35_ag
+Reading la35_ag_array
+Reading s_untreated_ag
+Reading s_untreated_ag_array
+Reading ..\Demands\firm.dem
+Reading swp_excl_firm
+Reading swp_excl_firm_array
+Reading cra_excl_firm
+Reading cra_excl_firm_array
+Reading blended_firm
+Reading blended_firm_array
+Reading cp_firm
+Reading cp_firm_array
+Reading w_excl_firm
+Reading w_excl_firm_array
+Reading d_excl_firm
+Reading d_excl_firm_array
+Reading j_excl_firm
+Reading j_excl_firm_array
+Reading s_excl_firm
+Reading s_excl_firm_array
+Reading m_excl_firm
+Reading m_excl_firm_array
+Reading upper_feeder1_firm
+Reading upper_feeder1_firm_array
+Reading cr_aqueduct_firm
+Reading cr_aqueduct_firm_array
+Reading upper_feeder2_firm
+Reading upper_feeder2_firm_array
+Reading lower_feeder_firm
+Reading lower_feeder_firm_array
+Reading rialto_firm
+Reading rialto_firm_array
+Reading savpl_sgp_sbv_firm
+Reading savpl_sgp_sbv_firm_array
+Reading lakeview_firm
+Reading lakeview_firm_array
+Reading la35_firm
+Reading la35_firm_array
+Reading s_untreated_firm
+Reading s_untreated_firm_array
+Reading ..\Costs\Colorado_River_Aqueduct\cra_power.cst
+Reading cra_power_real
+Reading cra_power_pv
+Reading hoover_energy
+Reading hoover_energy_need
+Reading hoover_energy_cost
+Reading hoover_energy_fee
+Reading hoover_energy_fee_array
+Reading parker_energy
+Reading parker_energy_need
+Reading parker_energy_cost
+Reading parker_energy_fee
+Reading parker_energy_fee_array
+Reading benefit_energy
+Reading benefit_energy_need
+Reading supplemental_energy_need
+Reading supplemental_energy_cost
+Reading supplemental_energy_fee
+Reading supplemental_energy_fee_array
+Reading ..\Costs\Colorado_River_Aqueduct\cra_transfers.cst
+Reading cra_transfer_fee
+Reading cra_transfer_cost_real
+Reading cra_transfer_cost_pv
+Reading cra_transfer_forecast_cost_real
+Reading cra_transfer_forecast_cost_pv
+Reading ..\Costs\Colorado_River_Aqueduct\dwcv_callback.cst
+Reading dwcv_callback_fixed_fee
+Reading dwcv_callback_fixed_cost1
+Reading dwcv_callback_fixed_cost2
+Reading dwcv_callback_variable_fee
+Reading dwcv_callback_cost_real
+Reading dwcv_callback_cost_pv
+Reading dwcv_callback_forecast_cost_real
+Reading dwcv_callback_forecast_cost_pv
+Reading ..\Costs\Colorado_River_Aqueduct\pvid.cst
+Reading pvid_fee
+Reading pvid_cost
+Reading pvid_cost_pv
+Reading pvid_forecast_cost_real
+Reading pvid_forecast_cost_pv
+Reading ..\Costs\In_Region\chino.cst
+Reading chino_take_fee
+Reading chino_take_cost
+Reading chino_cost_real
+Reading chino_forecast_cost_real
+Reading chino_cost_pv
+Reading chino_forecast_cost_pv
+Reading ..\Costs\In_Region\compton.cst
+Reading compton_cup_take_fee
+Reading compton_cup_take_cost
+Reading compton_cup_cost_real
+Reading compton_cup_forecast_cost_real
+Reading compton_cup_cost_pv
+Reading compton_cup_forecast_cost_pv
+Reading ..\Costs\In_Region\cyclic.cst
+Reading cyclic_take_fee
+Reading cyclic_cost_real
+Reading cyclic_forecast_cost_real
+Reading cyclic_cost_pv
+Reading cyclic_forecast_cost_pv
+Reading ..\Costs\In_Region\elsinore.cst
+Reading elsinore_take_fee
+Reading elsinore_take_cost
+Reading elsinore_cost_real
+Reading elsinore_forecast_cost_real
+Reading elsinore_cost_pv
+Reading elsinore_forecast_cost_pv
+Reading ..\Costs\In_Region\foothill.cst
+Reading foothill_cup_take_fee
+Reading foothill_cup_take_cost
+Reading foothill_cup_cost_real
+Reading foothill_cup_forecast_cost_real
+Reading foothill_cup_cost_pv
+Reading foothill_cup_forecast_cost_pv
+Reading ..\Costs\In_Region\lakewood.cst
+Reading lakewood_take_fee
+Reading lakewood_take_cost
+Reading lakewood_cost_real
+Reading lakewood_forecast_cost_real
+Reading lakewood_cost_pv
+Reading ..\Costs\In_Region\live_oak.cst
+Reading live_oak_take_fee
+Reading live_oak_take_cost
+Reading live_oak_cost_real
+Reading live_oak_forecast_cost_real
+Reading live_oak_cost_pv
+Reading live_oak_forecast_cost_pv
+Reading ..\Costs\In_Region\long_beach.cst
+Reading long_beach_take_fee
+Reading long_beach_take_cost
+Reading long_beach_cost_real
+Reading long_beach_forecast_cost_real
+Reading long_beach_cost_pv
+Reading long_beach_forecast_cost_pv
+Reading ..\Costs\In_Region\orange_county.cst
+Reading orange_county_take_fee
+Reading orange_county_take_cost
+Reading orange_county_cost_real
+Reading orange_county_forecast_cost_real
+Reading orange_county_cost_pv
+Reading orange_county_forecast_cost_pv
+Reading ..\Costs\In_Region\upper_claremont.cst
+Reading upper_claremont_take_fee
+Reading upper_claremont_take_cost
+Reading upper_claremont_cost_real
+Reading upper_claremont_forecast_cost_real
+Reading upper_claremont_cost_pv
+Reading upper_claremont_forecast_cost_pv
+Reading ..\Costs\In_Region\treatment.cst
+Reading treatment_cost
+Reading treatment_need
+Reading treatment_fee
+Reading treatment_fee_array
+Reading treatment_cost_pv
+Reading cumulative_treatment_cost
+Reading cumulative_treatment_cost_pv
+Reading ..\Costs\State_Water_Project\arvin_edison.cst
+Reading arvin_regulation_fee_delivered
+Reading arvin_put_power_fee
+Reading arvin_put_om
+Reading arvin_put_cost
+Reading arvin_regulation_fee_returned_non_capital
+Reading arvin_take_power_fee
+Reading arvin_take_om
+Reading arvin_take_cost
+Reading arvin_cost_real
+Reading arvin_forecast_cost_real
+Reading arvin_cost_pv
+Reading arvin_forecast_cost_pv
+Reading ..\Costs\State_Water_Project\kern_delta.cst
+Reading kerndelta_deposit_fee
+Reading kerndelta_put_om_fee
+Reading kerndelta_canal_fee
+Reading kerndelta_put_power_fee
+Reading kerndelta_put_cost
+Reading kerndelta_take_fee
+Reading kerndelta_take_om_fee
+Reading kerndelta_take_power_fee
+Reading kerndelta_take_cost
+Reading kerndelta_cost_real
+Reading kerndelta_forecast_cost_real
+Reading kerndelta_cost_pv
+Reading kerndelta_forecast_cost_pv
+Reading ..\Costs\State_Water_Project\mojave.cst
+Reading mojave_put_cost
+Reading mojave_take_cost
+Reading mojave_cost_real
+Reading mojave_forecast_cost_real
+Reading mojave_cost_pv
+Reading mojave_forecast_cost_pv
+Reading ..\Costs\State_Water_Project\san_bernardino.cst
+Reading sbvmwd_purchase_fee
+Reading sbvmwd_purchase_cost
+Reading sbvmwd_power_fee
+Reading sbvmwd_take_cost
+Reading sbvmwd_cost_real
+Reading sbvmwd_forecast_cost_real
+Reading sbvmwd_cost_pv
+Reading sbvmwd_forecast_cost_pv
+Reading ..\Costs\State_Water_Project\semitropic.cst
+Reading semitropic_put_fee_2
+Reading semitropic_put_cost
+Reading semitropic_take_fee_2
+Reading semitropic_take_power_fee
+Reading semitropic_take_cost
+Reading semitropic_om_fee
+Reading semitropic_om_2012_check
+Reading semitropic_om_cost
+Reading semitropic_om_credits_earned
+Reading semitropic_om_credits
+Reading semitropic_om_credits_cumulative
+Reading semitropic_cost_real
+Reading semitropic_forecast_cost_real
+Reading semitropic_cost_pv
+Reading semitropic_forecast_cost_pv
+Reading ..\Costs\State_Water_Project\swp_power.cst
+Reading alamo_power
+Reading alamo_power_array
+Reading banks_power
+Reading banks_power_array
+Reading dos_amigos_power
+Reading dos_amigos_power_array
+Reading buena_vista_power
+Reading buena_vista_power_array
+Reading edmonston_power
+Reading edmonston_power_array
+Reading mojave_siphon_power
+Reading mojave_siphon_power_array
+Reading devil_canyon_power
+Reading devil_canyon_power_array
+Reading castaic_power
+Reading castaic_power_array
+Reading polonio_power
+Reading polonio_power_array
+Reading southbay_power
+Reading southbay_power_array
+Reading swp_power_real
+Reading swp_power_pv
+Reading delta_power_real
+Reading delta_power_pv
+Reading swp_east_power
+Reading swp_east_power_real
+Reading swp_east_power_pv
+Reading swp_west_power
+Reading swp_west_power_real
+Reading swp_west_power_pv
+Reading arvin_put_swp_power
+Reading arvin_take_swp_power
+Reading arvin_power_real
+Reading arvin_power_pv
+Reading kerndelta_put_swp_power
+Reading kerndelta_take_swp_power
+Reading kerndelta_power_real
+Reading kerndelta_power_pv
+Reading mojave_power_real
+Reading mojave_power_pv
+Reading sbvmwd_power_real
+Reading sbvmwd_power_pv
+Reading semitropic_put_swp_power
+Reading semitropic_take_swp_power
+Reading semitropic_power_real
+Reading semitropic_power_pv
+Reading ..\Costs\State_Water_Project\swp_transfers.cst
+Reading swp_transfer_cost
+Reading swp_transfer_cost_pv
+Reading cumulative_swp_transfer_cost
+Reading cumulative_swp_transfer_cost_pv
+Reading ..\Costs\State_Water_Project\delta_fix.cst
+Reading delta_fix_cost
+Reading delta_fix_fee
+Reading delta_interim_fee
+Reading delta_fix_cost_pv
+Reading cumulative_delta_fix_cost
+Reading cumulative_delta_fix_cost_pv
+Reading ..\Costs\State_Water_Project\yuba.cst
+Reading yuba_cost_real
+Reading yuba_forecast_cost_real
+Reading yuba_cost_pv
+Reading yuba_forecast_cost_pv
+Reading yuba_critical_fee2
+Reading yuba_dry_fee2
+Reading yuba_fee2
+Reading yuba_cost2_real
+Reading yuba_cost2_pv
+Reading yuba_critical_fee34
+Reading yuba_dry_fee34
+Reading yuba_below_normal_fee34
+Reading yuba_above_normal_fee34
+Reading yuba_wet_fee34
+Reading yuba_fee34
+Reading yuba_cost3_real
+Reading yuba_cost3_pv
+Reading yuba_cost4_real
+Reading yuba_cost4_pv
+Reading yuba_gw_om_fee
+Reading yuba_gw_om_cost_real
+Reading ..\Water_Quality\Colorado_River_Aqueduct\cra.wq
+Reading cra_salinity
+Reading cra_exclusive_wq
+Reading cra_exclusive_af
+Reading cra_tds
+Reading cra_tds_array
+Reading ..\Water_Quality\In_Region\blended.wq
+Reading blended_tds
+Reading blended_salinity
+Reading blended_take_salinity
+Reading blended_take_wq
+Reading blended_take_af
+Reading blended_wq
+Reading blended_af
+Reading cra_blended_wq
+Reading cra_blended_af
+Reading swp_east_blended_wq
+Reading swp_east_blended_af
+Reading swp_west_blended_wq
+Reading swp_west_blended_af
+Reading local_wq
+Reading local_af
+Reading ..\Water_Quality\In_Region\chino.wq
+Reading chino_salinity
+Reading chino_wq_start
+Reading chino_tds_start
+Reading chino_put_wq
+Reading chino_take_wq
+Reading chino_wq_end
+Reading chino_tds_end
+Reading ..\Water_Quality\In_Region\compton.wq
+Reading compton_cup_salinity
+Reading compton_cup_wq_start
+Reading compton_cup_put_wq
+Reading compton_cup_take_wq
+Reading compton_cup_wq_end
+Reading compton_cup_tds_start
+Reading compton_cup_tds_end
+Reading ..\Water_Quality\In_Region\desal.wq
+Reading desal_salinity
+Reading desal_wq
+Reading desal_af
+Reading desal_tds
+Reading ..\Water_Quality\In_Region\dvl.wq
+Reading dvl_salinity
+Reading dvl_wq_start
+Reading dvl_put_wq
+Reading dvl_take_wq
+Reading dvl_wq_end
+Reading dvl_tds_start
+Reading dvl_tds_end
+Reading ..\Water_Quality\In_Region\elsinore.wq
+Reading elsinore_salinity
+Reading elsinore_wq_start
+Reading elsinore_put_wq
+Reading elsinore_take_wq
+Reading elsinore_wq_end
+Reading elsinore_tds_start
+Reading elsinore_tds_end
+Reading ..\Water_Quality\In_Region\foothill.wq
+Reading foothill_cup_salinity
+Reading foothill_cup_wq_start
+Reading foothill_cup_put_wq
+Reading foothill_cup_take_wq
+Reading foothill_cup_wq_end
+Reading foothill_cup_tds_start
+Reading foothill_cup_tds_end
+Reading ..\Water_Quality\In_Region\groundwater.wq
+Reading groundwater_salinity
+Reading groundwater_wq
+Reading groundwater_af
+Reading ..\Water_Quality\In_Region\gw_recovery.wq
+Reading gwr_salinity
+Reading gwr_wq
+Reading gwr_af
+Reading gwr_tds
+Reading ..\Water_Quality\In_Region\laa.wq
+Reading laa_salinity
+Reading laa_wq
+Reading laa_af
+Reading laa_tds
+Reading ..\Water_Quality\In_Region\lakewood.wq
+Reading lakewood_salinity
+Reading lakewood_wq_start
+Reading lakewood_put_wq
+Reading lakewood_take_wq
+Reading lakewood_wq_end
+Reading lakewood_tds_start
+Reading lakewood_tds_end
+Reading ..\Water_Quality\In_Region\live_oak.wq
+Reading live_oak_salinity
+Reading live_oak_wq_start
+Reading live_oak_put_wq
+Reading live_oak_take_wq
+Reading live_oak_wq_end
+Reading live_oak_tds_start
+Reading live_oak_tds_end
+Reading ..\Water_Quality\In_Region\long_beach.wq
+Reading long_beach_salinity
+Reading long_beach_wq_start
+Reading long_beach_put_wq
+Reading long_beach_take_wq
+Reading long_beach_wq_end
+Reading long_beach_tds_start
+Reading long_beach_tds_end
+Reading ..\Water_Quality\In_Region\orange_county.wq
+Reading orange_county_salinity
+Reading orange_county_wq_start
+Reading orange_county_put_wq
+Reading orange_county_take_wq
+Reading orange_county_wq_end
+Reading orange_county_tds_start
+Reading orange_county_tds_end
+Reading ..\Water_Quality\In_Region\recycling.wq
+Reading recycling_salinity
+Reading recycling_wq
+Reading recycling_af
+Reading recycling_tds
+Reading ..\Water_Quality\In_Region\skinner.wq
+Reading lake_skinner_salinity
+Reading lake_skinner_wq_start
+Reading lake_skinner_put_wq
+Reading lake_skinner_take_wq
+Reading lake_skinner_wq_end
+Reading lake_skinner_tds_start
+Reading lake_skinner_tds_end
+Reading ..\Water_Quality\In_Region\surface.wq
+Reading surface_salinity
+Reading surface_wq
+Reading surface_af
+Reading surface_tds
+Reading ..\Water_Quality\In_Region\upper_claremont.wq
+Reading upper_claremont_salinity
+Reading upper_claremont_wq_start
+Reading upper_claremont_put_wq
+Reading upper_claremont_take_wq
+Reading upper_claremont_wq_end
+Reading upper_claremont_tds_start
+Reading upper_claremont_tds_end
+Reading ..\Water_Quality\State_Water_Project\swp.wq
+Reading swp_west_salinity
+Reading swp_exclusive_west_wq
+Reading swp_west_tds
+Reading swp_exclusive_west_af
+Reading swp_east_salinity
+Reading swp_exclusive_east_wq
+Reading swp_exclusive_east_af
+Reading swp_tds
+Reading delta_wq
+Reading delta_af
+Reading mwd_delta_af
+Reading other_delta_af
+Reading central_coast_contractors
+Reading so_cal_contractors
+Reading san_joaquin_contractors
+Reading delta_tds
+Reading delta_tds_array
+Reading ..\Water_Quality\State_Water_Project\arvin_edison.wq
+Reading arvin_wq
+Reading arvin_tds
+Reading ..\Water_Quality\State_Water_Project\kern_delta.wq
+Reading kerndelta_wq
+Reading kerndelta_tds
+Reading ..\Water_Quality\State_Water_Project\semitropic.wq
+Reading semitropic_wq
+Reading semitropic_tds
+Reading ..\Test\test.in
+Reading test1
+Updating variable types
+
+4 Regions Defined:
+
+cra
+swp
+in_basin
+in_region
+
+
+Looking for missing variables:
+
+Finished
+
+
+05/14/15  09:34:51: Start Simulation dsm_input
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Completed
+05/14/15  09:35:19: End Simulation dsm_input
+

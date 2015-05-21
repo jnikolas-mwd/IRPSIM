@@ -7,18 +7,16 @@
 
 #include <irpapp.h>
 #include <notify.h>
+//#include <IrpsimEngineWrapper.h>
 
-using namespace IrpsimEngineWrapper;
+//using namespace IrpsimEngineWrapper;
 
 static wofstream sdebug("debug_testconsole.txt",ios::binary);
 
-
-int notify(int type, const wchar_t* msg, int data) 
-{ 
-		sdebug << msg << ENDL; 
-		return 0; 
-}
-
+class CMTestNotifier : public CMNotifier {
+protected:
+	int notify(ntype type, const wchar_t* msg, int data) { sdebug << msg << ENDL; return 0; }
+};
 
 using namespace std;
 
@@ -26,9 +24,9 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	try {
 
-		CMNotifier::SetDelegate(notify);
+		CMNotifier::SetNotifier(new CMTestNotifier());
 
-		CMWrappedIrpApplication^ app = gcnew  CMWrappedIrpApplication();
+		IrpsimEngineWrapper::CMWrappedIrpApplication^ app = gcnew  IrpsimEngineWrapper::CMWrappedIrpApplication();
 		//CMIrpApplication *app = new CMIrpApplication();
 
 		app->OpenProject(L"C:\\Users\\Casey\\Documents\\IRPSIM Project Test\\Inputs\\Configuration\\IRP Resource Strategy.cfg");

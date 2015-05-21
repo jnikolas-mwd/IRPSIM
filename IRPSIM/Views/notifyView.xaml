@@ -10,7 +10,9 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TabControl TabStripPlacement="Bottom">
-            <TabItem Header="Output">Content for Output</TabItem>
+            <TabItem Header="Output">
+                <TextBox Text="{Binding Log}"  VerticalScrollBarVisibility="Auto"/>
+            </TabItem>
             <TabItem Header="Errors">Content for Errors</TabItem>
         </TabControl>
     </Grid>

@@ -12,6 +12,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{FC636965-9068-46BB-90C4-A58FE7E156B3}</ProjectGuid>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>TestConsole</RootNamespace>
   </PropertyGroup>
@@ -53,7 +54,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../IrpsimEngine/</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../IrpsimEngine/;../IrpsimEngineWrapper</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -94,6 +95,9 @@
   <ItemGroup>
     <ProjectReference Include="..\IrpsimEngineWrapper\IrpsimEngineWrapper.vcxproj">
       <Project>{95243521-1858-4a9f-8418-869d85bcea41}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\IrpsimEngine\IrpsimEngine.vcxproj">
+      <Project>{c2373396-ad44-4219-81df-b12136225486}</Project>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -7,7 +7,7 @@
               mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <TreeView>
-        <TreeViewItem Header="Supply"/>
+        <TreeViewItem Header="Supply" ItemsSource="{Binding Variables}" />
         <TreeViewItem Header="Demand"/>
         <TreeViewItem Header="Storage"/>
         <TreeViewItem Header="Scenarios"/>

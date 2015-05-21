@@ -644,6 +644,7 @@ BOOL CMSimulation::Run()
 			CMVariable::ResetTrial();
 			if (trialno == 0 && pApp)
 				CMNotifier::Notify(CMNotifier::LOGTIME, L"Start Simulation " + GetName());
+			CMNotifier::Notify(CMNotifier::PROGRESS, L"", (int)(100 * (double)trialno / (double)ntrials));
 		}
 
 		if (script) script->Run(timemachine);
@@ -656,8 +657,7 @@ BOOL CMSimulation::Run()
 		if (reliability) reliability->Process(timemachine);
 
 		elapsedtime = initelapsed + (long)time(NULL) - (long)inittime;
-
-		CMNotifier::Notify(CMNotifier::PROGRESS, L"", (int)((double)trialno / (double)ntrials));
+		
 		//if (pApp) pApp->Synchronize(CMIrpApplication::SYNC_SIMULATION_UPDATE, this);
 
 		timemachine->Step();

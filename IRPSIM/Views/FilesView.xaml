@@ -1,7 +1,7 @@
 ﻿<UserControl x:Class="IRPSIM.Views.FilesView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:viewmodel="clr-namespace:IRPSIM.ViewModels"
              mc:Ignorable="d" 
@@ -9,9 +9,9 @@
     <UserControl.Resources>
         <Style TargetType="{x:Type TabControl}">
         <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}"/>
-    </Style>
+        </Style>
     </UserControl.Resources>
-    <TabControl TabStripPlacement="Top" ItemsSource="{Binding OpenFiles}" SelectedIndex="{Binding OpenFileIndex}">
+    <TabControl TabStripPlacement="Top" ItemsSource="{Binding Files}" SelectedIndex="{Binding OpenFileIndex}">
         <TabControl.ItemTemplate>
             <DataTemplate>
                 <TextBlock Text="{Binding FileName}"/>

@@ -9,25 +9,37 @@ namespace IRPSIM.ViewModels
 {
     public class DelegateCommand : ICommand
     {
-        private readonly Action _action;
+        private readonly Action<object> _execute;
+        private readonly Predicate<object> _canExecute;
 
-        public DelegateCommand(Action action)
+        public DelegateCommand(Action<object> execute)
+            : this(execute, null)
         {
-            _action = action;
         }
 
-        public void Execute(object parameter)
+        public DelegateCommand(Action<object> execute, Predicate<object> canExecute)
         {
-            _action();
+            if (execute == null)
+                throw new ArgumentNullException("execute");
+
+            _execute = execute;
+            _canExecute = canExecute;           
         }
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            return _canExecute == null ? true : _canExecute(parameter);
         }
 
-#pragma warning disable 67
-        public event EventHandler CanExecuteChanged;
-#pragma warning restore 67
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
+        public void Execute(object parameter)
+        {
+            _execute(parameter);
+        }
     }
 }

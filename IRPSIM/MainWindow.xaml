@@ -3,15 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:viewmodel="clr-namespace:IRPSIM.ViewModels"
         xmlns:view="clr-namespace:IRPSIM.Views"
-        Title="IRPSIM" Height="350" Width="525">
+          Title="{Binding ProjectTitle}" Height="350" Width="525" FontFamily="Verdana">
     <Window.DataContext>
         <viewmodel:MainViewModel/>
-    </Window.DataContext>    
-    <DockPanel>
+    </Window.DataContext>
+    <Window.Resources>
+        <viewmodel:ProgressToProgressVisibleConverter x:Key="progressToProgressVisible"/>
+    </Window.Resources>
+     <DockPanel>
         <Menu Name="mainMenu" DockPanel.Dock="Top">
             <MenuItem Header="_File">
                 <MenuItem Header="Open _Project..." Command="{Binding ProjectOpenCommand}"/>
-                <MenuItem Header="Open _File..." Command="{Binding FileOpenCommand}"/>
+                <MenuItem Header="Open _File..." Command="{Binding FilesViewModel.FileOpenCommand}"/>
                 <Separator/>
                 <MenuItem Header="_Close"/>
                 <Separator/>
@@ -23,18 +26,30 @@
             <MenuItem Header="_View"/>
         </Menu>
         <StatusBar Name="statusBar" DockPanel.Dock="Bottom">
-            Test
+            <ProgressBar Value="{Binding Path=Progress}" Visibility="{Binding Path=Progress, Converter={StaticResource progressToProgressVisible}}" Minimum="0" Maximum="100" Width="100" Height="10" />
         </StatusBar>
-        <view:NotifyView x:Name="notifyView" DockPanel.Dock="Bottom">
-        </view:NotifyView>
-        <Grid DockPanel.Dock="Bottom">
-             <Grid.ColumnDefinitions>
+         <Grid DockPanel.Dock="Bottom">
+               <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <view:ObjectView x:Name="objectView" Grid.Column="0" />
-            <GridSplitter Grid.Column="0" Width="5"/>
-            <view:FilesView x:Name="filesView" Grid.Column="1" DataContext="{Binding}"/>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TabControl TabStripPlacement="Bottom" Grid.Column="0" Grid.Row="0">
+                <TabItem Header="Objects">
+                    <view:ObjectView x:Name="objectView"/>
+                </TabItem>
+                <TabItem Header="Files">
+                    <view:LoadedFilesView x:Name="loadedFilesView"/>
+                </TabItem>
+            </TabControl>
+             <GridSplitter Grid.Column="0" Width="3"/>
+            <view:FilesView x:Name="filesView" Grid.Column="1" Grid.Row="0" DataContext="{Binding FilesViewModel}"/>
+            <GridSplitter Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="3" ResizeDirection="Rows" HorizontalAlignment="Stretch"/>
+            <view:NotifyView x:Name="notifyView" Grid.Row="2" Grid.ColumnSpan="2"/>
         </Grid>
     </DockPanel>
 </Window>

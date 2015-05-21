@@ -10,49 +10,219 @@
 #include <msclr\marshal_cppstd.h>
 
 using namespace System;
+using namespace System::Collections;
+using namespace System::ComponentModel;
 using namespace msclr::interop;
-//using namespace System::Runtime::InteropServices;
+using namespace System::Runtime::InteropServices;
+using namespace System::Collections::ObjectModel;
 
 namespace IrpsimEngineWrapper	
 {
-	/*
-	private class _CMIrpApplication : public CMIrpApplication
-	{
+	public delegate int CMNotifierDelegate(int type, String^ msg, int data);
+	typedef int(__stdcall  *CMNotifierCallback)(CMNotifier::ntype type, String^  msg, int data);
 
+	public enum class NodeType { None, Demand, Supply, Storage, Cost };
+
+	class _CMNotifier : public CMNotifier 
+	{
+	private:
+		IntPtr ip;
+		CMNotifierCallback callback;
+	public:
+		_CMNotifier()
+		{
+			CMNotifier::SetNotifier(this);
+		}
+		
+		void SetNotifierDelegate(CMNotifierDelegate^ d)
+		{
+			ip = Marshal::GetFunctionPointerForDelegate(d);
+			callback = static_cast<CMNotifierCallback>(ip.ToPointer());
+		}
+		
+		virtual int notify(CMNotifier::ntype type, const wchar_t* msg, int data)
+		{
+			if (callback)
+				return callback(type, marshal_as<String^>(msg), data);
+			return 0;
+		}
 	};
-	*/
-	/*
-	public delegate int CMNotifyDelegate(int, byte* , int);
-	*/
+
+	public ref class CMWrappedNotifier
+	{
+	private:
+		_CMNotifier* pNotifier = nullptr;
+	public:
+		CMWrappedNotifier(CMNotifierDelegate^ d)
+		{
+			pNotifier = new _CMNotifier();
+			pNotifier->SetNotifierDelegate(d);
+		}
+	};
+	
+	public ref class CMWrappedIrpObject : INotifyPropertyChanged
+	{
+	protected:
+		CMIrpObject* obj;
+	public:
+		virtual event PropertyChangedEventHandler^ PropertyChanged;
+		
+		void OnPropertyChanged(String^ info)
+		{
+			PropertyChanged(this, gcnew PropertyChangedEventArgs(info));
+		}
+
+		CMWrappedIrpObject(CMIrpObject* o)
+		{
+			obj = o;
+		}
+		
+		property int FileId
+		{
+			int get() { return obj->GetApplicationId(); }
+		}
+
+		property String^ Name
+		{
+			String^ get() { return marshal_as<String^>(obj->GetName().c_str()); }
+		}
+
+		property String^ Type
+		{
+			String^ get() { return marshal_as<String^>(obj->IsA()); }
+		}
+
+		virtual String^ ToString() override { return Name; }
+	};
+	
+	public ref class CMWrappedVariable : public CMWrappedIrpObject {
+	private:
+		NodeType _ntype;
+	public:
+		CMWrappedVariable(CMVariable* v) : CMWrappedIrpObject(v)
+		{
+			if (v->IsType(L"Demand")) _ntype = NodeType::Demand;
+			else if (v->IsType(L"Supply")) _ntype = NodeType::Supply;
+			else if (v->IsType(L"Storage")) _ntype = NodeType::Storage;
+			else if (v->IsType(L"Cost")) _ntype = NodeType::Cost;
+		}
+
+		property String^ EType
+		{
+			String^ get() 
+			{ 
+				CMVariable* v = (CMVariable*)obj;
+				return marshal_as<String^>(v->VariableType().c_str()); 
+			}
+		}
+
+		property NodeType NType
+		{
+			NodeType get() { return _ntype; }
+		}
+	};
+
+	public ref class CMLoadedFile : INotifyPropertyChanged 
+	{
+	private:
+		int _id;
+		String^ _path;
+	public:
+		virtual event PropertyChangedEventHandler^ PropertyChanged;
+
+		void OnPropertyChanged(String^ info)
+		{
+			PropertyChanged(this, gcnew PropertyChangedEventArgs(info));
+		}
+
+		CMLoadedFile() : CMLoadedFile(0, gcnew String(L"")) {}
+
+		CMLoadedFile(int id, String^ path)
+		{
+			_id = id;
+			_path = path;
+		}
+
+		property int Id
+		{
+			int get() { return _id; }
+		}
+
+		property String^ Path
+		{
+			String^ get() { return _path; }
+		}
+
+		property String^ FileName
+		{
+			String^ get()
+			{
+				int index = Path->LastIndexOf(L"\\");
+				return Path->Substring(index + 1);
+			}
+		}
+
+		virtual String^ ToString() override { return FileName; }
+	};
+
 
 	public ref class CMWrappedIrpApplication
 	{
 	private:
 		CMIrpApplication *app = nullptr;
 		CMSimulation *sim = nullptr;
-		//CMNotifyDelegatePointer pDelegate;
+		ObservableCollection<CMWrappedVariable^>^ variableList = gcnew System::Collections::ObjectModel::ObservableCollection<CMWrappedVariable^>();
+		ObservableCollection<CMLoadedFile^>^ loadedFileList = gcnew System::Collections::ObjectModel::ObservableCollection<CMLoadedFile^>();
+
 	public:
 		CMWrappedIrpApplication()
 		{
 			app = new CMIrpApplication();
-			CMNotifier::SetDelegate(nullptr);
 		}
-			
-		/*
-		CMWrappedIrpApplication(CMNotifyDelegate^ del)
+
+#pragma region Properties
+
+		String^ GetProjectName()
 		{
-			app = new _CMIrpApplication();
-			IntPtr delegatePointer = Marshal::GetFunctionPointerForDelegate(del);
-			pDelegate = reinterpret_cast<CMNotifyDelegatePointer>(delegatePointer.ToPointer());
-			CMNotifier::SetDelegate(pDelegate);
+			return marshal_as<String^>(app->GetProjectFile().c_str());
 		}
-		*/
+
+		ObservableCollection<CMWrappedVariable^>^ GetVariables()
+		{
+			return variableList;
+		}
+
+		ObservableCollection<CMLoadedFile^>^ GetLoadedFiles()
+		{
+			return loadedFileList;
+		}
+
+#pragma endregion
+
+
+#pragma region Commands
 
 		void OpenProject(String^ fileName)
 		{
 			std::wstring str = marshal_as<std::wstring>(fileName);
-
 			app->OpenProject(str.c_str());
+		}
+
+		void AfterOpenProject() 
+		{
+			CMVariableIterator iter;
+			CMVariable* v;
+		
+			while ((v = iter()) != 0)
+				variableList->Add(gcnew CMWrappedVariable(v));
+
+			int n = app->LoadedFilesCount();
+			for (int i = 0; i < n; i++)
+			{
+				loadedFileList->Add(gcnew CMLoadedFile(
+					i,
+					marshal_as<String^>(app->LoadedFile(i).c_str())));
+			}
 		}
 
 		void UseScenario(String^ name)
@@ -72,6 +242,8 @@ namespace IrpsimEngineWrapper
 			sim = app->CreateSimulation();
 			app->RunSimulation(sim);
 		}
+
+#pragma endregion
 
 
 		// TODO: Add your methods for this class here.

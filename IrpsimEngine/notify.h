@@ -22,8 +22,6 @@
 #include "cmstring.h"
 #include "cmtime.h"
 
-typedef int(*CMNotifyDelegatePointer)(int ntype, const wchar_t* msg, int data);
-
 class _IRPCLASS CMException {
 	CMString what;
 public:
@@ -33,10 +31,12 @@ public:
 
 class _IRPCLASS CMNotifier {
 public:
-	typedef enum ntype { ERROR = 1, WARNING, LOG, LOGTIME, INFO, PROGRESS };
-	static CMNotifyDelegatePointer SetDelegate(CMNotifyDelegatePointer p) { pDelegate = p; return pDelegate; }
+	typedef enum ntype : int { ERROR = 1, WARNING, LOG, LOGTIME, INFO, PROGRESS };
+	static CMNotifier* SetNotifier(CMNotifier *p) { pNotifier = p; return pNotifier; }
 	static int Notify(ntype type, const CMString& msg, int data = 0);
-	static int Notify(ntype type);
+	static int Notify(ntype type) { return Notify(type, L"", 0); }
+protected:
+	virtual int notify(ntype type, const wchar_t* msg, int data) { return 0; }
 private:
-	static CMNotifyDelegatePointer pDelegate;
+	static CMNotifier * pNotifier;
 };

@@ -105,7 +105,7 @@ public:
 	CMOptions& Options() {return options;}
 	void SetOptions(const CMOptions& op);
 
-	void SetLogFile(const CMString& fname);
+	// void SetLogFile(const CMString& fname);
 
 	CMString GetProjectFile() { return m_strProjectFile; }
 	//CMString GetProjectName();

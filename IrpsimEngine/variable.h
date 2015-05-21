@@ -148,7 +148,7 @@ public:
    virtual void SetSpecialValues(CMTimeMachine* t,double v1=0,double v2=0,double v3=0,double v4=0) {}
 
 	int Fail() {return (state&vsFailed) ? 1 : 0;}
-   void  SetRegion(int r) {region=r;}
+    void  SetRegion(int r) {region=r;}
 	int	GetRegion() {return region;}
 //   void  SetApplicationId(int id) {app_id=id;}
 //	int   GetApplicationId() {return app_id;}
@@ -169,6 +169,7 @@ public:
 	void   SetType(const CMString& aName);
 	void   SetType(int val); // for setting negative types
 	int	 IsType(const CMString& aName);
+
 	CMString GetSpecialType();
 
 	void	UpdateVariableLinks();
