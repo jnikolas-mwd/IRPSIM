@@ -28,8 +28,8 @@
 #include "cmlib.h"
 #include "notify.h"
 
-//#include <fstream>
-//static wofstream sdebug(L"debug_polynom.txt");
+#include <fstream>
+static wofstream sdebug(L"debug_polynom.txt");
 
 wchar_t* CMPolynomial::errorstrings[] = {
 	L"no expression",
@@ -172,8 +172,13 @@ int operator == (const CMPolynomial& p1,const CMPolynomial& p2)
 void CMPolynomial::UpdateVariableLinks()
 {
 	int i;
-	for (i=0;i<varnames.Count();i++)
-		variables.AddAt(i,CMVariable::Find(varnames[i].c_str()));
+	for (i = 0; i < varnames.Count(); i++) {
+		CMVariable* v = CMVariable::Find(varnames[i]);
+		if (v != 0)
+			variables.AddAt(i, v);
+		else
+			variables.AddAt(i, CMDefinitions::Find(varnames[i]));
+	}
 	for (i=0;i<expressions.Count();i++)
 		expressions[i]->UpdateVariableLinks();
 }
@@ -329,7 +334,7 @@ int CMPolynomial::add_constant_or_expression(CMString& str)
 
 int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, CMString& str, int& n, CMVSmallArray<CMString>& args)
 {
-	int i,len;
+	int i;
 	int err=-1;
 
 	str.resize(0);
@@ -406,10 +411,14 @@ int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, CMString& str, i
 
 	// check to see if this is a definition
 
+	/* Definitions are now incorporated into variables
 	const wchar_t* defname;
+	sdebug << ptr << ENDL;
 	for (i=0;(defname=CMDefinitions::GetDefinitionName(i))!=0;i++) {
 		len = wcslen(defname);
-		if (!_wcsnicmp(ptr, defname, len)) {
+		sdebug << L"   " << defname << L" " << len << ENDL;
+		if (_wcsnicmp(defname, ptr, len)==0) {
+			sdebug << L"FOUND " << defname << ENDL;
 			// if it is in the list of definitions and the next symbol is not
 			// a letter or '_' (implying a variable name that happens to begin
 			// with the same letters as a special symbol), then add the 'special'
@@ -423,6 +432,7 @@ int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, CMString& str, i
 			break;
 		}
 	}
+	*/
 
 	// check to see if item is a special function
 	for (i=0;special_funcs[i]!=NULL;i++) {
@@ -891,8 +901,11 @@ void CMPolynomial::level7(double& result)      // functions, (), numbers,
 		result = eval_variable(token==Variable);
 	else if (token == Constant)
 		result = constants[offset];
-	else if (token == Definition)
+	else if (token == Definition) 
+	{
 		result = CMDefinitions::GetDefinitionValue(offset);
+		sdebug << "Definition " << offset << result << ENDL;
+	}
 	else if (isspecialfunc(token))
 		result = eval_special_function();
 	get_token();
@@ -963,17 +976,22 @@ double CMPolynomial::eval_variable(int current)
 {
 	double ret;
 
+	// TODO: Fix to allow definitions
 	if (variables[offset] == 0) {
 		if (!(globalstate&ignoremissingvars))
 			report_error(XMissingVariable,varnames[offset]);
 		index += nargs*3;
 		ret = 0;
 	}
+	else if (variables[offset]->IsA() == L"CMDefinition") {
+		index += nargs * 3;
+		ret = (((CMDefinition*)variables[offset])->GetValue());
+	}
 	else {
 		int indexes[2];
 		int timeoffset = 0;
 		int i;
-      CMTIMEUNIT interval;
+        CMTIMEUNIT interval;
 		indexes[0] = indexes[1] = 0;
 		int indexno = 0;
 		for (i=0;i<nargs;i++) {
@@ -998,7 +1016,7 @@ double CMPolynomial::eval_variable(int current)
 				time->Offset(timeoffset,interval);
 			}
 		}
-		ret = variables[offset]->GetValue(time,current,indexes[0],indexes[1]);
+		ret = ((CMVariable*)variables[offset])->GetValue(time,current,indexes[0],indexes[1]);
 		if (timeoffset)
 			time->Offset(-timeoffset,interval);
 	}

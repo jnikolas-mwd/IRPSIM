@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using IrpsimEngineWrapper;
+using System.Diagnostics;
 
 namespace IRPSIM.Views
 {
@@ -23,6 +25,11 @@ namespace IRPSIM.Views
         public ObjectView()
         {
             InitializeComponent();
+        }
+
+        private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            SelectedObjectHelper.Content = e.NewValue;
         }
     }
 }

@@ -22,9 +22,11 @@
 
 #include "defines.h"
 
+const wchar_t* CMDefinition::IsA() { return L"CMDefinition"; }
+
 CMPSmallArray<CMDefinition> CMDefinitions::definition_array;
 
-CMDefinition* CMDefinitions::find(const CMString& n,unsigned short* loc)
+CMDefinition* CMDefinitions::Find(const CMString& n,unsigned short* loc)
 {
 	if (loc) *loc=0;
 
@@ -43,6 +45,11 @@ CMDefinition* CMDefinitions::find(const CMString& n,unsigned short* loc)
 double CMDefinitions::GetDefinition(const CMString& n)
 {
 	return IsDefined(n) ? GetValue(n) : _wtof(n.c_str());
+}
+
+CMDefinition* CMDefinitions::GetDefinition(unsigned n)
+{
+	return (n >= definition_array.Count()) ? 0 : definition_array.At(n);
 }
 
 const wchar_t* CMDefinitions::GetDefinitionName(unsigned n)

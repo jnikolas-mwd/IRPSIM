@@ -13,7 +13,9 @@
             <TabItem Header="Output">
                 <TextBox Text="{Binding Log}"  VerticalScrollBarVisibility="Auto"/>
             </TabItem>
-            <TabItem Header="Errors">Content for Errors</TabItem>
+            <TabItem Header="Errors">
+                <TextBox Text="{Binding Errors}"  VerticalScrollBarVisibility="Auto"/>
+            </TabItem>
         </TabControl>
     </Grid>
 </UserControl>

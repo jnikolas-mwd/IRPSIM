@@ -7,6 +7,7 @@
 #include <fstream>
 #include <irpapp.h>
 #include <notify.h>
+#include <defines.h>
 #include <msclr\marshal_cppstd.h>
 
 using namespace System;
@@ -23,7 +24,7 @@ namespace IrpsimEngineWrapper
 
 	public enum class NodeType { None, Demand, Supply, Storage, Cost };
 
-	class _CMNotifier : public CMNotifier 
+	private class _CMNotifier : public CMNotifier 
 	{
 	private:
 		IntPtr ip;
@@ -122,6 +123,21 @@ namespace IrpsimEngineWrapper
 		}
 	};
 
+	public ref class CMWrappedDefinition : public CMWrappedIrpObject {
+	private:
+		double value;
+	public:
+		CMWrappedDefinition(CMDefinition* d) : CMWrappedIrpObject(d)
+		{
+			value = d->GetValue();
+		}
+
+		property double Value
+		{
+			double get() { return value; }
+		}
+	};
+
 	public ref class CMLoadedFile : INotifyPropertyChanged 
 	{
 	private:
@@ -165,14 +181,17 @@ namespace IrpsimEngineWrapper
 		virtual String^ ToString() override { return FileName; }
 	};
 
-
 	public ref class CMWrappedIrpApplication
 	{
 	private:
 		CMIrpApplication *app = nullptr;
 		CMSimulation *sim = nullptr;
-		ObservableCollection<CMWrappedVariable^>^ variableList = gcnew System::Collections::ObjectModel::ObservableCollection<CMWrappedVariable^>();
-		ObservableCollection<CMLoadedFile^>^ loadedFileList = gcnew System::Collections::ObjectModel::ObservableCollection<CMLoadedFile^>();
+		ObservableCollection<CMWrappedVariable^>^ variableList = gcnew ObservableCollection<CMWrappedVariable^>();
+		ObservableCollection<CMLoadedFile^>^ loadedFileList = gcnew ObservableCollection<CMLoadedFile^>();
+		ObservableCollection<CMWrappedIrpObject^>^ definitionList = gcnew ObservableCollection<CMWrappedIrpObject^>();
+		ObservableCollection<CMWrappedIrpObject^>^ scenarioList = gcnew ObservableCollection<CMWrappedIrpObject^>();
+		ObservableCollection<CMWrappedIrpObject^>^ scriptList = gcnew ObservableCollection<CMWrappedIrpObject^>();
+		ObservableCollection<CMWrappedIrpObject^>^ categoryList = gcnew ObservableCollection<CMWrappedIrpObject^>();
 
 	public:
 		CMWrappedIrpApplication()
@@ -182,19 +201,39 @@ namespace IrpsimEngineWrapper
 
 #pragma region Properties
 
-		String^ GetProjectName()
+		property String^ ProjectName
 		{
-			return marshal_as<String^>(app->GetProjectFile().c_str());
+			String^ get() { return marshal_as<String^>(app->GetProjectFile().c_str()); }
 		}
 
-		ObservableCollection<CMWrappedVariable^>^ GetVariables()
+		property ObservableCollection<CMWrappedVariable^>^ Variables
 		{
-			return variableList;
+			ObservableCollection<CMWrappedVariable^>^ get() { return variableList; }
+		}
+		
+		property ObservableCollection<CMWrappedIrpObject^>^ Definitions
+		{
+			ObservableCollection<CMWrappedIrpObject^>^ get() { return definitionList; }
 		}
 
-		ObservableCollection<CMLoadedFile^>^ GetLoadedFiles()
+		property ObservableCollection<CMWrappedIrpObject^>^ Scenarions
 		{
-			return loadedFileList;
+			ObservableCollection<CMWrappedIrpObject^>^ get() { return scenarioList; }
+		}
+
+		property ObservableCollection<CMWrappedIrpObject^>^ Scripts
+		{
+			ObservableCollection<CMWrappedIrpObject^>^ get() { return scriptList; }
+		}
+
+		property ObservableCollection<CMWrappedIrpObject^>^ Categories
+		{
+			ObservableCollection<CMWrappedIrpObject^>^ get() { return categoryList; }
+		}
+
+		property ObservableCollection<CMLoadedFile^>^ LoadedFiles
+		{		
+			ObservableCollection<CMLoadedFile^>^ get() { return loadedFileList; }
 		}
 
 #pragma endregion
@@ -212,11 +251,28 @@ namespace IrpsimEngineWrapper
 		{
 			CMVariableIterator iter;
 			CMVariable* v;
+			CMDefinition* d;
+			int n;
 		
 			while ((v = iter()) != 0)
 				variableList->Add(gcnew CMWrappedVariable(v));
 
-			int n = app->LoadedFilesCount();
+			for (int i = 0; (d = CMDefinitions::GetDefinition(i)) != 0; i++)
+				definitionList->Add(gcnew CMWrappedDefinition(d));
+
+			n = app->ScenariosCount();
+			for (int i = 0; i < n; i++)
+				scenarioList->Add(gcnew CMWrappedIrpObject(app->Scenario(i)));
+
+			n = app->ScriptsCount();
+			for (int i = 0; i < n; i++)
+				scriptList->Add(gcnew CMWrappedIrpObject(app->Script(i)));
+
+			n = app->Categories();
+			for (int i = 0; i < n; i++)
+				categoryList->Add(gcnew CMWrappedIrpObject(app->Category(i)));
+
+			n = app->LoadedFilesCount();
 			for (int i = 0; i < n; i++)
 			{
 				loadedFileList->Add(gcnew CMLoadedFile(

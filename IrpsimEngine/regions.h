@@ -33,7 +33,7 @@ public:
 	static void Reset() {regions.Reset(1);}
 	static int GetRegionId(const CMString& name);
 	static CMString GetRegionName(int id);
-   static unsigned RegionCount() {return regions.Count();}
+    static unsigned RegionCount() {return regions.Count();}
 };
 
 #endif

@@ -4,9 +4,6 @@
         xmlns:viewmodel="clr-namespace:IRPSIM.ViewModels"
         xmlns:view="clr-namespace:IRPSIM.Views"
           Title="{Binding ProjectTitle}" Height="350" Width="525" FontFamily="Verdana">
-    <Window.DataContext>
-        <viewmodel:MainViewModel/>
-    </Window.DataContext>
     <Window.Resources>
         <viewmodel:ProgressToProgressVisibleConverter x:Key="progressToProgressVisible"/>
     </Window.Resources>

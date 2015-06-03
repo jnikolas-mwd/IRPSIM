@@ -99,7 +99,7 @@ protected:
 	virtual void write_body(wostream& s) {}
 	virtual wistream& read(wistream& s);
 	virtual wostream& write(wostream& s);
-	virtual const wchar_t* CMVariable::IsA();
+	virtual const wchar_t* IsA();
 public:
 	static const ULONG vsFailed;
 	static const ULONG vsStochastic;

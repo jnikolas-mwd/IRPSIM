@@ -10,6 +10,7 @@ using System.Collections.ObjectModel;
 using Microsoft.Win32;
 using IrpsimEngineWrapper;
 using System.ComponentModel;
+using System.Windows.Data;
 
 namespace IRPSIM.ViewModels
 {
@@ -23,14 +24,14 @@ namespace IRPSIM.ViewModels
         private BackgroundWorker backgroundWorkerRunSimulation = new BackgroundWorker();
 
         private Dictionary<int, string> _notifyTypes = new Dictionary<int,string>();
-        private string _logMessage;
-        private int _progress = 0;
-                        
+                               
         private int test(int ntype, String msg, int data)
         {
-            if (ntype == 3 || ntype == 4)
+            if (ntype == 1 || ntype == 2)
+                this.Errors += (msg + System.Environment.NewLine);
+            else if (ntype == 3 || ntype == 4)
                 this.Log += (msg + System.Environment.NewLine);
-            if (ntype == 6)
+            else if (ntype == 6)
                 this.Progress = data;
             return 0;
         }
@@ -49,6 +50,53 @@ namespace IRPSIM.ViewModels
             _notifyTypes.Add(5, "INFO");
             _notifyTypes.Add(6, "PROGRESS");
 
+            SortDescription sd = new SortDescription("Name", ListSortDirection.Ascending);
+
+            this.SupplyVariables = new CollectionViewSource();
+            this.SupplyVariables.Source = irpApp.Variables;
+            this.SupplyVariables.Filter += new FilterEventHandler(delegate(object item, FilterEventArgs e) { e.Accepted = (((CMWrappedVariable)e.Item).NType == NodeType.Supply); });
+            this.SupplyVariables.SortDescriptions.Add(sd);
+
+            this.DemandVariables = new CollectionViewSource();
+            this.DemandVariables.Source = irpApp.Variables;
+            this.DemandVariables.Filter += new FilterEventHandler(delegate(object item, FilterEventArgs e) { e.Accepted = (((CMWrappedVariable)e.Item).NType == NodeType.Demand); });
+            this.DemandVariables.SortDescriptions.Add(sd);
+
+            this.StorageVariables = new CollectionViewSource();
+            this.StorageVariables.Source = irpApp.Variables;
+            this.StorageVariables.Filter += new FilterEventHandler(delegate(object item, FilterEventArgs e) { e.Accepted = (((CMWrappedVariable)e.Item).NType == NodeType.Storage); });
+            this.StorageVariables.SortDescriptions.Add(sd);
+
+            this.CostVariables = new CollectionViewSource();
+            this.CostVariables.Source = irpApp.Variables;
+            this.CostVariables.Filter += new FilterEventHandler(delegate(object item, FilterEventArgs e) { e.Accepted = (((CMWrappedVariable)e.Item).NType == NodeType.Cost); });
+            this.CostVariables.SortDescriptions.Add(sd);
+
+            this.SupportingVariables = new CollectionViewSource();
+            this.SupportingVariables.Source = irpApp.Variables;
+            this.SupportingVariables.Filter += new FilterEventHandler(delegate(object item, FilterEventArgs e) { e.Accepted = (((CMWrappedVariable)e.Item).NType == NodeType.None && ((CMWrappedVariable)e.Item).FileId>=0); });
+            this.SupportingVariables.SortDescriptions.Add(sd);
+
+            this.LoadedFiles = new CollectionViewSource();
+            this.LoadedFiles.Source = irpApp.LoadedFiles;
+            this.LoadedFiles.SortDescriptions.Add(new SortDescription("FileName", ListSortDirection.Ascending));
+
+            this.Definitions = new CollectionViewSource();
+            this.Definitions.Source = irpApp.Definitions;
+            this.Definitions.SortDescriptions.Add(sd);
+
+            this.Scenarios = new CollectionViewSource();
+            this.Scenarios.Source = irpApp.Scenarions;
+            this.Scenarios.SortDescriptions.Add(sd);
+
+            this.Scripts = new CollectionViewSource();
+            this.Scripts.Source = irpApp.Scripts;
+            this.Scripts.SortDescriptions.Add(sd);
+            
+            this.Categories = new CollectionViewSource();
+            this.Categories.Source = irpApp.Categories;
+            this.Categories.SortDescriptions.Add(sd);
+            
             backgroundWorkerOpenProject.DoWork += backgroundWorkerOpenProject_DoWork;
             backgroundWorkerOpenProject.RunWorkerCompleted += backgroundWorkerOpenProject_RunWorkerCompleted;
 
@@ -63,26 +111,77 @@ namespace IRPSIM.ViewModels
             get { return filesViewModel; }
         }
 
+        private object _selectedObject;
+        public object SelectedObject
+        {
+            get { return _selectedObject; }
+            set
+            {
+                _selectedObject = value;
+                CMWrappedIrpObject obj = value as CMWrappedIrpObject;
+                if (obj != null)
+                    Debug.WriteLine(obj.FileId);
+                RaisePropertyChangedEvent("SelectedObject");
+            }
+        }
+
+        public CollectionViewSource SupplyVariables { get; private set; }
+
+        public CollectionViewSource DemandVariables { get; private set; }
+
+        public CollectionViewSource StorageVariables { get; private set; }
+
+        public CollectionViewSource CostVariables { get; private set; }
+
+        public CollectionViewSource SupportingVariables { get; private set; }
+
+        public CollectionViewSource LoadedFiles { get; private set; }
+
+        public CollectionViewSource Definitions { get; private set; }
+
+        public CollectionViewSource Scripts { get; private set; }
+
+        public CollectionViewSource Scenarios { get; private set; }
+
+        public CollectionViewSource Categories { get; private set; }
+ 
+        /*
         public ObservableCollection<CMWrappedVariable> Variables
         {
             get { return irpApp.GetVariables(); }
         }
+        */
 
+        /*
         public ObservableCollection<CMLoadedFile> LoadedFiles
         {
             get { return irpApp.GetLoadedFiles(); }
         }
+        */
 
+        private string _log;
         public string Log
         {
-            get { return _logMessage; }
+            get { return _log; }
             set
             {
-                _logMessage = value;
+                _log = value;
                 RaisePropertyChangedEvent("Log");
             }
         }
 
+        private string _errors;
+        public string Errors
+        {
+            get { return _errors; }
+            set
+            {
+                _errors = value;
+                RaisePropertyChangedEvent("Errors");
+            }
+        }
+
+        private int _progress;
         public int Progress
         {
             get { return _progress; }
@@ -95,12 +194,11 @@ namespace IRPSIM.ViewModels
 
         public string ProjectTitle
         {
-            get { string ret = irpApp.GetProjectName(); return ret == "" ? "IRPSIM" : ret; }
+            get { string ret = irpApp.ProjectName; return ret == "" ? "IRPSIM" : ret; }
         }
  
         #endregion
 
- 
         public ICommand ProjectOpenCommand
         {
             get { return new DelegateCommand(param => openProjectDelegate()); }
@@ -108,7 +206,17 @@ namespace IRPSIM.ViewModels
 
         public ICommand RunSimulationCommand
         {
-            get { return new DelegateCommand(parap => runSimulationDelegate()); }
+            get { return new DelegateCommand(param => runSimulationDelegate()); }
+        }
+
+        public ICommand DoSomethingCommand
+        {
+            get { return new DelegateCommand(param => doSomethingDelegate((MouseEventArgs)param)); }
+        }
+
+        private void doSomethingDelegate(MouseEventArgs e)
+        {
+            Debug.WriteLine("Do Something!");
         }
 
         private void openProjectDelegate()

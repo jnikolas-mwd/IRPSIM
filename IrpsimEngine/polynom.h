@@ -45,8 +45,8 @@ class _IRPCLASS CMPolynomial
 
 	class _IRPCLASS CMVSmallArray<double> 		 constants;
 	class _IRPCLASS CMVSmallArray<CMString> 	 varnames;
-	class _IRPCLASS CMPSmallArray<CMVariable> 	 variables;
-	class _IRPCLASS CMPSmallArray<CMPolynomial> expressions;
+	class _IRPCLASS CMPSmallArray<CMIrpObject> 	 variables;
+	class _IRPCLASS CMPSmallArray<CMPolynomial>  expressions;
 	class _IRPCLASS CMVSmallArray<CMFunction> 	 functions;
 	class _IRPCLASS CMVSmallArray<int> 			 expression;
 

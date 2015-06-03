@@ -29,6 +29,7 @@
 #include "node.h"
 #include "vardesc.h"
 #include "notify.h"
+#include "defines.h"
 
 #include "token.h"
 #include "random.h"
@@ -36,7 +37,7 @@
 #include <time.h>
 #include <fstream>
 using namespace std;
-//static ofstream sdebug("f:\\simulat.deb");
+static ofstream sdebug("simulat_debug.txt");
 
 #define CM_BIGTIME 10000000L
 
@@ -274,8 +275,10 @@ void CMSimulation::initialize()
 		}
 	}
 
-	if (find_missing_variables())
+	if (find_missing_variables()) {
+		sdebug << "Missing variables found";
 		state |= sMissingVariables;
+	}
 
 	summaryvars.Sort();
 	outcomevars.Sort();
@@ -367,9 +370,11 @@ int CMSimulation::find_missing_variables()
 			vi = v->CreateIterator();
 			const wchar_t* vname;
 			while (vi && ((vname=vi->GetNext())!=0)) {
-				if (!CMVariable::Find(vname))
-					if (!missingvars.Contains(vname))
-						missingvars.Add(vname);
+				if (!CMVariable::Find(vname) && !CMDefinitions::IsDefined(vname))
+				if (!missingvars.Contains(vname)) {
+					missingvars.Add(vname);
+					CMNotifier::Notify(CMNotifier::ERROR, L"Missing variable or definition " + CMString(vname) + L" in definition of " + v->GetName());
+				}
 			}
 			CMString atype,aname;
 			for (int i=0;v->GetAssociation(i,atype,aname);i++) {
@@ -630,6 +635,8 @@ BOOL CMSimulation::Run()
 	
 	if (!(state&sInitialized))
 		initialize();
+
+	sdebug << "Got to 1";
 	
 	while ((trialno = timemachine->Count())<ntrials && !Fail() && !(state&(sStopped | sFromFile))) 
 	{
@@ -644,6 +651,8 @@ BOOL CMSimulation::Run()
 			CMVariable::ResetTrial();
 			if (trialno == 0 && pApp)
 				CMNotifier::Notify(CMNotifier::LOGTIME, L"Start Simulation " + GetName());
+			
+			sdebug << "Trial number " << trialno;
 			CMNotifier::Notify(CMNotifier::PROGRESS, L"", (int)(100 * (double)trialno / (double)ntrials));
 		}
 

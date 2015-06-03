@@ -198,6 +198,7 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 	CMString errorheader = L"problem reading file ";
 	wifstream* stack[128];
 	int current=0,currfile,oldfile;
+	CMString currpath = name;
 
 	stack[0] = new wifstream(name.c_str(),ios::in|IOS_BINARY);
 	wifstream* s = stack[0];
@@ -223,9 +224,9 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 			CMString token = next(delims);
 			if (token == L"include") {
 				CMString fname = next(delims);
-				CMString path = getabsolutepath(name.c_str(), fname.c_str());
+				currpath = getabsolutepath(name.c_str(), fname.c_str());
 
-				s = stack[++current] = new wifstream(path.c_str(),ios::in|IOS_BINARY);
+				s = stack[++current] = new wifstream(currpath.c_str(),ios::in|IOS_BINARY);
 				if (s->fail()) {
 					CMNotifier::Notify(CMNotifier::ERROR, errorheader + fname);
 					err = -1;
@@ -246,7 +247,7 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 			else if (token == L"define") {
 				CMString s1 = next(delims);
 				CMString s2 = next(delims);
-				CMDefinitions::Add(s1,s2);
+				CMDefinitions::Add(s1,s2,currfile);
 			}
 			else if (token==L"options") {
 				CMNotifier::Notify(CMNotifier::INFO, messageheader + L"options");
@@ -287,14 +288,17 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 				CMVariable* v;
 				*s >> v;
 				if (v) {
-               if (variables->Find(v->GetName()))
-               	delete v;
-               else {
-		            variables->Add(v);
-					v->SetApplicationId(currfile);
-					CMNotifier::Notify(CMNotifier::INFO, messageheader + v->GetName());
-               }
-            }
+					if (variables->Find(v->GetName()))
+						delete v;
+					else {
+						variables->Add(v);
+						v->SetApplicationId(currfile);
+						CMNotifier::Notify(CMNotifier::INFO, messageheader + v->GetName());
+					}
+				}
+			}
+			else {
+				CMNotifier::Notify(CMNotifier::WARNING, L"Unrecognized token: #" + token + L" in file " + currpath);
 			}
 		}
 		if (s->eof()) {
@@ -385,11 +389,12 @@ void CMIrpApplication::update_variable_links()
 		const wchar_t* vname;
 		int first=1;
 		while (ni && ((vname=ni->GetNext())!=0)) {
-			if (!CMVariable::Find(vname)) {
+			if (!CMVariable::Find(vname) && !CMDefinitions::IsDefined(vname)) {
 				if (first)
 					CMNotifier::Notify(CMNotifier::LOG, CMString(L"\r\n") + v->GetName() + L"\r\n missing:");
 				first=0;
 				CMNotifier::Notify(CMNotifier::LOG, vname);
+				CMNotifier::Notify(CMNotifier::ERROR, L"Missing variable or definition " + CMString(vname) + L" in definition of " + v->GetName());
 			}
 		}
 	}
