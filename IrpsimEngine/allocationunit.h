@@ -56,7 +56,7 @@ public:
 	enum {PutOperation,TakeOperation,CutBackOperation,AddBackOperation,
 			EvaluateOperation};
 
-	CMAllocationUnit(const wchar_t* aName = NULL,int id=-1);
+	CMAllocationUnit(int id=-1);
 	CMAllocationUnit(const CMString& aName,int id=-1);
 	int GetType() {return allocation_type;}
 

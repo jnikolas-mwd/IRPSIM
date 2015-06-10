@@ -25,7 +25,7 @@
 #include <iomanip>
 
 CMVPeriodIterator::CMVPeriodIterator(CMVPeriod* v) :
-CMVNameIterator(v),
+CMIrpObjectIterator(v),
 eIterator(0),
 pos(0)
 {
@@ -39,7 +39,7 @@ CMVPeriodIterator::~CMVPeriodIterator()
 const wchar_t* CMVPeriodIterator::get_next()
 {
 	const wchar_t* ret;
-	CMVPeriod* v = (CMVPeriod*) variable;
+	CMVPeriod* v = (CMVPeriod*) obj;
 
 	if (!(v->periodstate & v->containsPolynomials))
 		return 0;
@@ -76,7 +76,7 @@ CMVPeriod::~CMVPeriod()
 	array.ResetAndDestroy(1);
 }
 
-CMVNameIterator* CMVPeriod::create_iterator()
+CMIrpObjectIterator* CMVPeriod::create_iterator()
 {
 	return (periodstate&containsPolynomials) ? new CMVPeriodIterator(this) : 0;
 }

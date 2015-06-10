@@ -36,7 +36,7 @@ const wchar_t* CMInterval::footer = L"#END";
 const wchar_t* CMInterval::IsA() { return L"CMInterval"; }
 
 CMInterval::CMInterval(const CMString& def) :
-CMIrpObject(NULL,-1),
+CMIrpObject(),
 duration_unit(CM_MONTH),
 duration_length(12),
 intervalstart(L"201501"),
@@ -55,7 +55,7 @@ state(0)
 }
 
 CMInterval::CMInterval(CMTimeMachine* t) :
-CMIrpObject(NULL,-1),
+CMIrpObject(),
 duration_unit(t->IncUnits()),
 duration_length(t->IncLength()),
 intervalstart(t->At(0).Begin()),

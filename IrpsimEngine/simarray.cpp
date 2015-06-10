@@ -25,7 +25,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-//static ofstream sdebug("simarray.deb");
+//#include <fstream>
+//static wofstream sdebug("debug_simarray.txt");
 
 static const wchar_t* simid = L"simarray0001";
 
@@ -92,13 +93,16 @@ int CMSimulationArray::open_file()
 			file->write((const wchar_t*)&nvars, sizeof(nvars));
 			time.WriteBinary(*file);
 		}
-		else
+		else {
 			state |= failbit;
+		}
 	}
-	else
+	else {
 		state |= failbit;
-	if ( time[0].End()<time[0].Begin())
+	}
+	if (time[0].End() < time[0].Begin()) {
 		state |= failbit;
+	}
 	return (state & failbit);
 }
 

@@ -24,7 +24,7 @@
 
 class _IRPCLASS CMVArray;
 
-class _IRPCLASS CMVArrayIterator : public CMVNameIterator
+class _IRPCLASS CMVArrayIterator : public CMIrpObjectIterator
 {
 	CMExpressionIterator *iter;
 	long pos;
@@ -45,7 +45,7 @@ protected:
 	virtual void read_body(wistream& s);
 	virtual void write_body(wostream& s);
 	virtual double evaluate(CMTimeMachine* t,int index1=0,int index2=0);
-	virtual CMVNameIterator* create_iterator();
+	virtual CMIrpObjectIterator* create_iterator();
 	int arraystate;
 	enum {containsPolynomials=0x0001};
 public:

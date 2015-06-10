@@ -26,8 +26,6 @@
 
 #include <iomanip>
 
-const wchar_t* CMScenario::IsA() { return L"CMScenario"; }
-
 CMScenario::~CMScenario()
 {
 	options.ResetAndDestroy();
@@ -38,7 +36,7 @@ void CMScenario::AddEntry(const CMString& nm,const CMString& value,int forceopti
 	CMString val = stripends(value);
 	int len = nm.length();
 	if (nm[0] == L'#' || forceoption) {
-		CMOption* o = new CMOption(nm,val);
+		CMOption* o = new CMOption(nm,val,this->GetApplicationId());
 		options.Add(o);
 		len = o->GetName().length();
 	}
@@ -109,7 +107,7 @@ wistream& CMScenario::read(wistream& s)
 	return s;
 }
 
-void CMScenario::Use(CMOptions& op)
+void CMScenario::Use(CMOptions& ops)
 {
 	CMVariableIterator next;
 	CMVariable* v;
@@ -128,7 +126,7 @@ void CMScenario::Use(CMOptions& op)
 		}
 	}
 	for (i=0;i<options.Count();i++)
-		op.SetOption(options[i]->GetName(),options[i]->GetValue());
+		ops.SetOption(options[i]->GetName(),options[i]->GetValue());
 }
 
 

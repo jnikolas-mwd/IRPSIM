@@ -65,6 +65,7 @@ namespace IrpsimEngineWrapper
 	{
 	protected:
 		CMIrpObject* obj;
+		bool _selected;
 	public:
 		virtual event PropertyChangedEventHandler^ PropertyChanged;
 		
@@ -76,11 +77,21 @@ namespace IrpsimEngineWrapper
 		CMWrappedIrpObject(CMIrpObject* o)
 		{
 			obj = o;
+			_selected = false;
 		}
 		
 		property int FileId
 		{
 			int get() { return obj->GetApplicationId(); }
+		}
+
+		property bool Selected
+		{
+			bool get() { return _selected; }
+			void set(bool value) {
+				_selected = value;
+				OnPropertyChanged(L"Selected");
+			}
 		}
 
 		property String^ Name
@@ -216,7 +227,7 @@ namespace IrpsimEngineWrapper
 			ObservableCollection<CMWrappedIrpObject^>^ get() { return definitionList; }
 		}
 
-		property ObservableCollection<CMWrappedIrpObject^>^ Scenarions
+		property ObservableCollection<CMWrappedIrpObject^>^ Scenarios
 		{
 			ObservableCollection<CMWrappedIrpObject^>^ get() { return scenarioList; }
 		}

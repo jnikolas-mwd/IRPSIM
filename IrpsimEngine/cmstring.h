@@ -224,7 +224,7 @@ public:
   wistream&	readFile(wistream&);			// Read to EOF or null character.
   wistream&	read_line(wistream&);	// Read to EOF or newline.
   wistream&	readString(wistream&);			// Read to EOF or null character.
-  wistream&	readToDelim(wistream&, wchar_t delim);	// Read to EOF or delimitor.
+  wistream&	readToDelim(wistream&, wchar_t delim);	// Read to EOF or delimiter.
   wistream&	readToken(wistream&);			// Read separated by white space.
   CMString&	remove(size_t pos);			// Remove pos to end of CMString
   CMString&	remove(size_t pos, size_t n);		// Remove n chars starting at pos

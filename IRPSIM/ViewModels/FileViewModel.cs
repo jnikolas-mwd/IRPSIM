@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows;
 using System.Windows.Input;
-using Microsoft.Win32;
+using IRPSIM.ViewModels.Services;
+using GalaSoft.MvvmLight;
 
 namespace IRPSIM.ViewModels
 {
-    class FileViewModel : ObservableObject
+    class FileViewModel : ViewModelBase
     {
         private string filePath, fileContents;
-
+ 
         public FileViewModel(string path)
         {
             this.filePath = path;
@@ -49,16 +50,23 @@ namespace IRPSIM.ViewModels
             set
             {
                 fileContents = value;
-                RaisePropertyChangedEvent("FileContents");
+                RaisePropertyChanged("FileContents");
             }
         }
     }
 
-    class FilesViewModel : ObservableObject
+    class FilesViewModel : ViewModelBase
     {
         private ObservableCollection<FileViewModel> _files = new ObservableCollection<FileViewModel>();
         private int openFileIndex;
+        private IGetFileName _getFileNameService;
 
+        public FilesViewModel(IGetFileName fnservice)
+        {
+            _getFileNameService = fnservice;
+        }
+        
+        
         public ObservableCollection<FileViewModel> Files
         {
             get { return _files; }
@@ -70,7 +78,7 @@ namespace IRPSIM.ViewModels
             set
             {
                 openFileIndex = value;
-                RaisePropertyChangedEvent("OpenFileIndex");
+                RaisePropertyChanged("OpenFileIndex");
             }
         }
 
@@ -81,11 +89,11 @@ namespace IRPSIM.ViewModels
 
         private void openFileDelegate()
         {
-            OpenFileDialog dlg = new OpenFileDialog();
+            string path = _getFileNameService.GetFileName();
 
-            if (dlg.ShowDialog() == true)
+            if (path!=null)
             {
-                _files.Add(new FileViewModel(dlg.FileName));
+                _files.Add(new FileViewModel(path));
                 OpenFileIndex = _files.Count - 1;
             }
         }

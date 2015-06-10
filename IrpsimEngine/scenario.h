@@ -39,9 +39,9 @@ protected:
 	virtual wostream& write(wostream& os);
 
 public:
-	virtual const wchar_t* IsA();
+	virtual const wchar_t* IsA() { return L"CMScenario"; };
 	enum { SaveFlag = 0x01, WriteFlag = 0x02 };
-	CMScenario(int id = -1) : CMIrpObject(NULL,id),
+	CMScenario(int id=-1) : CMIrpObject(id),
 		options() , varnames(), flags() , maxwidth(0) {}
 	CMScenario(const CMString& aName,int id = -1) : CMIrpObject(aName,id),
 		options() , varnames(), flags() , maxwidth(0) {}

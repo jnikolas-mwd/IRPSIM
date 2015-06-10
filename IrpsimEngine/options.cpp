@@ -28,8 +28,8 @@
 #include <stdlib.h>
 #include <iomanip>
 
-//#include <fstream.h>
-//static ofstream sdebug("options.deb");
+//#include <fstream>
+//static wofstream sdebug("debug_options.txt");
 
 CMOptions::_def CMOptions::defaults[] = {
 {L"simbegin",L"2016"},
@@ -96,21 +96,24 @@ pbContractorAllocationVar 	contractor_allocation
 pbMWDAllocationVar	mwd_allocation
 */
 
-CMOption::CMOption(const CMString& n,const CMString& v) :
+/*
+CMOption::CMOption(const CMString& n,const CMString& v , int app_id) :
 name(n)
 {
-//	name.to_lower();
+  name.to_lower();
    name = stripends(name);
 	if (name.length() && name[0]==L'#')
 		name = name.substr(1,name.length()-1);
 	SetValue(v);
 }
+*/
 
 void CMOption::SetValue(const CMString& v)
 {
 	value = stripends(v);
 }
 
+/*
 wostream& CMOption::WriteBinary(wostream& s)
 {
 	writestringbinary(name,s);
@@ -129,6 +132,7 @@ short CMOption::BinarySize()
 {
 	return (stringbinarylength(name) + stringbinarylength(value));
 }
+*/
 
 CMOptions::CMOptions() :
 options(),
@@ -155,7 +159,7 @@ void CMOptions::SetDefaults()
 	for (int i=0;defaults[i].name;i++) {
 		CMString n(defaults[i].name);
 		if ((int)n.length()>maxwidth) maxwidth = (int)n.length();
-		options.Add(new CMOption(n,defaults[i].value));
+		options.Add(new CMOption(n,defaults[i].value,-1));
 	}
 }
 
@@ -189,36 +193,36 @@ long CMOptions::GetOptionLong(const CMString& option)
 	return _wtol(GetOption(option).c_str());
 }
 
-void CMOptions::SetOption(const CMString& line)
+void CMOptions::SetOption(const CMString& line, int id)
 {
 	CMTokenizer next(line);
 	CMString name  = next(L" \t\r\n");
 	CMString value = next(L"\r\n");
-	SetOption(name,value);
+	SetOption(name, value, id);
 }
 
-void CMOptions::SetOption(const CMString& name,const CMString& value)
+void CMOptions::SetOption(const CMString& name,const CMString& value, int id)
 {
 	CMString nm = stripends(name);
 	int len = nm.length();
 	if (len>maxwidth) maxwidth=len;
 	CMOption* op = options.Find(nm);
-	if (op) 	op->SetValue(value);
-	else   	options.Add(new CMOption(nm,value));
+	if (op) 	op->SetValueAndAppId(value, id);
+	else   	options.Add(new CMOption(nm,value,id));
 }
 
-void CMOptions::SetOption(const CMString& name,double option)
+void CMOptions::SetOption(const CMString& name,double option, int id)
 {
 	wchar_t buffer[64];
 	swprintf_s(buffer, 64, L"%.12g",option);
-	SetOption(name,buffer);
+	SetOption(name,buffer,id);
 }
 
 CMOptions& CMOptions::operator = (const CMOptions& op)
 {
 	options.ResetAndDestroy(1);
 	for (unsigned i=0;i<op.Count();i++)
-		SetOption(op.At(i)->GetName(),op.At(i)->GetValue());
+		SetOption(*op.At(i));
 	return *this;
 }
 
@@ -244,6 +248,7 @@ wistream& operator >> (wistream& s, CMOptions& o)
 	while (!s.eof()) {
 		line.read_line(s);
 		line = stripends(line);
+
 		if (line.is_null() || line[0] == L'*') {
 			continue;
 		}
@@ -264,7 +269,7 @@ wistream& operator >> (wistream& s, CMOptions& o)
 			cont.read_line(s);
 			line += stripends(cont);
 		}
-		o.SetOption(line);
+		o.SetOption(line, o.GetApplicationId());
 	}
 
 	o.options.Sort();
@@ -272,6 +277,7 @@ wistream& operator >> (wistream& s, CMOptions& o)
 	return s;
 }
 
+/*
 wostream& CMOptions::WriteBinary(wostream& s)
 {
 	unsigned short len = options.Count();
@@ -305,3 +311,4 @@ long CMOptions::BinarySize()
 	return ret;
 }
 
+*/

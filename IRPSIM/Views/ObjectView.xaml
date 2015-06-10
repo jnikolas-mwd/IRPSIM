@@ -3,10 +3,70 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:mvvm="clr-namespace:IRPSIM.MVVM"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
              xmlns:viewmodel="clr-namespace:IRPSIM.ViewModels"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
               mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <viewmodel:SelectedToForegroundConverter x:Key="selectedToForeground"/>
+        <Style TargetType="TreeViewItem">
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Name}" Foreground="{Binding Selected, Converter={StaticResource selectedToForeground}}"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <CollectionViewSource x:Key="SupplyCollection" Source="{Binding Variables}" Filter="Supply_Filter">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+         </CollectionViewSource>
+        <CollectionViewSource x:Key="DemandCollection" Source="{Binding Variables}" Filter="Demand_Filter">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="StorageCollection" Source="{Binding Variables}" Filter="Storage_Filter">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="CostCollection" Source="{Binding Variables}" Filter="Cost_Filter">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="VariableCollection" Source="{Binding Variables}" Filter="Variable_Filter">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="ScriptCollection" Source="{Binding Scripts}" Filter="Script_Filter">
+              <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="ScenarioCollection" Source="{Binding Scenarios}" Filter="Scenario_Filter">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="CategoryCollection" Source="{Binding Categories}" Filter="Category_Filter">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="DefinitionCollection" Source="{Binding Definitions}" Filter="Definition_Filter">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="0"/>
@@ -14,15 +74,23 @@
         </Grid.RowDefinitions>
         <ContentControl Grid.Row="0" x:Name="SelectedObjectHelper" Content="{Binding SelectedObject, Mode=OneWayToSource}" Visibility="Collapsed"/>
         <TreeView Grid.Row="1" SelectedItemChanged="TreeView_SelectedItemChanged">
-            <TreeViewItem Header="Supply" ItemsSource="{Binding SupplyVariables.View}"/>
-            <TreeViewItem Header="Demand" ItemsSource="{Binding DemandVariables.View}"/>
-            <TreeViewItem Header="Storage" ItemsSource="{Binding StorageVariables.View}"/>
-            <TreeViewItem Header="Cost" ItemsSource="{Binding CostVariables.View}"/>
-            <TreeViewItem Header="Scenarios" ItemsSource="{Binding Scenarios.View}"/>
-            <TreeViewItem Header="Scripts" ItemsSource="{Binding Scripts.View}"/>
-            <TreeViewItem Header="Categories" ItemsSource="{Binding Categories.View}"/>
-            <TreeViewItem Header="Definitions" ItemsSource="{Binding Definitions.View}"/>
-            <TreeViewItem Header="Variables" ItemsSource="{Binding SupportingVariables.View}"/>
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <cmd:EventToCommand Command="{Binding TestCommand}" CommandParameter="{Binding SelectedItem, RelativeSource={RelativeSource AncestorType={x:Type TreeView}}}"/>
+                </i:EventTrigger>
+                <i:EventTrigger EventName="KeyDown">
+                    <cmd:EventToCommand Command="{Binding TestCommand2}" PassEventArgsToCommand="True"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <TreeViewItem Header="Supply" ItemsSource="{Binding Source={StaticResource SupplyCollection}}"/>
+            <TreeViewItem Header="Demand" ItemsSource="{Binding Source={StaticResource DemandCollection}}"/>
+            <TreeViewItem Header="Storage" ItemsSource="{Binding Source={StaticResource StorageCollection}}"/>
+            <TreeViewItem Header="Cost" ItemsSource="{Binding Source={StaticResource CostCollection}}"/>
+            <TreeViewItem Header="Scenarios" ItemsSource="{Binding Source={StaticResource ScenarioCollection}}"/>
+            <TreeViewItem Header="Scripts" ItemsSource="{Binding Source={StaticResource ScriptCollection}}"/>
+            <TreeViewItem Header="Categories" ItemsSource="{Binding Source={StaticResource CategoryCollection}}"/>
+            <TreeViewItem Header="Definitions" ItemsSource="{Binding Source={StaticResource DefinitionCollection}}"/>
+            <TreeViewItem Header="Variables" ItemsSource="{Binding Source={StaticResource VariableCollection}}"/>
         </TreeView>
     </Grid>
 </UserControl>

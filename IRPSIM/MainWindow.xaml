@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:viewmodel="clr-namespace:IRPSIM.ViewModels"
         xmlns:view="clr-namespace:IRPSIM.Views"
-          Title="{Binding ProjectTitle}" Height="350" Width="525" FontFamily="Verdana">
+        Title="{Binding ProjectTitle}" Height="350" Width="525" FontFamily="Verdana">
     <Window.Resources>
         <viewmodel:ProgressToProgressVisibleConverter x:Key="progressToProgressVisible"/>
     </Window.Resources>
@@ -20,10 +20,11 @@
             <MenuItem Header="_Project">
                 <MenuItem Header="_Run Simulation" Command="{Binding RunSimulationCommand}"/>
              </MenuItem>
-            <MenuItem Header="_View"/>
-        </Menu>
+          </Menu>
         <StatusBar Name="statusBar" DockPanel.Dock="Bottom">
             <ProgressBar Value="{Binding Path=Progress}" Visibility="{Binding Path=Progress, Converter={StaticResource progressToProgressVisible}}" Minimum="0" Maximum="100" Width="100" Height="10" />
+            <CheckBox IsChecked="{Binding Path=CanRunSimulation}" Content="Can Run?"/>
+            <Button Command="{Binding RunSimulationCommand}" Content="TEST"/>
         </StatusBar>
          <Grid DockPanel.Dock="Bottom">
                <Grid.ColumnDefinitions>

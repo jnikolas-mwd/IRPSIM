@@ -42,9 +42,7 @@ CMTimeMachine* CMCategory::time = 0;
 CMVariable* CMCategory::vnetsurplus = 0;
 CMPSmallArray<CMCategory> CMCategory::categories;
 
-const wchar_t* CMCategory::IsA() {return L"CMCategory";}
-
-CMCategory::CMCategory(int id) : CMAllocationUnit(NULL,id) 
+CMCategory::CMCategory(int id) : CMAllocationUnit(id) 
 {
 	reset();
 }

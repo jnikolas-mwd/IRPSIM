@@ -34,7 +34,7 @@ using namespace std;
 
 //class ostream;
 
-class _IRPCLASS CMVNameIterator;
+class _IRPCLASS CMIrpObjectIterator;
 class _IRPCLASS CMPolynomial;
 
 class _IRPCLASS CMPolynomial
@@ -67,6 +67,9 @@ class _IRPCLASS CMPolynomial
 							 // the list depends on the current token
 	int	  nargs;		 // number of arguments for current function or variable
 
+	int   err_code = -1;
+
+	static  wchar_t *badops[];   // common "bad" operators such as =>
 	static  wchar_t *ops[];
 	static  wchar_t *special_funcs[];
 
@@ -139,7 +142,7 @@ public:
 			 XBadIndex,XBadExpression,XMissingArgument,
 			 XNotEnoughArguments,XTooManyArguments,
 			 XBadArgumentList,XInvalidArgument,XIllegalCondition,
-			 XDivideByZero,XFunctionDomain,XMissingVariable
+			 XDivideByZero,XFunctionDomain,XMissingVariable,XUnrecognizedOperator
 			 };
 /*
 	class CMXPolynomial : public xmsg
@@ -163,6 +166,8 @@ public:
 	int  ContainsVariables() {return (state&hasvariables);}
 	double Evaluate(CMTimeMachine* t);
 	int Fail() {return (state&failed);}
+	int GetErrorCode() { return err_code; }
+	CMString GetErrorString() { return err_code<0 ? L"" : errorstrings[err_code]; }
 	CMPolynomial& operator = (const wchar_t* str) { translate(str); return *this; }
 	CMPolynomial& operator = (const CMPolynomial& p) {set_equal_to(p);return *this;}
 
@@ -179,7 +184,7 @@ class _IRPCLASS CMPolynomialIterator
 	int pos;
 	CMPolynomial& exp;
 	CMPolynomialIterator* eIterator;
-	CMVNameIterator* vIterator;
+	CMIrpObjectIterator* vIterator;
 public:
 	CMPolynomialIterator(CMPolynomial& aExp);
 	~CMPolynomialIterator();

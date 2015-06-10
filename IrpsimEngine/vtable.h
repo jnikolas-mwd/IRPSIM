@@ -28,9 +28,9 @@
 
 class _IRPCLASS CMVTable;
 
-class _IRPCLASS CMVTableIterator : public CMVNameIterator
+class _IRPCLASS CMVTableIterator : public CMIrpObjectIterator
 {
-	CMVNameIterator 	*vIterator;
+	CMIrpObjectIterator 	*vIterator;
 	CMExpressionIterator *eIterator;
 	int state;
 	unsigned short pos;
@@ -54,7 +54,7 @@ protected:
 	int ncols;
 	int tablestate;
 	virtual double evaluate(CMTimeMachine* t,int index1=0,int index2=0);
-	virtual CMVNameIterator* create_iterator() {return new CMVTableIterator(this);}
+	virtual CMIrpObjectIterator* create_iterator() { return new CMVTableIterator(this); }
 	virtual void update_variable_links();
 	virtual void read_body(wistream& s);
 	virtual void write_body(wostream& s);

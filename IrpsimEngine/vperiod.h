@@ -27,7 +27,7 @@
 
 class _IRPCLASS CMVPeriod;
 
-class _IRPCLASS CMVPeriodIterator : public CMVNameIterator
+class _IRPCLASS CMVPeriodIterator : public CMIrpObjectIterator
 {
 	CMExpressionIterator *eIterator;
 	unsigned pos;
@@ -52,7 +52,7 @@ protected:
 	class _IRPCLASS CMPSSmallArray<CMTimedExpression> array;
 	unsigned get_array_index(CMTime& t);
 	virtual double evaluate(CMTimeMachine* t,int index1=0,int index2=0);
-	virtual CMVNameIterator* create_iterator();
+	virtual CMIrpObjectIterator* create_iterator();
 	virtual void reset(CMTimeMachine*);
 	virtual void update_variable_links();
 	virtual void read_body(wistream& s);

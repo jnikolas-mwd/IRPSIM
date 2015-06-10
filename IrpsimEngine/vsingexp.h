@@ -23,7 +23,7 @@
 
 class _IRPCLASS CMVSingleExpression;
 
-class _IRPCLASS CMVSingleExpressionIterator : public CMVNameIterator
+class _IRPCLASS CMVSingleExpressionIterator : public CMIrpObjectIterator
 {
 	CMExpressionIterator iter;
 	virtual const wchar_t* get_next();
@@ -38,7 +38,7 @@ protected:
 	CMExpression expression;
 
 	virtual double evaluate(CMTimeMachine* t,int index1=0,int index2=0) {return expression.Evaluate(t);}
-	virtual CMVNameIterator* create_iterator();
+	virtual CMIrpObjectIterator* create_iterator();
 	virtual void update_variable_links() {expression.UpdateVariableLinks();}
 	virtual void read_body(wistream& s);
 	virtual void write_body(wostream& s);

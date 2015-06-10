@@ -7,28 +7,65 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
-using Microsoft.Win32;
 using IrpsimEngineWrapper;
 using System.ComponentModel;
 using System.Windows.Data;
+using IRPSIM.ViewModels.Services;
+using System.Windows;
+using System.Globalization;
+using GalaSoft.MvvmLight;
+using GalaSoft.MvvmLight.Command;
+using System.Windows.Media;
 
 namespace IRPSIM.ViewModels
 {
-    class MainViewModel : ObservableObject
+    class ProgressToProgressVisibleConverter : IValueConverter
     {
-        private FilesViewModel filesViewModel = new FilesViewModel();
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            int n = int.Parse(value.ToString());
+            return (n > 0 && n < 100 ? Visibility.Visible : Visibility.Hidden);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return DependencyProperty.UnsetValue;
+        }
+    }
+
+    class SelectedToForegroundConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            Debug.WriteLine(value);
+            bool b = Boolean.Parse(value.ToString());
+            return (b ? Brushes.Red : Brushes.Black);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return DependencyProperty.UnsetValue;
+        }
+    }
+
+    class MainViewModel : ViewModelBase
+    {
+        //*** TODO: Abstract out as an IFilesViewModel interface injected as a dependency through MainViewModel constructor
+        private FilesViewModel filesViewModel;
          
-        private CMNotifierDelegate del;
+        private CMNotifierDelegate _notifierDelegate;
 
         private BackgroundWorker backgroundWorkerOpenProject = new BackgroundWorker();
         private BackgroundWorker backgroundWorkerRunSimulation = new BackgroundWorker();
 
-        private Dictionary<int, string> _notifyTypes = new Dictionary<int,string>();
+        private List<ErrorViewModel> _errors = new List<ErrorViewModel>();
+
+        private IGetFileName _getFileNameService;
                                
-        private int test(int ntype, String msg, int data)
+        private int _notify(int ntype, String msg, int data)
         {
             if (ntype == 1 || ntype == 2)
-                this.Errors += (msg + System.Environment.NewLine);
+                _errors.Add(new ErrorViewModel(ntype, msg));
             else if (ntype == 3 || ntype == 4)
                 this.Log += (msg + System.Environment.NewLine);
             else if (ntype == 6)
@@ -37,66 +74,18 @@ namespace IRPSIM.ViewModels
         }
 
         private CMWrappedIrpApplication irpApp = new CMWrappedIrpApplication();
-        private CMWrappedNotifier notifier;
+        private CMWrappedNotifier _notifier;
 
         public MainViewModel()
         {
-           del = new CMNotifierDelegate(test);
-           notifier = new CMWrappedNotifier(del);
-            _notifyTypes.Add(1, "ERROR");
-            _notifyTypes.Add(2, "WARNING");
-            _notifyTypes.Add(3, "LOG");
-            _notifyTypes.Add(4, "LOGTIME");
-            _notifyTypes.Add(5, "INFO");
-            _notifyTypes.Add(6, "PROGRESS");
+            _getFileNameService = new OpenFileDialogService();
+            filesViewModel = new FilesViewModel(_getFileNameService);
 
-            SortDescription sd = new SortDescription("Name", ListSortDirection.Ascending);
+            _notifierDelegate = new CMNotifierDelegate(_notify);
+            _notifier = new CMWrappedNotifier(_notifierDelegate);
+    
+            Errors = new ObservableCollection<ErrorViewModel>();
 
-            this.SupplyVariables = new CollectionViewSource();
-            this.SupplyVariables.Source = irpApp.Variables;
-            this.SupplyVariables.Filter += new FilterEventHandler(delegate(object item, FilterEventArgs e) { e.Accepted = (((CMWrappedVariable)e.Item).NType == NodeType.Supply); });
-            this.SupplyVariables.SortDescriptions.Add(sd);
-
-            this.DemandVariables = new CollectionViewSource();
-            this.DemandVariables.Source = irpApp.Variables;
-            this.DemandVariables.Filter += new FilterEventHandler(delegate(object item, FilterEventArgs e) { e.Accepted = (((CMWrappedVariable)e.Item).NType == NodeType.Demand); });
-            this.DemandVariables.SortDescriptions.Add(sd);
-
-            this.StorageVariables = new CollectionViewSource();
-            this.StorageVariables.Source = irpApp.Variables;
-            this.StorageVariables.Filter += new FilterEventHandler(delegate(object item, FilterEventArgs e) { e.Accepted = (((CMWrappedVariable)e.Item).NType == NodeType.Storage); });
-            this.StorageVariables.SortDescriptions.Add(sd);
-
-            this.CostVariables = new CollectionViewSource();
-            this.CostVariables.Source = irpApp.Variables;
-            this.CostVariables.Filter += new FilterEventHandler(delegate(object item, FilterEventArgs e) { e.Accepted = (((CMWrappedVariable)e.Item).NType == NodeType.Cost); });
-            this.CostVariables.SortDescriptions.Add(sd);
-
-            this.SupportingVariables = new CollectionViewSource();
-            this.SupportingVariables.Source = irpApp.Variables;
-            this.SupportingVariables.Filter += new FilterEventHandler(delegate(object item, FilterEventArgs e) { e.Accepted = (((CMWrappedVariable)e.Item).NType == NodeType.None && ((CMWrappedVariable)e.Item).FileId>=0); });
-            this.SupportingVariables.SortDescriptions.Add(sd);
-
-            this.LoadedFiles = new CollectionViewSource();
-            this.LoadedFiles.Source = irpApp.LoadedFiles;
-            this.LoadedFiles.SortDescriptions.Add(new SortDescription("FileName", ListSortDirection.Ascending));
-
-            this.Definitions = new CollectionViewSource();
-            this.Definitions.Source = irpApp.Definitions;
-            this.Definitions.SortDescriptions.Add(sd);
-
-            this.Scenarios = new CollectionViewSource();
-            this.Scenarios.Source = irpApp.Scenarions;
-            this.Scenarios.SortDescriptions.Add(sd);
-
-            this.Scripts = new CollectionViewSource();
-            this.Scripts.Source = irpApp.Scripts;
-            this.Scripts.SortDescriptions.Add(sd);
-            
-            this.Categories = new CollectionViewSource();
-            this.Categories.Source = irpApp.Categories;
-            this.Categories.SortDescriptions.Add(sd);
-            
             backgroundWorkerOpenProject.DoWork += backgroundWorkerOpenProject_DoWork;
             backgroundWorkerOpenProject.RunWorkerCompleted += backgroundWorkerOpenProject_RunWorkerCompleted;
 
@@ -121,43 +110,32 @@ namespace IRPSIM.ViewModels
                 CMWrappedIrpObject obj = value as CMWrappedIrpObject;
                 if (obj != null)
                     Debug.WriteLine(obj.FileId);
-                RaisePropertyChangedEvent("SelectedObject");
+                RaisePropertyChanged("SelectedObject");
             }
         }
 
-        public CollectionViewSource SupplyVariables { get; private set; }
-
-        public CollectionViewSource DemandVariables { get; private set; }
-
-        public CollectionViewSource StorageVariables { get; private set; }
-
-        public CollectionViewSource CostVariables { get; private set; }
-
-        public CollectionViewSource SupportingVariables { get; private set; }
-
-        public CollectionViewSource LoadedFiles { get; private set; }
-
-        public CollectionViewSource Definitions { get; private set; }
-
-        public CollectionViewSource Scripts { get; private set; }
-
-        public CollectionViewSource Scenarios { get; private set; }
-
-        public CollectionViewSource Categories { get; private set; }
- 
-        /*
-        public ObservableCollection<CMWrappedVariable> Variables
+        public object TestSel
         {
-            get { return irpApp.GetVariables(); }
+            get { return null; }
+            set
+            {
+                Debug.WriteLine(value);
+            }
         }
-        */
 
-        /*
-        public ObservableCollection<CMLoadedFile> LoadedFiles
-        {
-            get { return irpApp.GetLoadedFiles(); }
-        }
-        */
+        public ObservableCollection<CMWrappedVariable> Variables { get { return irpApp.Variables; } }
+
+        public ObservableCollection<CMLoadedFile> LoadedFiles { get { return irpApp.LoadedFiles; } }
+
+        public ObservableCollection<CMWrappedIrpObject> Definitions { get { return irpApp.Definitions; } }
+
+        public ObservableCollection<CMWrappedIrpObject> Scenarios { get { return irpApp.Scenarios; } }
+
+        public ObservableCollection<CMWrappedIrpObject> Scripts { get { return irpApp.Scripts; } }
+
+        public ObservableCollection<CMWrappedIrpObject> Categories { get { return irpApp.Categories; } }
+
+        public ObservableCollection<ErrorViewModel> Errors { get; set; }
 
         private string _log;
         public string Log
@@ -166,18 +144,7 @@ namespace IRPSIM.ViewModels
             set
             {
                 _log = value;
-                RaisePropertyChangedEvent("Log");
-            }
-        }
-
-        private string _errors;
-        public string Errors
-        {
-            get { return _errors; }
-            set
-            {
-                _errors = value;
-                RaisePropertyChangedEvent("Errors");
+                RaisePropertyChanged("Log");
             }
         }
 
@@ -188,7 +155,21 @@ namespace IRPSIM.ViewModels
             set
             {
                 _progress = value;
-                RaisePropertyChangedEvent("Progress");
+                RaisePropertyChanged("Progress");
+            }
+        }
+
+        private Boolean _haserrors = false;
+        public Boolean HasErrors
+        {
+            get { return _haserrors; }
+            set
+            {
+                if (value != _haserrors)
+                {
+                    _haserrors = value;
+                    RaisePropertyChanged("HasErrors");
+                }
             }
         }
 
@@ -196,46 +177,147 @@ namespace IRPSIM.ViewModels
         {
             get { string ret = irpApp.ProjectName; return ret == "" ? "IRPSIM" : ret; }
         }
+
+        bool _canRunSimulation = false;
+        public bool CanRunSimulation
+        {
+            get { return _canRunSimulation; }
+            set
+            {
+                if (value != _canRunSimulation)
+                {
+                    _canRunSimulation = value;
+                    RaisePropertyChanged("CanRunSimulation");
+                    RunSimulationCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
+        
+        bool _canOpenProject = true;
+        public bool CanOpenProject
+        {
+            get { return _canOpenProject; }
+            set
+            {
+                if (value != _canOpenProject)
+                {
+                    _canOpenProject = value;
+                    RaisePropertyChanged("CanOpenProject");
+                    ProjectOpenCommand.RaiseCanExecuteChanged();
+                }
+            }
+        }
  
         #endregion
 
-        public ICommand ProjectOpenCommand
+        public string IrpObjectType(object obj)
         {
-            get { return new DelegateCommand(param => openProjectDelegate()); }
+            CMWrappedIrpObject wo = obj as CMWrappedIrpObject;
+
+            if (wo == null)
+                return "None";
+
+            if (wo is CMWrappedVariable)
+            {
+                CMWrappedVariable v = wo as CMWrappedVariable;
+
+                if (v.NType == NodeType.Demand)
+                    return "Demand";
+                if (v.NType == NodeType.Supply)
+                    return "Supply";
+                if (v.NType == NodeType.Storage)
+                    return "Storage";
+                if (v.NType == NodeType.Cost)
+                    return "Cost";
+                return (v.FileId >= 0 ? "UserVariable" : "SystemVariable");
+            }
+
+            return wo.Type.Substring(2);
         }
 
-        public ICommand RunSimulationCommand
+
+        #region Commands
+
+        RelayCommand<object> _testCommand;
+        public RelayCommand<object> TestCommand
         {
-            get { return new DelegateCommand(param => runSimulationDelegate()); }
+            get
+            {
+                if (_testCommand == null)
+                    _testCommand = new RelayCommand<object>(testDelegate);
+                return _testCommand;
+            }
         }
 
-        public ICommand DoSomethingCommand
+        RelayCommand<object> _testCommand2;
+        public RelayCommand<object> TestCommand2
         {
-            get { return new DelegateCommand(param => doSomethingDelegate((MouseEventArgs)param)); }
+            get
+            {
+                if (_testCommand2 == null)
+                    _testCommand2 = new RelayCommand<object>(testDelegate2);
+                return _testCommand2;
+            }
+        }
+        RelayCommand _projectOpenCommand;
+        public RelayCommand ProjectOpenCommand
+        {
+            get {
+                if (_projectOpenCommand==null)
+                    _projectOpenCommand = new RelayCommand(openProjectDelegate, () => { return CanOpenProject; });
+                return _projectOpenCommand;
+            }
+        }
+        
+        RelayCommand _runSimulationCommand;
+        public RelayCommand RunSimulationCommand
+        {
+            get
+            {
+                if (_runSimulationCommand == null)
+                    _runSimulationCommand = new RelayCommand(runSimulationDelegate, () => { return CanRunSimulation; });
+                return _runSimulationCommand;
+            }
         }
 
-        private void doSomethingDelegate(MouseEventArgs e)
+        #endregion
+
+        private void testDelegate(object param)
         {
-            Debug.WriteLine("Do Something!");
+            CMWrappedIrpObject obj = param as CMWrappedIrpObject;
+            if (obj != null)
+                obj.Selected = !obj.Selected;
+        }
+
+        private void testDelegate2(object param)
+        {
+            CMWrappedIrpObject obj = SelectedObject as CMWrappedIrpObject;
+            if (obj == null)
+                return;
+
+            KeyEventArgs a = param as KeyEventArgs;
+
+            if (a.Key == Key.Space) 
+                obj.Selected = !obj.Selected;
         }
 
         private void openProjectDelegate()
         {
-            if (backgroundWorkerOpenProject.IsBusy)
+            if (!CanOpenProject)
             {
-                Debug.WriteLine("Project is being opened");
+                Debug.WriteLine("Can't open project");
                 return;
             }
 
-            OpenFileDialog dlg = new OpenFileDialog();
+            string path = _getFileNameService.GetFileName();
 
-            if (dlg.ShowDialog() == true)
+            if (path!=null)
             {
-                string filename = dlg.FileName;
-                backgroundWorkerOpenProject.RunWorkerAsync(filename);
+                CanOpenProject = false;
+                CanRunSimulation = false;
+                backgroundWorkerOpenProject.RunWorkerAsync(path);
             }
         }
-
 
         private void runSimulationDelegate()
         {
@@ -256,20 +338,32 @@ namespace IRPSIM.ViewModels
 
         private void backgroundWorkerOpenProject_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            RaisePropertyChangedEvent("ProjectTitle");
+            RaisePropertyChanged("ProjectTitle");
             irpApp.AfterOpenProject();
-        }
+            CanRunSimulation = true;
+            CanOpenProject = true;
+  
+            foreach (ErrorViewModel m in _errors)
+            {
+                Errors.Add(m);
+                HasErrors = true;
+            }
+         }
 
         private void backgroundWorkerRunSimulation_DoWork(object sender, DoWorkEventArgs e)
         {
-            irpApp.UseScenario("dsm_input");
+            irpApp.UseScenario("test");
             irpApp.UseScript("basemix-cra-ondemand");
             irpApp.RunSimulation();
         }
 
         private void backgroundWorkerRunSimulation_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            //TODO
+            foreach (ErrorViewModel m in _errors)
+            {
+                Errors.Add(m);
+                HasErrors = true;
+            }
         }
 
         private void openProject(string filename)

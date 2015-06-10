@@ -43,7 +43,7 @@ public:
 	//CMString& GetName() {return name;}
 	double GetValue() {return value;}
 protected:
-	virtual const wchar_t* IsA();
+	virtual const wchar_t* IsA() { return L"CMDefinition"; }
 };
 
 class _IRPCLASS CMDefinitions

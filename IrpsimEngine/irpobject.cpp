@@ -18,18 +18,65 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 #include "irpobject.h"
+#include "cmlib.h"
 
-CMIrpObject::CMIrpObject(const CMString& aName,int id) :
-name(aName),
-app_id(id)
+CMIrpObjectIterator::CMIrpObjectIterator(CMIrpObject* o) :
+obj(o),
+array(),
+pos(-2)
 {
 }
 
+CMIrpObjectIterator::~CMIrpObjectIterator()
+{
+	array.ResetAndDestroy(1);
+}
+
+int CMIrpObjectIterator::Reset()
+{
+	if (pos >= -1) {
+		pos = 0;
+		return 1;
+	}
+	return 0;
+}
+
+const wchar_t* CMIrpObjectIterator::GetNext()
+{
+	const wchar_t* ret = 0;
+	if (!obj->IsIterating()) {
+		obj->SetIterating(true);
+		if (pos == -2) {
+			if ((ret = get_next()) != 0)
+				array.Insert(ret);
+			else
+				pos = -1;
+		}
+		else if (pos>-1)
+			ret = (pos<array.Count()) ? array[pos++]->c_str() : 0;
+		obj->SetIterating(false);
+	}
+	return ret;
+}
+
+CMIrpObject::CMIrpObject(const CMString& n, int id) :
+name(n),
+app_id(id)
+{
+	//name.to_lower();
+	name = stripends(name);
+	if (name.length() && name[0] == L'#')
+		name = name.substr(1, name.length() - 1);
+}
+
+
+/*
 CMIrpObject::CMIrpObject(const wchar_t* aName,int id) :
 name(aName ? aName : L""),
 app_id(id)
 {
 }
+*/
 
 wistream& CMIrpObject::read(wistream& s)
 {

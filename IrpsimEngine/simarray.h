@@ -48,7 +48,7 @@ class _IRPCLASS CMSimulationArray
 {
 	CMString   filename;
 	wfstream* file;
-   wchar_t     head[16];
+    wchar_t     head[16];
 	float*   fbuffer;
 	long		begindex; // for fbuffer
 	CMVBigArray<float>* array;

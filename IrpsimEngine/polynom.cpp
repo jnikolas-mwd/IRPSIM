@@ -28,8 +28,8 @@
 #include "cmlib.h"
 #include "notify.h"
 
-#include <fstream>
-static wofstream sdebug(L"debug_polynom.txt");
+//#include <fstream>
+//static wofstream sdebug(L"debug_polynom.txt");
 
 wchar_t* CMPolynomial::errorstrings[] = {
 	L"no expression",
@@ -51,9 +51,12 @@ wchar_t* CMPolynomial::errorstrings[] = {
 	L"illegal conditional expression",
 	L"divide by zero",
 	L"function domain error",
-	L"missing variable"
+	L"missing variable",
+	L"unrecognized operator"
 };
 
+
+wchar_t* CMPolynomial::badops[] = { L"=>", L"=<", L"===", NULL };
 
 wchar_t* CMPolynomial::ops[] = { L"==", L"!=", L"<=", L">=", L"<", L">",
 							L"||", L"|", L"&&", L"&", L"!", L"=", L"+", L"-",
@@ -77,7 +80,9 @@ state(0)
 {
 	int errorcode = translate(str);
 	if (errorcode >= 0) {
+		err_code = errorcode;
 		state |= failed;
+		report_error(errorcode, str);
 //		throw CMXPolynomial(errorcode,CMString(str));
 	}
 }
@@ -104,8 +109,7 @@ CMPolynomial::~CMPolynomial()
 void CMPolynomial::report_error(int code,const CMString& t)
 {
 	CMString s(errorstrings[code]);
-	s += L" : ";
-	s += t;
+	s += L" : " + t;
 	CMNotifier::Notify(CMNotifier::ERROR,s);
 }
 
@@ -327,7 +331,9 @@ int CMPolynomial::add_constant_or_expression(CMString& str)
 	else {
 		expression.Add(Expression);
 		expression.Add((int)expressions.Count());
-		expressions.Add(new CMPolynomial(str.c_str()));
+		CMPolynomial* p = new CMPolynomial(str.c_str());
+		expressions.Add(p);
+		ret = p->GetErrorCode();
 	}
 	return ret;
 }
@@ -389,6 +395,12 @@ int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, CMString& str, i
 				return XIllegalCondition;
 		}
 		return -1;
+	}
+
+	// check to see if item is a bad operation
+	for (i = 0; badops[i] != NULL; i++) {
+		if (!wcsncmp(ptr, badops[i], wcslen(badops[i])))
+			return XUnrecognizedOperator;
 	}
 
 	// check to see if item is an operation
@@ -591,8 +603,10 @@ CMString CMPolynomial::GetString()
 {
 	CMString ret;
 	if (Fail()) {
-   		if (original) ret += *original;
-			return ret + L"  ERROR!";
+   		if (original) 
+			return *original;
+		else
+			return L"ERROR!";
    }
 	int nmod;
    unsigned short i;
@@ -901,11 +915,13 @@ void CMPolynomial::level7(double& result)      // functions, (), numbers,
 		result = eval_variable(token==Variable);
 	else if (token == Constant)
 		result = constants[offset];
+	/*
 	else if (token == Definition) 
 	{
 		result = CMDefinitions::GetDefinitionValue(offset);
 		sdebug << "Definition " << offset << result << ENDL;
 	}
+	*/
 	else if (isspecialfunc(token))
 		result = eval_special_function();
 	get_token();

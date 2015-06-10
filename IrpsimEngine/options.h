@@ -23,30 +23,35 @@
 #define __OPTIONS_H
 
 #include "irp.h"
+#include "irpobject.h"
 #include "cmdefs.h"
 #include "arraydic.h"
 //#include <iostream.h>
 #include <iostream>
 using namespace std;
 
-class _IRPCLASS CMOption {
-	CMString name;
+class _IRPCLASS CMOption : public CMIrpObject {
+//	CMString name;
 	CMString value;
 public:
-	CMOption() : name() , value() {}
-	CMOption(const CMString& n,const CMString& v);
-	CMOption(const CMOption& o) : name(o.name) , value(o.value) {}
-	CMOption& operator = (const CMOption& o) {name=o.name;value=o.value;return *this;}
-	int operator == (const CMOption& o) {return name==o.name;}
-	int operator < (const CMOption& o) {return name<o.name;}
-	CMString& GetName() {return name;}
-	CMString& GetValue() {return value;}
+	CMOption() : CMIrpObject() , value(L"") {}
+	CMOption(const CMString& n, const CMString& v, int app_id) : CMIrpObject(n, app_id) { SetValue(v); }
+	CMOption(const CMOption& o) : value(o.value) {this->name = o.name; this->app_id = o.app_id; }
+	CMOption& operator = (const CMOption& o) { name = o.name; value = o.value; app_id = o.app_id; return *this; }
+//	int operator == (const CMOption& o) {return name==o.name;}
+//	int operator < (const CMOption& o) {return name<o.name;}
+//	CMString& GetName() {return name;}
+	const CMString& GetValue() const {return value;}
 	void SetValue(const CMString& v);
+	void SetValueAndAppId(const CMString& v, int id) { SetValue(v); app_id = id; }
 
-	wostream& WriteBinary(wostream& s);
-	wistream& ReadBinary(wistream& s);
-	short    BinarySize();
+//	wostream& WriteBinary(wostream& s);
+//	wistream& ReadBinary(wistream& s);
+//	short    BinarySize();
+protected:
+	virtual const wchar_t* IsA() { return L"CMOption"; }
 };
+
 
 //template class _IRPCLASS CMArrayDictionary<CMOption>;
 typedef class _IRPCLASS CMArrayDictionary<CMOption> CMOPTIONARRAYDICTIONARY;
@@ -59,12 +64,15 @@ class _IRPCLASS CMOptions
 //	CMArrayDictionary<CMOption> options;
 	CMOPTIONARRAYDICTIONARY options;
 	short maxwidth;
+	int app_id = -1;
 public:
 	static struct _def { const wchar_t* name; const wchar_t* value; } defaults[];
 	CMOptions();
 	CMOptions(const CMOptions& op);
 	~CMOptions() {options.ResetAndDestroy(1);}
 
+	void   SetApplicationId(int id) { this->app_id = id; }
+	int	   GetApplicationId() { return this->app_id; }
 	void   SetDefaults();
 
 	CMString GetOption(const CMString& option);
@@ -73,17 +81,19 @@ public:
 	short	 GetOptionInt(const CMString& option);
 	long	 GetOptionLong(const CMString& option);
 
-	void   SetOption(const CMString& line);
-	void   SetOption(const CMString& name,const CMString& value);
-	void   SetOption(const CMString& name,double option);
+	void   SetOption(const CMString& line, int app_id);
+	void   SetOption(const CMString& name,const CMString& value,int app_id);
+	void   SetOption(const CMString& name,double option, int app_id);
+	void   SetOption(const CMString& name, const CMString& value) { SetOption(name, value, -1); }
+	void   SetOption(const CMOption& op) { SetOption(op.GetName(), op.GetValue(), op.GetApplicationId()); }
 
 	unsigned  Count() const {return options.Count();}
 	CMOption* At(unsigned short n) const {return options.At(n);}
 
     CMOptions& operator = (const CMOptions& op);
-	wostream& WriteBinary(wostream& s);
-	wistream& ReadBinary(wistream& s);
-	long     BinarySize();
+	//wostream& WriteBinary(wostream& s);
+	//wistream& ReadBinary(wistream& s);
+	//long     BinarySize();
 };
 
 _IRPFUNC wostream& operator << (wostream& s, CMOptions& o);

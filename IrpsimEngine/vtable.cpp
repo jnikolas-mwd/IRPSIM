@@ -27,7 +27,7 @@
 //static ofstream vdebug("vtable.deb");
 
 CMVTableIterator::CMVTableIterator(CMVTable* v) :
-CMVNameIterator(v),
+CMIrpObjectIterator(v),
 vIterator(0),
 eIterator(0),
 state(iterRowSel),
@@ -44,7 +44,7 @@ CMVTableIterator::~CMVTableIterator()
 const wchar_t* CMVTableIterator::get_next()
 {
 	const wchar_t* ret;
-	CMVTable* v = (CMVTable*)variable;
+	CMVTable* v = (CMVTable*)obj;
 	CMVariable* var;
 
 //   vdebug << "got to 1 : " << v->GetName() << ENDL;

@@ -23,7 +23,7 @@
 #include <stdlib.h>
 
 CMVArrayIterator::CMVArrayIterator(CMVArray* v) :
-CMVNameIterator(v),
+CMIrpObjectIterator(v),
 iter(0),
 pos(0)
 {
@@ -37,7 +37,7 @@ CMVArrayIterator::~CMVArrayIterator()
 const wchar_t* CMVArrayIterator::get_next()
 {
 	const wchar_t* ret;
-	CMVArray* v = (CMVArray*)variable;
+	CMVArray* v = (CMVArray*)obj;
 
 	if (!(v->arraystate & v->containsPolynomials))
 		return 0;
@@ -73,7 +73,7 @@ CMVArray::~CMVArray()
 	array.ResetAndDestroy(1);
 }
 
-CMVNameIterator* CMVArray::create_iterator()
+CMIrpObjectIterator* CMVArray::create_iterator()
 {
 	return (arraystate&containsPolynomials) ? new CMVArrayIterator(this) : 0;
 }

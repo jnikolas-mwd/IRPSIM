@@ -33,7 +33,7 @@ template <class TP> class CMPHashDictionary
 	CMPSmallArray<TP>* array;
 	int csflag;  // case sensitive flag
 public:
-	CMPHashDictionary(unsigned short sz=64,int flag=1);
+	CMPHashDictionary(unsigned short sz=64,int flag=0);
 	~CMPHashDictionary();
 	void Add(TP* val);
 	void Reset(int destroy=0);

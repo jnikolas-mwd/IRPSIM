@@ -37,7 +37,8 @@
 #include <time.h>
 #include <fstream>
 using namespace std;
-static ofstream sdebug("simulat_debug.txt");
+
+//static wofstream sdebug("debug_simulat.txt");
 
 #define CM_BIGTIME 10000000L
 
@@ -247,10 +248,10 @@ void CMSimulation::initialize()
 
 	if (script) {
 		script->SetSimulationContext(this, pApp);
-      if (script->Fail()) {
-		  CMNotifier::Notify(CMNotifier::ERROR, CMString(L"problem with script <" + script->GetName() + L">"));
-         state |= sBadScript;
-      }
+		if (script->Fail()) {
+			CMNotifier::Notify(CMNotifier::ERROR, CMString(L"problem with script <" + script->GetName() + L">"));
+			state |= sBadScript;
+		}
    }
 	else {
 		CMNotifier::Notify(CMNotifier::ERROR, (L"can't run simulation: no script loaded"));
@@ -276,7 +277,7 @@ void CMSimulation::initialize()
 	}
 
 	if (find_missing_variables()) {
-		sdebug << "Missing variables found";
+		CMNotifier::Notify(CMNotifier::ERROR, (L"can't run simulation: missing variables"));
 		state |= sMissingVariables;
 	}
 
@@ -288,8 +289,9 @@ void CMSimulation::initialize()
 	accumulator = new CMAccumulatorArray(*timemachine,summaryvars.Count());
 	simarray = new CMSimulationArray(*timemachine,outcomevars.Count(),filename.c_str(),incsize);
 
-	if (!simarray || simarray->Fail())
+	if (!simarray || simarray->Fail()) {
 		state |= sCantOpenBinaryFile;
+	}
 	for (i=0;i<summaryvars.Count() && accumulator;i++)
 		accumulator->AssignVariable(i,summaryvars[i]->GetName(),summaryvars[i]->GetSpecialType(),get_vardesc_state(summaryvars[i]));
 	for (i=0;i<outcomevars.Count() && simarray;i++)
@@ -364,16 +366,17 @@ int CMSimulation::find_missing_variables()
 {
 	CMVariableIterator iter;
 	CMVariable* v;
-	CMVNameIterator* vi;
+	CMIrpObjectIterator* vi;
 	while ((v=iter())!=0) {
 		if (v->GetState(CMVariable::vsSelected)) {
 			vi = v->CreateIterator();
 			const wchar_t* vname;
 			while (vi && ((vname=vi->GetNext())!=0)) {
-				if (!CMVariable::Find(vname) && !CMDefinitions::IsDefined(vname))
-				if (!missingvars.Contains(vname)) {
-					missingvars.Add(vname);
-					CMNotifier::Notify(CMNotifier::ERROR, L"Missing variable or definition " + CMString(vname) + L" in definition of " + v->GetName());
+				if (!CMVariable::Find(vname) && !CMDefinitions::IsDefined(vname)) {
+					if (!missingvars.Contains(vname)) {
+						missingvars.Add(vname);
+						CMNotifier::Notify(CMNotifier::ERROR, L"Missing variable or definition " + CMString(vname) + L" in definition of " + v->GetName());
+					}
 				}
 			}
 			CMString atype,aname;
@@ -381,10 +384,13 @@ int CMSimulation::find_missing_variables()
 				CMVariable* vassoc = CMVariable::Find(aname);
 				if (vassoc) {
 					vi = vassoc->CreateIterator();
-					while (vi && ((vname=vi->GetNext())!=0)) {
-						if (!CMVariable::Find(vname))
-						if (!missingvars.Contains(vname))
-							missingvars.Add(vname);
+					while (vi && ((vname = vi->GetNext()) != 0)) {
+						if (!CMVariable::Find(vname)) {
+							if (!missingvars.Contains(vname)) {
+								missingvars.Add(vname);
+								CMNotifier::Notify(CMNotifier::ERROR, L"Missing variable or definition " + CMString(vname) + L" in definition of " + v->GetName());
+							}
+						}
 					}
 				}
 			}
@@ -473,6 +479,7 @@ void CMSimulation::get_data_from_options()
 {
 	filename = options.GetOption(L"simulationfile");
 	simname  = options.GetOption(L"simulationname");
+
    if (!simname.length()) simname = L"<no name>";
 	randomseed = options.GetOptionLong(L"randomseed");
    if (randomseed<0) randomseed=0;
@@ -636,8 +643,6 @@ BOOL CMSimulation::Run()
 	if (!(state&sInitialized))
 		initialize();
 
-	sdebug << "Got to 1";
-	
 	while ((trialno = timemachine->Count())<ntrials && !Fail() && !(state&(sStopped | sFromFile))) 
 	{
 		int atbeginning = timemachine->AtBeginning();
@@ -651,8 +656,6 @@ BOOL CMSimulation::Run()
 			CMVariable::ResetTrial();
 			if (trialno == 0 && pApp)
 				CMNotifier::Notify(CMNotifier::LOGTIME, L"Start Simulation " + GetName());
-			
-			sdebug << "Trial number " << trialno;
 			CMNotifier::Notify(CMNotifier::PROGRESS, L"", (int)(100 * (double)trialno / (double)ntrials));
 		}
 

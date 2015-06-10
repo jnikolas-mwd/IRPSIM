@@ -36,7 +36,7 @@ include(0)
 {
 }
 
-CMAllocationUnit::CMAllocationUnit(const wchar_t* aName,int id) : CMIrpObject(aName,id),
+CMAllocationUnit::CMAllocationUnit(int id) : CMIrpObject(id),
 allocation_type(0),
 allocation_mode(Preserve),
 sort_value(CM_BIGDOUBLE),

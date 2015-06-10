@@ -77,7 +77,7 @@ wchar_t* CMScript::footer = L"#END";
 const wchar_t* CMScript::IsA() { return L"CMScript"; }
 
 CMScript::CMScript(int id) :
-CMIrpObject(NULL,id),
+CMIrpObject(id),
 state(0),
 tm(0),
 sim(0),
@@ -594,14 +594,14 @@ wistream& CMScript::read(wistream& s)
 	CMString line;
 	while (!s.eof()) {
 		line.read_line(s);
-   	line = stripends(line);
+   		line = stripends(line);
 		if (line.is_null())
-      	continue;
+      		continue;
 		else if (line(0,wcslen(header)) == header)
-      	name = stripends(CMString(line.c_str()+wcslen(header)));
+      		name = stripends(CMString(line.c_str()+wcslen(header)));
 		else if (line(0,wcslen(footer)) == footer)
-   		break;
-      else
+   			break;
+		else
 			lines.Add(line);
    }
    return s;

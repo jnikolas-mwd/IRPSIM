@@ -61,7 +61,7 @@ class _IRPCLASS CMCategory : public CMAllocationUnit
 
    virtual wistream& read(wistream& s);
    virtual wostream& write(wostream& s);
-   virtual const wchar_t* IsA();
+   virtual const wchar_t* IsA() { return L"CMCategory"; };
 
 	void reset();
 

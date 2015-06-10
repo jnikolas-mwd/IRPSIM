@@ -22,8 +22,6 @@
 
 #include "defines.h"
 
-const wchar_t* CMDefinition::IsA() { return L"CMDefinition"; }
-
 CMPSmallArray<CMDefinition> CMDefinitions::definition_array;
 
 CMDefinition* CMDefinitions::Find(const CMString& n,unsigned short* loc)

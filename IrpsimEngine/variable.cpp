@@ -63,45 +63,6 @@ const unsigned long CMVariable::vsAccumulate	 		= 0x08000000L;
 const unsigned long CMVariable::vsDontEdit	 		= 0x10000000L;
 const unsigned long CMVariable::vsFlag			 		= 0x20000000L;
 
-CMVNameIterator::CMVNameIterator(CMVariable* v) :
-variable(v),
-varray(),
-vpos(-2)
-{
-}
-
-CMVNameIterator::~CMVNameIterator()
-{
-	varray.ResetAndDestroy(1);
-}
-
-int CMVNameIterator::reset()
-{
-	if (vpos>=-1) {
-		vpos=0;
-		return 1;
-	}
-	return 0;
-}
-
-const wchar_t* CMVNameIterator::GetNext()
-{
-	const wchar_t* ret = 0;
-	if (!(variable->GetState() & CMVariable::vsIterating)) {
-		variable->SetState(CMVariable::vsIterating,TRUE);
-		if (vpos==-2) {
-			if ((ret=get_next())!=0)
-				varray.Insert(ret);
-			else
-				vpos=-1;
-		}
-		else if (vpos>-1)
-			ret = (vpos<varray.Count()) ? varray[vpos++]->c_str() : 0;
-		variable->SetState(CMVariable::vsIterating,FALSE);
-	}
-	return ret;
-}
-
 // Static variables
 
 wchar_t* CMVariable::errorstrings[] =
@@ -272,7 +233,7 @@ void CMVariable::UpdateLinkStatus()
          vfound->UpdateLinkStatus();
    }
 
-	CMVNameIterator* ni = CreateIterator();
+	CMIrpObjectIterator* ni = CreateIterator();
 	if (ni) {
 		const wchar_t* vname;
 		while ((vname=ni->GetNext())!=0)
@@ -284,12 +245,6 @@ void CMVariable::UpdateLinkStatus()
 void CMVariable::ResetTrial()
 {
 	if (variables) variables->SetStateAll(vsResetRequired,TRUE);
-}
-
-CMVNameIterator* CMVariable::create_iterator()
-{
-	return 0;
-//	return new CMVNameIterator(this);
 }
 
 void CMVariable::SetType(const CMString& aName)
@@ -353,13 +308,13 @@ int CMVariable::GetAssociation(int n,CMString& s1,CMString& s2)
 	return associations.GetAssociation(n,s1,s2);
 }
 
-CMVNameIterator* CMVariable::CreateIterator()
+CMIrpObjectIterator* CMVariable::CreateIterator()
 {
-	if (GetState() & vsIterating)
+	if (IsIterating())
 		return 0;
 
 	if (iterator) {
-		if (!iterator->reset()) {
+		if (!iterator->Reset()) {
 			delete iterator;
 			iterator=0;
 		}

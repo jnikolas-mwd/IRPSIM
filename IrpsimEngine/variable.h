@@ -32,21 +32,6 @@
 #include "strval.h"
 #include "queue.h"
 
-class _IRPCLASS CMVNameIterator
-{
-	friend class _IRPCLASS CMVariable;
-	class _IRPCLASS CMPSSmallArray<CMString> varray;
-	int vpos;
-	int reset();
-protected:
-	CMVariable* variable;
-	virtual const wchar_t* get_next() {return 0;}
-public:
-	CMVNameIterator(CMVariable* v);
-	~CMVNameIterator();
-	const wchar_t* GetNext();
-};
-
 class _IRPCLASS CMVariable : public CMIrpObject
 {
 	friend class _IRPCLASS CMVariableIterator;
@@ -58,7 +43,7 @@ class _IRPCLASS CMVariable : public CMIrpObject
 	int type;
 	ULONG state;
 	int errorcode;
-	CMVNameIterator* iterator;
+	CMIrpObjectIterator* iterator;
 	//CMPSMALLSTRINGARRAY types;
 	CMPSmallArray<CMString> types;
 
@@ -87,13 +72,13 @@ protected:
 	static int column_width;
 	// Virtual functions that must be overridden in each derived class
 	// Evaluate variables. Indexes depend on nature of derived variable class
+	virtual CMIrpObjectIterator* create_iterator() { return 0; }
 
 	// virtual function to perform any addition resetting at beginning of
 	// a simulation trial
 	virtual void reset(CMTimeMachine* t) {}
 	virtual double evaluate(CMTimeMachine* t,int index1=0,int index2=0) {return 0;}
 	virtual int is_less_than(const CMIrpObject& v2) const;
-	virtual CMVNameIterator* create_iterator();
 	virtual void update_variable_links() {}
 	virtual void read_body(wistream& s);
 	virtual void write_body(wostream& s) {}
@@ -175,7 +160,7 @@ public:
 	void	UpdateVariableLinks();
 	void	UpdateLinkStatus();
 
-	CMVNameIterator* CreateIterator();
+	virtual CMIrpObjectIterator* CreateIterator();
 
 // ------------- Static methods
 

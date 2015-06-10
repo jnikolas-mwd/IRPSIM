@@ -21,7 +21,7 @@
 #include "realizations.h"
 #include <fstream>
 
-static wofstream sdebug("debug_realizations.txt", ios::binary);
+//static wofstream sdebug("debug_realizations.txt", ios::binary);
 
 void CMRealizations::Reset()
 {
@@ -40,7 +40,6 @@ double CMRealizations::At(const CMTime& t)
 
 bool CMRealizations::SetValue(const CMTime& t, double v, bool bAccumulate)
 {
-	sdebug << L"SetValue: " << t << L"  " << v << ENDL;
 	double exist = At(t);
 	if (bAccumulate)
 		v += exist;

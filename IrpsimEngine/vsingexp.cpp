@@ -21,7 +21,7 @@
 //static wofstream sdebug("debug_vsingexp.txt");
 
 CMVSingleExpressionIterator::CMVSingleExpressionIterator(CMVSingleExpression* v) :
-CMVNameIterator(v),
+CMIrpObjectIterator(v),
 iter(v->expression)
 {
 }
@@ -31,7 +31,7 @@ const wchar_t* CMVSingleExpressionIterator::get_next()
 	return iter();
 }
 
-CMVNameIterator* CMVSingleExpression::create_iterator()
+CMIrpObjectIterator* CMVSingleExpression::create_iterator()
 {
 	return expression.IsPolynomial() ? new CMVSingleExpressionIterator(this) : 0;
 }
@@ -47,7 +47,7 @@ void CMVSingleExpression::read_body(wistream& s)
 			continue;
 		if (str(0,wcslen(vardef_end)) == vardef_end)
 			break;
-		expr += str;
+		expr += str.strip(CMString::stripType::Trailing, L'\r');
 	}
 	SetExpression(expr.c_str());
 	if (expression.Fail()) {

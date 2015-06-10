@@ -251,6 +251,7 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 			}
 			else if (token==L"options") {
 				CMNotifier::Notify(CMNotifier::INFO, messageheader + L"options");
+				options.SetApplicationId(currfile);
 				s->seekg(index);
 				*s >> options;
 			}
@@ -385,7 +386,7 @@ void CMIrpApplication::update_variable_links()
 		if (v->GetState(CMVariable::vsAggregate | CMVariable::vsSystem))
 			continue;
 		int pct = (int)(100*n/vcount);
-		CMVNameIterator* ni = v->CreateIterator();
+		CMIrpObjectIterator* ni = v->CreateIterator();
 		const wchar_t* vname;
 		int first=1;
 		while (ni && ((vname=ni->GetNext())!=0)) {
@@ -430,11 +431,13 @@ CMString CMIrpApplication::GetObjectFileName(CMIrpObject* pObject)
 	return ret;
 }
 
+/*
 void CMIrpApplication::SetOptions(const CMOptions& op)
 {
 	for (unsigned i=0;i<op.Count();i++)
 		options.SetOption(op.At(i)->GetName(),op.At(i)->GetValue());
 }
+*/
 
 /*
 CMScenario* CMIrpApplication::AddThisScenario(const CMString& name)
@@ -657,7 +660,7 @@ CMSimulation* CMIrpApplication::CreateSimulation()  //const wchar_t* pFileName)
 				newsim = new CMSimulation(this);
 				if (newsim->Fail()) {
   	   				delete newsim;
-					CMNotifier::Notify(CMNotifier::LOG, L"Unable to create simulation");
+					CMNotifier::Notify(CMNotifier::ERROR, L"Unable to create simulation");
 					newsim=NULL;
 				}
 			}
@@ -710,8 +713,12 @@ void CMIrpApplication::DeleteSimulation(CMSimulation* pSim,int save)
 
 BOOL CMIrpApplication::RunSimulation(CMSimulation* pSim)
 {
-	if (pSim==NULL || RunningSimulation() || currentscript==NULL)
+	if (pSim==NULL || RunningSimulation())
 		return FALSE;
+	if (currentscript == NULL) {
+		CMNotifier::Notify(CMNotifier::ERROR, L"Cannot run simulation: No script selected");
+		return FALSE;
+	}
 	if (!pSim->Initialized()) {
 		for (unsigned short i=0;i<scripts.Count();i++)
 			scripts[i]->Parse(*this);

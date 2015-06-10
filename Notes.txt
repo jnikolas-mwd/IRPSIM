@@ -1,0 +1,26 @@
+In the nevada.sup file, there is a variable defined as follows:
+
+#VARDEF		snwa_cumulative_2020	
+#type	sum		
+if(_cyear => snwa_end, snwa_cumulative[_y-1] + snwa.take,0)			
+#ENDVAR
+
+The => is wrong and should be flagged by IRPSIM. Should be
+
+#VARDEF		snwa_cumulative_2020	
+#type	sum		
+if(_cyear >= snwa_end, snwa_cumulative[_y-1] + snwa.take,0)			
+#ENDVAR
+
+In the Colorado_River_Aqueduct\pvid.sup file, there is a variable defined as follows:
+
+#VARDEF		pvid_max_check	
+if(pvid_option [_y-1] => (102500 * 0.9), 1, 0)			
+#ENDVAR
+
+The => is wrong and should be flagged by IRPSIM. Should be
+
+#VARDEF		pvid_max_check	
+if(pvid_option [_y-1] >= (102500 * 0.9), 1, 0)			
+#ENDVAR
+			
