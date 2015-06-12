@@ -8,8 +8,23 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
-        <viewmodel:ErrorSeverityToColorConverter x:Key="errorSeverityToColor"/>
-        <viewmodel:ErrorCountToColorConverter x:Key="errorCountToColor"/>
+        <Style x:Key="HeaderText" TargetType="{x:Type TextBlock}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding HasErrors}" Value="True">
+                    <Setter Property="Foreground" Value="Red"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ErrorText" TargetType="{x:Type TextBlock}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Severity}" Value="1">
+                    <Setter Property="Foreground" Value="Red"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Severity}" Value="2">
+                    <Setter Property="Foreground" Value="YellowGreen"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -21,7 +36,7 @@
             </TabItem>
             <TabItem>
                 <TabItem.Header>
-                    <TextBlock Text="Errors" Foreground="{Binding Path=HasErrors, Converter={StaticResource errorCountToColor}}"/>
+                    <TextBlock Text="Errors" Style="{StaticResource HeaderText}"/>
                 </TabItem.Header>
                 <ListBox ItemsSource="{Binding Errors}">
                     <ListBox.ItemTemplate>
@@ -31,8 +46,8 @@
                                     <ColumnDefinition Width="60"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0" Text="{Binding ErrorSeverityString}" Foreground="{Binding Path=ErrorSeverity, Converter={StaticResource errorSeverityToColor}}" />
-                                <TextBlock Grid.Column="1" Text="{Binding ErrorMessage}"/>
+                                <TextBlock Grid.Column="0" Text="{Binding SeverityString}" Style="{StaticResource ErrorText}" />
+                                <TextBlock Grid.Column="1" Text="{Binding Message}"/>
                             </Grid>
                         </DataTemplate>
                     </ListBox.ItemTemplate>

@@ -1,36 +1,175 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="Header Files">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
-    </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="TestConsole.cpp" />
+    <ClCompile Include="..\IrpsimEngine\accum.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\advmath.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\allocationunit.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\assoc.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\category.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\cmerror.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\cmlib.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\cmstring.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\cmtime.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\control.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\defines.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\expresn.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\fifo.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\function.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\indexsel.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\interval.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\irpapp.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\irpobject.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\matrix.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\node.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\notify.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\ntuple.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\options.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\polynom.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\queue.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\random.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\realizations.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\regions.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\reliab.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\savesim.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\savesima.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\scenario.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\script.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\simarray.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\simulat.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\timemach.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\tmarray.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\token.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\units.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\varcol.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\varconst.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\vardesc.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\variable.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\varray.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\vartypes.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\vmake.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\vperiod.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\vsingexp.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\vsystem.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\vtable.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\vtime.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\IrpsimEngine\vtimevar.cpp">
+      <Filter>External Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="stdafx.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="targetver.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="stdafx.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="TestConsole.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
+    <Filter Include="External Files">
+      <UniqueIdentifier>{7d125778-0c5e-42d1-8b62-8e96a9af6996}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

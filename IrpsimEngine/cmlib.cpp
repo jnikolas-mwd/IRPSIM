@@ -17,6 +17,7 @@
 // ==========================================================================
 //
 /////////////////////////////////////////////////////////////////////////////
+#include "StdAfx.h"
 #include "cmlib.h"
 #include "notify.h"
 #include <ctype.h>
@@ -31,6 +32,8 @@
 static wchar_t* algops[] = { L"==", L"=", L"!=", L"<=", L">=", L"<", L">",
 						L"||", L"|", L"&&" ,L"&", L"+", L"-",
 						L"*", L"/", L"%", L"^", NULL};
+
+
 /*
 long _IRPFUNC round(double val)
 {
@@ -276,14 +279,35 @@ CMString getrelativepath(const wchar_t* master, const wchar_t* slave)
 	return path;
 }
 
+#define is_directory_char(x)   ((x)==L'\\' || (x)==L'/')
+
 CMString getabsolutepath(const wchar_t* master, const wchar_t* slave)
 {
-	if (wcschr(slave, ':'))
+	if (wcschr(slave, L':') || slave[0]==L'\\' || slave[0]==L'/')
 		return CMString(slave);
 
-	CMString path = extractpath(master);
+	const wchar_t* mptr = master + wcslen(master) - 1;
+	const wchar_t* sptr = slave;
 
-	return path + slave;
+	while (!is_directory_char(*mptr)) mptr--;
+	
+	while (*sptr != L'\0' && mptr != master) {
+		if (!wcsncmp(sptr, L".\\", 2) || !wcsncmp(sptr, L"./", 2))
+			sptr += 2;
+		else if (!wcsncmp(sptr, L"..\\", 3) || !wcsncmp(sptr, L"../", 3)) {
+			mptr--;
+			while (!is_directory_char(*mptr) && mptr != master) mptr--;
+			sptr += 3;
+		}
+		else
+			break;
+	}
+
+	size_t index = (mptr - master);
+
+	CMString ret = (CMString(master,index+1) + sptr);
+	
+	return ret;
 }
 
 #else

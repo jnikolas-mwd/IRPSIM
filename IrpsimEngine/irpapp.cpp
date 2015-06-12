@@ -18,6 +18,7 @@
 // ==========================================================================
 //
 /////////////////////////////////////////////////////////////////////////////
+#include "StdAfx.h"
 #include "irpapp.h"
 #include "accum.h"
 #include "vtime.h"
@@ -223,7 +224,7 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 			CMTokenizer next(line);
 			CMString token = next(delims);
 			if (token == L"include") {
-				CMString fname = next(delims);
+				CMString fname = stripends(CMString(line.c_str() + 8));
 				currpath = getabsolutepath(name.c_str(), fname.c_str());
 
 				s = stack[++current] = new wifstream(currpath.c_str(),ios::in|IOS_BINARY);
@@ -233,8 +234,8 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 				}
 				else {
 					oldfile=currfile;
-					currfile = add_file_to_list(fname);
-					CMNotifier::Notify(CMNotifier::LOG, messageheader + fname);
+					currfile = add_file_to_list(currpath);
+					CMNotifier::Notify(CMNotifier::LOG, messageheader + currpath);
 				}
 			}
 			/*
@@ -252,6 +253,7 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 			else if (token==L"options") {
 				CMNotifier::Notify(CMNotifier::INFO, messageheader + L"options");
 				options.SetApplicationId(currfile);
+				options.SetApplicationIndex(index);
 				s->seekg(index);
 				*s >> options;
 			}
@@ -259,12 +261,14 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 				CMNotifier::Notify(CMNotifier::INFO, messageheader + L"intervals");
 				CMInterval::Read(*s);
 				CMInterval::SetApplicationIdAll(currfile);
+				CMInterval::SetApplicationIndexAll(index);
 			}
 			else if (token==L"scenario") {
 				s->seekg(index);
 				CMScenario* sce = new CMScenario(currfile);
 				*s >> *sce;
 				scenarios.Add(sce);
+				sce->SetApplicationIndex(index);
 				CMNotifier::Notify(CMNotifier::INFO, messageheader + sce->GetName());
 			}
 			else if (token==L"script") {
@@ -272,6 +276,7 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 				CMScript* scr = new CMScript(currfile);
 				*s >> *scr;
 				scripts.Add(scr);
+				scr->SetApplicationIndex(index);
 				CMNotifier::Notify(CMNotifier::INFO, messageheader + scr->GetName());
 			}
 			else if (token==L"category") {
@@ -279,6 +284,7 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 				CMCategory* cat = new CMCategory(currfile);
 				*s >> *cat;
 				CMCategory::AddCategory(cat);
+				cat->SetApplicationIndex(index);
 				CMNotifier::Notify(CMNotifier::INFO, messageheader + cat->GetName());
 			}
 			else if (token==L"vardef") {
@@ -294,6 +300,7 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 					else {
 						variables->Add(v);
 						v->SetApplicationId(currfile);
+						v->SetApplicationIndex(index);
 						CMNotifier::Notify(CMNotifier::INFO, messageheader + v->GetName());
 					}
 				}
@@ -819,10 +826,10 @@ int CMIrpApplication::WriteSummary(const CMString& filename,CMSimulation* sim)
    return report.Summary(filename);
 }
 
-int CMIrpApplication::add_file_to_list(const CMString& name)
+int CMIrpApplication::add_file_to_list(const CMString& path)
 {
 	int nRet = -1;
-	loadedfiles.Add(getabsolutepath(m_strProjectFile.c_str(), name.c_str()));
+	loadedfiles.Add(path);
 	nRet = loadedfiles.Count() - 1;
 	return nRet;
 }

@@ -20,7 +20,11 @@
 #pragma once
 
 #if defined (_WIN32)
-	#if defined (_BUILDIRP)
+	#if defined (_STATICIRPLIB)
+		#define _IRPCLASS
+		#define _IRPFUNC
+		#define _IRPDATA
+	#elif defined (_BUILDIRP)
 		#define _IRPCLASS __declspec(dllexport)
 		#define _IRPFUNC  __declspec(dllexport)
 		#define _IRPDATA  __declspec(dllexport)
@@ -28,7 +32,7 @@
 		#define _IRPCLASS __declspec(dllimport)
 		#define _IRPFUNC  __declspec(dllimport)
 		#define _IRPDATA  __declspec(dllimport)
-   #endif
+#endif
 #else
 	#define _IRPCLASS
 	#define _IRPFUNC

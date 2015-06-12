@@ -19,6 +19,7 @@
 // ==========================================================================
 //
 /////////////////////////////////////////////////////////////////////////////
+#include "StdAfx.h"
 #include "options.h"
 
 #include "cmlib.h"
@@ -193,29 +194,33 @@ long CMOptions::GetOptionLong(const CMString& option)
 	return _wtol(GetOption(option).c_str());
 }
 
-void CMOptions::SetOption(const CMString& line, int id)
+CMOption* CMOptions::SetOption(const CMString& line, int id)
 {
 	CMTokenizer next(line);
 	CMString name  = next(L" \t\r\n");
 	CMString value = next(L"\r\n");
-	SetOption(name, value, id);
+	return SetOption(name, value, id);
 }
 
-void CMOptions::SetOption(const CMString& name,const CMString& value, int id)
+CMOption* CMOptions::SetOption(const CMString& name, const CMString& value, int id)
 {
 	CMString nm = stripends(name);
 	int len = nm.length();
 	if (len>maxwidth) maxwidth=len;
 	CMOption* op = options.Find(nm);
 	if (op) 	op->SetValueAndAppId(value, id);
-	else   	options.Add(new CMOption(nm,value,id));
+	else {
+		op = new CMOption(CMOption(nm, value, id));
+		options.Add(op);
+	}
+	return op;
 }
 
-void CMOptions::SetOption(const CMString& name,double option, int id)
+CMOption* CMOptions::SetOption(const CMString& name, double option, int id)
 {
 	wchar_t buffer[64];
 	swprintf_s(buffer, 64, L"%.12g",option);
-	SetOption(name,buffer,id);
+	return SetOption(name,buffer,id);
 }
 
 CMOptions& CMOptions::operator = (const CMOptions& op)
@@ -269,7 +274,8 @@ wistream& operator >> (wistream& s, CMOptions& o)
 			cont.read_line(s);
 			line += stripends(cont);
 		}
-		o.SetOption(line, o.GetApplicationId());
+		CMOption* poption = o.SetOption(line, o.GetApplicationId());
+		if (poption) poption->SetApplicationIndex(o.GetApplicationIndex());
 	}
 
 	o.options.Sort();

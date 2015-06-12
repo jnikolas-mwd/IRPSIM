@@ -52,7 +52,8 @@ class _IRPCLASS CMIrpObject
 	// Data elements ***************
 protected:
 	CMString name;
-	int app_id;
+	int app_id=-1;
+	long app_index=0;
 	bool is_iterating = false;
 	
 	virtual wistream& read(wistream& s);
@@ -70,6 +71,10 @@ public:
 
     void  SetApplicationId(int id) {app_id=id;}
 	int   GetApplicationId() const {return app_id;}
+	
+	void  SetApplicationIndex(long index) { app_index = index; }
+	long   GetApplicationIndex() const { return app_index; }
+
 	const CMString& GetName() const {return name;}
 
 	virtual CMIrpObjectIterator* CreateIterator() { return 0; }

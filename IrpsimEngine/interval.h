@@ -58,6 +58,7 @@ public:
 	static CMInterval* GetInterval(unsigned short n);
 	static unsigned short NumIntervals();
 	static void SetApplicationIdAll(int id);
+	static void SetApplicationIndexAll(long index);
    static wistream& Read(wistream& s);
 };
 

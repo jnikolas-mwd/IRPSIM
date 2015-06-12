@@ -8,19 +8,23 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <Style TargetType="{x:Type TabControl}">
-        <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}"/>
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}"/>
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding FileName}"/>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="ContentTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <TextBox Text="{Binding FileContents, IsAsync=True}" />
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </UserControl.Resources>
     <TabControl TabStripPlacement="Top" ItemsSource="{Binding Files}" SelectedIndex="{Binding OpenFileIndex}">
-        <TabControl.ItemTemplate>
-            <DataTemplate>
-                <TextBlock Text="{Binding FileName}"/>
-            </DataTemplate>
-        </TabControl.ItemTemplate>
-        <TabControl.ContentTemplate>
-            <DataTemplate>
-                <TextBox Text="{Binding FileContents}"/>
-            </DataTemplate>
-        </TabControl.ContentTemplate>
     </TabControl>
 </UserControl>

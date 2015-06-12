@@ -17,6 +17,7 @@
 // ==========================================================================
 //
 /////////////////////////////////////////////////////////////////////////////
+#include "StdAfx.h"
 #include "interval.h"
 
 #include "token.h"
@@ -118,6 +119,12 @@ void CMInterval::SetApplicationIdAll(int id)
 {
 	for (unsigned short i=0;i<intervals.Count();i++)
 		intervals[i]->SetApplicationId(id);
+}
+
+void CMInterval::SetApplicationIndexAll(long index)
+{
+	for (unsigned short i = 0; i<intervals.Count(); i++)
+		intervals[i]->SetApplicationIndex(index);
 }
 
 wistream& CMInterval::Read(wistream& s)

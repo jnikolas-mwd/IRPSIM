@@ -11,10 +11,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{FC636965-9068-46BB-90C4-A58FE7E156B3}</ProjectGuid>
-    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <ProjectGuid>{A49D4B86-52D2-4A2F-AFB8-023329A8E740}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>TestConsole</RootNamespace>
+    <RootNamespace>DebugConsole</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -22,7 +21,6 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v120</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
-    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -30,7 +28,6 @@
     <PlatformToolset>v120</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
-    <CLRSupport>false</CLRSupport>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -50,12 +47,11 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_STATICIRPLIB;_CM_COMPILE_INSTANTIATE;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../IrpsimEngine/;../IrpsimEngineWrapper</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -65,11 +61,11 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
-      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_STATICIRPLIB;_CM_COMPILE_INSTANTIATE;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
     </ClCompile>
     <Link>
@@ -87,63 +83,11 @@
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\IrpsimEngine\accum.cpp" />
-    <ClCompile Include="..\IrpsimEngine\advmath.cpp" />
-    <ClCompile Include="..\IrpsimEngine\allocationunit.cpp" />
-    <ClCompile Include="..\IrpsimEngine\assoc.cpp" />
-    <ClCompile Include="..\IrpsimEngine\category.cpp" />
-    <ClCompile Include="..\IrpsimEngine\cmerror.cpp" />
-    <ClCompile Include="..\IrpsimEngine\cmlib.cpp" />
-    <ClCompile Include="..\IrpsimEngine\cmstring.cpp" />
-    <ClCompile Include="..\IrpsimEngine\cmtime.cpp" />
-    <ClCompile Include="..\IrpsimEngine\control.cpp" />
-    <ClCompile Include="..\IrpsimEngine\defines.cpp" />
-    <ClCompile Include="..\IrpsimEngine\expresn.cpp" />
-    <ClCompile Include="..\IrpsimEngine\fifo.cpp" />
-    <ClCompile Include="..\IrpsimEngine\function.cpp" />
-    <ClCompile Include="..\IrpsimEngine\indexsel.cpp" />
-    <ClCompile Include="..\IrpsimEngine\interval.cpp" />
-    <ClCompile Include="..\IrpsimEngine\irpapp.cpp" />
-    <ClCompile Include="..\IrpsimEngine\irpobject.cpp" />
-    <ClCompile Include="..\IrpsimEngine\matrix.cpp" />
-    <ClCompile Include="..\IrpsimEngine\node.cpp" />
-    <ClCompile Include="..\IrpsimEngine\notify.cpp" />
-    <ClCompile Include="..\IrpsimEngine\ntuple.cpp" />
-    <ClCompile Include="..\IrpsimEngine\options.cpp" />
-    <ClCompile Include="..\IrpsimEngine\polynom.cpp" />
-    <ClCompile Include="..\IrpsimEngine\queue.cpp" />
-    <ClCompile Include="..\IrpsimEngine\random.cpp" />
-    <ClCompile Include="..\IrpsimEngine\realizations.cpp" />
-    <ClCompile Include="..\IrpsimEngine\regions.cpp" />
-    <ClCompile Include="..\IrpsimEngine\reliab.cpp" />
-    <ClCompile Include="..\IrpsimEngine\savesim.cpp" />
-    <ClCompile Include="..\IrpsimEngine\savesima.cpp" />
-    <ClCompile Include="..\IrpsimEngine\scenario.cpp" />
-    <ClCompile Include="..\IrpsimEngine\script.cpp" />
-    <ClCompile Include="..\IrpsimEngine\simarray.cpp" />
-    <ClCompile Include="..\IrpsimEngine\simulat.cpp" />
-    <ClCompile Include="..\IrpsimEngine\timemach.cpp" />
-    <ClCompile Include="..\IrpsimEngine\tmarray.cpp" />
-    <ClCompile Include="..\IrpsimEngine\token.cpp" />
-    <ClCompile Include="..\IrpsimEngine\units.cpp" />
-    <ClCompile Include="..\IrpsimEngine\varcol.cpp" />
-    <ClCompile Include="..\IrpsimEngine\varconst.cpp" />
-    <ClCompile Include="..\IrpsimEngine\vardesc.cpp" />
-    <ClCompile Include="..\IrpsimEngine\variable.cpp" />
-    <ClCompile Include="..\IrpsimEngine\varray.cpp" />
-    <ClCompile Include="..\IrpsimEngine\vartypes.cpp" />
-    <ClCompile Include="..\IrpsimEngine\vmake.cpp" />
-    <ClCompile Include="..\IrpsimEngine\vperiod.cpp" />
-    <ClCompile Include="..\IrpsimEngine\vsingexp.cpp" />
-    <ClCompile Include="..\IrpsimEngine\vsystem.cpp" />
-    <ClCompile Include="..\IrpsimEngine\vtable.cpp" />
-    <ClCompile Include="..\IrpsimEngine\vtime.cpp" />
-    <ClCompile Include="..\IrpsimEngine\vtimevar.cpp" />
+    <ClCompile Include="DebugConsole.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="TestConsole.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

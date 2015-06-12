@@ -12,6 +12,7 @@
 // ==========================================================================
 //
 /////////////////////////////////////////////////////////////////////////////
+#include "StdAfx.h"
 #include "assoc.h"
 
 void CMAssociations::AddAssociation(const CMString& aName,const CMString& val)

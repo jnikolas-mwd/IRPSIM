@@ -17,6 +17,7 @@
 // ==========================================================================
 //
 /////////////////////////////////////////////////////////////////////////////
+#include "StdAfx.h"
 #include "simulat.h"
 #include "irpapp.h"
 #include "regions.h"
@@ -266,11 +267,11 @@ void CMSimulation::initialize()
 
 	while ((v=iter())!=0) {
 		if (v->GetState(CMVariable::vsSystem)==TRUE)
-      	continue;
+      		continue;
 		if (v->GetState(CMVariable::vsSelected)==TRUE) {
 			summaryvars.Add(v);
-         if (v->IsType(L"cost"))
-            costvars.Add(v);
+			if (v->IsType(L"cost"))
+				costvars.Add(v);
 			if (v->GetState(CMVariable::vsSaveOutcomes)==TRUE)
 				outcomevars.Add(v);
 		}
@@ -681,11 +682,18 @@ BOOL CMSimulation::Run()
 		state |= sStopped;
 		trialno--;
 		if (pApp) {
+			CMString fileName;
 			CMNotifier::Notify(CMNotifier::LOGTIME, L"End Simulation " + GetName());
-			if (options.GetOption(L"autooutcomes") == L"yes")
-				pApp->WriteOutcomes(options.GetOption(L"outcomefile"), this);
-			if (options.GetOption(L"autosummary") == L"yes")
-				pApp->WriteSummary(options.GetOption(L"summaryfile"), this);
+			if (options.GetOption(L"autooutcomes") == L"yes") {
+				fileName = options.GetOption(L"outcomefile");
+				CMNotifier::Notify(CMNotifier::LOGTIME, L"Writing Outcomes to " + fileName);
+				pApp->WriteOutcomes(fileName, this);
+			}
+			if (options.GetOption(L"autosummary") == L"yes") {
+				fileName = options.GetOption(L"summaryfile");
+				CMNotifier::Notify(CMNotifier::LOGTIME, L"Writing Summary to " + fileName);
+				pApp->WriteSummary(fileName, this);
+			}
 		}
 	}
 	state &= ~sRunning;

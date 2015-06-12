@@ -17,6 +17,7 @@
 // ==========================================================================
 //
 /////////////////////////////////////////////////////////////////////////////
+#include "StdAfx.h"
 #include "scenario.h"
 #include "variable.h"
 #include "varcol.h"
@@ -42,6 +43,7 @@ void CMScenario::AddEntry(const CMString& nm,const CMString& value,int forceopti
 	}
 	else if (len) {
 		varnames.Add(nm);
+		/*
 		int flg = 0;
 		CMTokenizer next(value);
 		CMString token;
@@ -50,6 +52,7 @@ void CMScenario::AddEntry(const CMString& nm,const CMString& value,int forceopti
 			else if (to_lower(token[0]) == L'w') flg |= WriteFlag;
 		}
 		flags.Add(flg);
+		*/
 	}
 	if (len >= maxwidth) maxwidth = len+1;
 }
@@ -62,8 +65,8 @@ wostream& CMScenario::write(wostream& s)
 		s << L'#' << setw(maxwidth+2) << options[i]->GetName() << options[i]->GetValue() << ENDL;
 	for (i=0;i<varnames.Count();i++) {
 		s << setw(maxwidth+3) << varnames[i];
-		if (flags[i] & SaveFlag) s << L"save  ";
-		if (flags[i] & WriteFlag) s << L"write  ";
+		//if (flags[i] & SaveFlag) s << L"save  ";
+		//if (flags[i] & WriteFlag) s << L"write  ";
 		s << ENDL;
 	}
 	return s << L"#END" << ENDL;
@@ -76,7 +79,7 @@ wistream& CMScenario::read(wistream& s)
 
 	options.ResetAndDestroy(1);
 	varnames.Reset(1);
-	flags.Reset(1);
+	//flags.Reset(1);
 
 	CMString line;
 
@@ -120,9 +123,9 @@ void CMScenario::Use(CMOptions& ops)
 	for (i=0;i<varnames.Count();i++) {
 		CMVariable* v = CMVariable::Find(varnames[i]);
 		if (v) {
-			v->SetState(CMVariable::vsSelected,TRUE);
-			if (flags[i] & SaveFlag) v->SetState(CMVariable::vsSaveOutcomes,TRUE);
-			if (flags[i] & WriteFlag) v->SetState(CMVariable::vsOutput,TRUE);
+			v->SetState(CMVariable::vsSelected | CMVariable::vsSaveOutcomes, TRUE);
+			//if (flags[i] & SaveFlag) v->SetState(CMVariable::vsSaveOutcomes,TRUE);
+			//if (flags[i] & WriteFlag) v->SetState(CMVariable::vsOutput,TRUE);
 		}
 	}
 	for (i=0;i<options.Count();i++)

@@ -18,6 +18,7 @@
 // ==========================================================================
 //
 /////////////////////////////////////////////////////////////////////////////
+#include "StdAfx.h"
 #include "timemach.h"
 #include <string.h>
 #include <stdio.h>
@@ -158,7 +159,7 @@ CMString CMTimeMachine::CycleAsString(unsigned n) const
 	CMString ret;
 	wchar_t buffer[64];
    static wchar_t *unitstr[] = { L"seconds", L"minutes", L"hours", L"days", L"weeks", L"months", L"years" };
-   const wchar_t* unitptr;
+   const wchar_t* unitptr = unitstr[6];
    if (n>=cycles.Count())
    	return ret;
 

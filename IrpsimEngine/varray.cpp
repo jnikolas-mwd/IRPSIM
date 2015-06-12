@@ -15,6 +15,7 @@
 // ==========================================================================
 //			1.00	09 March 2015	- Initial re-write and release.
 // ==========================================================================
+#include "StdAfx.h"
 #include "varray.h"
 
 #include "cmlib.h"
@@ -109,9 +110,9 @@ void CMVArray::Set(int row,int col,const CMString& str)
 		if (e->IsPolynomial()) arraystate |= containsPolynomials;
 		if (e->Fail()) {
   		 	SetState(vsFailed,1);
-   	   ReportError(XBadVardef,e->GetString());
+   			ReportError(XBadVardef,e->GetString());
 	   }
-		array.AddAt((long)row*ncols+col,e);
+	   array.AddAt((long)row*ncols+col,e);
 	}
 }
 

@@ -65,6 +65,7 @@ class _IRPCLASS CMOptions
 	CMOPTIONARRAYDICTIONARY options;
 	short maxwidth;
 	int app_id = -1;
+	long app_index = 0;
 public:
 	static struct _def { const wchar_t* name; const wchar_t* value; } defaults[];
 	CMOptions();
@@ -73,6 +74,9 @@ public:
 
 	void   SetApplicationId(int id) { this->app_id = id; }
 	int	   GetApplicationId() { return this->app_id; }
+	void   SetApplicationIndex(long index) { this->app_index = index; }
+	int	   GetApplicationIndex() { return this->app_id; }
+	
 	void   SetDefaults();
 
 	CMString GetOption(const CMString& option);
@@ -81,11 +85,11 @@ public:
 	short	 GetOptionInt(const CMString& option);
 	long	 GetOptionLong(const CMString& option);
 
-	void   SetOption(const CMString& line, int app_id);
-	void   SetOption(const CMString& name,const CMString& value,int app_id);
-	void   SetOption(const CMString& name,double option, int app_id);
-	void   SetOption(const CMString& name, const CMString& value) { SetOption(name, value, -1); }
-	void   SetOption(const CMOption& op) { SetOption(op.GetName(), op.GetValue(), op.GetApplicationId()); }
+	CMOption* SetOption(const CMString& line, int app_id);
+	CMOption* SetOption(const CMString& name, const CMString& value, int app_id);
+	CMOption* SetOption(const CMString& name, double option, int app_id);
+	CMOption* SetOption(const CMString& name, const CMString& value) { return SetOption(name, value, -1); }
+	CMOption* SetOption(const CMOption& op) { return SetOption(op.GetName(), op.GetValue(), op.GetApplicationId()); }
 
 	unsigned  Count() const {return options.Count();}
 	CMOption* At(unsigned short n) const {return options.At(n);}

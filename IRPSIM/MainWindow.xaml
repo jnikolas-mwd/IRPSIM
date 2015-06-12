@@ -3,9 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:viewmodel="clr-namespace:IRPSIM.ViewModels"
         xmlns:view="clr-namespace:IRPSIM.Views"
-        Title="{Binding ProjectTitle}" Height="350" Width="525" FontFamily="Verdana">
+        Title="{Binding ProjectTitle}" Height="350" Width="525">
     <Window.Resources>
-        <viewmodel:ProgressToProgressVisibleConverter x:Key="progressToProgressVisible"/>
+        <Style TargetType="{x:Type ProgressBar}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding IsSimulationRunning}" Value="False">
+                    <Setter Property="Visibility" Value="Hidden" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
      <DockPanel>
         <Menu Name="mainMenu" DockPanel.Dock="Top">
@@ -13,17 +19,20 @@
                 <MenuItem Header="Open _Project..." Command="{Binding ProjectOpenCommand}"/>
                 <MenuItem Header="Open _File..." Command="{Binding FilesViewModel.FileOpenCommand}"/>
                 <Separator/>
-                <MenuItem Header="_Close"/>
+                <MenuItem Header="_Reload Project" Command="{Binding ProjectReloadCommand}"/>
+                <MenuItem Header="_Close Project" Command="{Binding ProjectCloseCommand}"/>
                 <Separator/>
                 <MenuItem Header="_Exit"/>
             </MenuItem>
             <MenuItem Header="_Project">
                 <MenuItem Header="_Run Simulation" Command="{Binding RunSimulationCommand}"/>
-             </MenuItem>
+            </MenuItem>
           </Menu>
         <StatusBar Name="statusBar" DockPanel.Dock="Bottom">
-            <ProgressBar Value="{Binding Path=Progress}" Visibility="{Binding Path=Progress, Converter={StaticResource progressToProgressVisible}}" Minimum="0" Maximum="100" Width="100" Height="10" />
-            <CheckBox IsChecked="{Binding Path=CanRunSimulation}" Content="Can Run?"/>
+            <StatusBar.Resources>
+            </StatusBar.Resources>
+            <ProgressBar Value="{Binding Path=Progress}" Minimum="0" Maximum="100" Width="100" Height="10"/>
+            <CheckBox IsChecked="{Binding Path=IsSimulationRunning}" Content="Running?"/>
             <Button Command="{Binding RunSimulationCommand}" Content="TEST"/>
         </StatusBar>
          <Grid DockPanel.Dock="Bottom">

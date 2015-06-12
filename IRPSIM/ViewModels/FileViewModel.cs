@@ -31,7 +31,7 @@ namespace IRPSIM.ViewModels
                 FileContents = ex.Message;
             }
         }
-
+        
         /*
         public FileViewModel(string path, string contents)
         {

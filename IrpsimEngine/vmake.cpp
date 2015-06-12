@@ -16,6 +16,7 @@
 // ==========================================================================
 //			1.00	09 March 2015	- Initial re-write and release.
 // ==========================================================================
+#include "StdAfx.h"
 #include "vsingexp.h"
 #include "vtable.h"
 #include "varray.h"

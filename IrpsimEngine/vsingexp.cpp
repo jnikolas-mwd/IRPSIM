@@ -16,6 +16,7 @@
 // ==========================================================================
 //			1.00	09 March 2015	- Initial re-write and release.
 // ==========================================================================
+#include "StdAfx.h"
 #include "vsingexp.h"
 //#include <fstream>
 //static wofstream sdebug("debug_vsingexp.txt");

@@ -1,5 +1,4 @@
 // IrpsimEngineWrapper.h
-
 #pragma once
 
 #include "stdafx.h"
@@ -22,7 +21,7 @@ namespace IrpsimEngineWrapper
 	public delegate int CMNotifierDelegate(int type, String^ msg, int data);
 	typedef int(__stdcall  *CMNotifierCallback)(CMNotifier::ntype type, String^  msg, int data);
 
-	public enum class NodeType { None, Demand, Supply, Storage, Cost };
+	public enum class IrpNodeType { None, Demand, Supply, Storage, Cost };
 
 	private class _CMNotifier : public CMNotifier 
 	{
@@ -85,6 +84,11 @@ namespace IrpsimEngineWrapper
 			int get() { return obj->GetApplicationId(); }
 		}
 
+		property long FileIndex
+		{
+			long get() { return obj->GetApplicationIndex(); }
+		}
+
 		property bool Selected
 		{
 			bool get() { return _selected; }
@@ -109,14 +113,14 @@ namespace IrpsimEngineWrapper
 	
 	public ref class CMWrappedVariable : public CMWrappedIrpObject {
 	private:
-		NodeType _ntype;
+		IrpNodeType _ntype;
 	public:
 		CMWrappedVariable(CMVariable* v) : CMWrappedIrpObject(v)
 		{
-			if (v->IsType(L"Demand")) _ntype = NodeType::Demand;
-			else if (v->IsType(L"Supply")) _ntype = NodeType::Supply;
-			else if (v->IsType(L"Storage")) _ntype = NodeType::Storage;
-			else if (v->IsType(L"Cost")) _ntype = NodeType::Cost;
+			if (v->IsType(L"Demand")) _ntype = IrpNodeType::Demand;
+			else if (v->IsType(L"Supply")) _ntype = IrpNodeType::Supply;
+			else if (v->IsType(L"Storage")) _ntype = IrpNodeType::Storage;
+			else if (v->IsType(L"Cost")) _ntype = IrpNodeType::Cost;
 		}
 
 		property String^ EType
@@ -128,9 +132,9 @@ namespace IrpsimEngineWrapper
 			}
 		}
 
-		property NodeType NType
+		property IrpNodeType NType
 		{
-			NodeType get() { return _ntype; }
+			IrpNodeType get() { return _ntype; }
 		}
 	};
 
@@ -212,7 +216,7 @@ namespace IrpsimEngineWrapper
 
 #pragma region Properties
 
-		property String^ ProjectName
+		property String^ ProjectFile
 		{
 			String^ get() { return marshal_as<String^>(app->GetProjectFile().c_str()); }
 		}
@@ -250,12 +254,23 @@ namespace IrpsimEngineWrapper
 #pragma endregion
 
 
-#pragma region Commands
+#pragma region Methods
 
 		void OpenProject(String^ fileName)
 		{
 			std::wstring str = marshal_as<std::wstring>(fileName);
 			app->OpenProject(str.c_str());
+		}
+
+		void CloseProject() {
+			Variables->Clear();
+			Definitions->Clear();
+			Scenarios->Clear();
+			Scripts->Clear();
+			Categories->Clear();
+			LoadedFiles->Clear();
+			app->DeleteSimulation(sim, 0);
+			app->ResetApplication();
 		}
 
 		void AfterOpenProject() 
@@ -311,8 +326,5 @@ namespace IrpsimEngineWrapper
 		}
 
 #pragma endregion
-
-
-		// TODO: Add your methods for this class here.
 	};
 }

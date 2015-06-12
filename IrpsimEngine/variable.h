@@ -102,7 +102,7 @@ public:
 	static const ULONG vsLinked;
 	static const ULONG vsSaveSummary;
 	static const ULONG vsSaveOutcomes;
-   static const ULONG vsOutput;
+    static const ULONG vsOutput;
 	static const ULONG vsGraph;
 	static const ULONG vsSum;
 	static const ULONG vsInteger;
@@ -110,7 +110,7 @@ public:
 	static const ULONG vsNoUnits;
 	static const ULONG vsResetRequired;
 	static const ULONG vsCarryForward;
-   static const ULONG vsInUse;
+    static const ULONG vsInUse;
 	static const ULONG vsAutoCreated;
 	static const ULONG vsMonitor;
 	static const ULONG vsAccumulate;

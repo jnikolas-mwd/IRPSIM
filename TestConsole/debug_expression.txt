@@ -1,1351 +1,0 @@
-initial_20x2020 * yield_consv																																																																																		
-580000 																																																																																		
-min(total_20x2020, max((_cyear-2010-delay_consv),0)*total_20x2020/10)  																																																																										
-2012
-2013
-1921
-_ctyear-tyear0																																																																																		
-if(_cyear == start_year, hydro, offset [_y-1])																																																																																		
-1.03^(_cyear - cost_year)
-1.05^(_cyear - cost_year)
-1.05
-2012
-1.025^(_cyear - cost_year)
-1.025^(_cyear - cost_year) * cost_increase_energy
-1.025 * cost_increase_energy
-368 * cost_increase_energy
-max(1.025^(_cyear - 2035),0) * cost_increase_energy
-capital_cost + om_cost
-capital_cost_pv + om_cost_pv
-if(_cyear == start_year, total_cost, cumulative_total_cost [_y-1] + total_cost)
-if(_cyear == start_year, total_cost_pv, cumulative_total_cost_pv [_y-1] + total_cost_pv)
-0
-0
-if(_cyear == start_year, capital_cost, cumulative_capital_cost [_y-1] + capital_cost)
-if(_cyear == start_year, capital_cost_pv, cumulative_capital_cost_pv [_y-1] + capital_cost_pv)
-treatment_cost + swp_programs_cost + cra_programs_cost + in_region_programs_cost + power_cost
-treatment_cost_pv + swp_programs_cost_pv + cra_programs_cost_pv + in_region_programs_cost_pv + power_cost_pv
-if(_cyear == start_year, om_cost, cumulative_om_cost [_y-1] + om_cost)
-if(_cyear == start_year, om_cost_pv, cumulative_om_cost_pv [_y-1] + om_cost_pv)
-arvin_cost_real + kerndelta_cost_real + semitropic_cost_real + yuba_cost_real + swp_transfer_cost + delta_fix_cost + mojave_cost_real + sbvmwd_cost_real  
-arvin_cost_pv + kerndelta_cost_pv + semitropic_cost_pv + yuba_cost_pv + swp_transfer_cost_pv + delta_fix_cost_pv + mojave_cost_pv + sbvmwd_cost_pv
-if(_cyear == start_year, swp_programs_cost, cumulative_swp_programs_cost [_y-1] + swp_programs_cost)
-if(_cyear == start_year, swp_programs_cost_pv, cumulative_swp_programs_cost_pv [_y-1] + swp_programs_cost_pv)
-pvid_cost + cra_transfer_cost_real + dwcv_callback_cost_real
-pvid_cost_pv + cra_transfer_cost_pv + dwcv_callback_cost_pv
-if(_cyear == start_year, cra_programs_cost, cumulative_cra_programs_cost [_y-1] + cra_programs_cost)
-if(_cyear == start_year, cra_programs_cost_pv, cumulative_cra_programs_cost_pv [_y-1] + cra_programs_cost_pv)
-chino_cost_real + compton_cup_cost_real + cyclic_cost_real + elsinore_cost_real + foothill_cup_cost_real + lakewood_cost_real + live_oak_cost_real + long_beach_cost_real + orange_county_cost_real + upper_claremont_cost_real
-chino_cost_pv + compton_cup_cost_pv + cyclic_cost_pv + elsinore_cost_pv + foothill_cup_cost_pv + lakewood_cost_pv + live_oak_cost_pv + long_beach_cost_pv + orange_county_cost_pv + upper_claremont_cost_pv
-if(_cyear == start_year, in_region_programs_cost, cumulative_in_region_programs_cost [_y-1] + in_region_programs_cost)
-if(_cyear == start_year, in_region_programs_cost_pv, cumulative_in_region_programs_cost_pv [_y-1] + in_region_programs_cost_pv)
-swp_power_real + cra_power_real
-swp_power_pv + cra_power_pv
-if(_cyear == start_year, power_cost, cumulative_power_cost [_y-1] + power_cost)
-if(_cyear == start_year, power_cost_pv, cumulative_power_cost_pv [_y-1] + power_cost_pv)
-basic_apportionment + surplus - cra_losses - dwcv_remaining_obligation + pvid_total + iid_mwd + iid_sdcwa + all_american_lining_sd + all_american_lining_slr + coachella_lining_sd + coachella_lining_slr - ppr + quechan + lower_colorado_wsp + salton_sea - cvwd_35_transfer - snwa_payback + hayfield 
-1250000
-_supply.cra
-cra_maxsupply - _supply.cra
-cra + cra_take
-max(cra_maxsupply - cra_losses - dwcv_remaining_obligation - cra_reservoir.take - snwa.take - mwd_drop_2.take - lake_mead.take - cra_transfer.take,0) 
-snwa.take + mwd_drop_2.take + lake_mead.take - lake_mead.put + cra_transfer.take + dwcv_transfer_reservoir.take
-36000
-cra_reservoir.take + cra_take + cra_losses + dwcv_remaining_obligation - dwcv_transfer_reservoir.take - hayfield 
-intake_ps
-gene_ps
-ironmountain_ps
-eaglemountain_ps + hayfield 
-hinds_ps - dwcv.put - dwcv_remaining_obligation + dwcv_transfer_reservoir.take
-cra_service_area
-max(cra_service_area - cra_demand + mathews.take - mathews.put - cra_losses,0)																																											
-swp_demand + cra_demand + blended_demand
-swp_excl_ag + swp_excl_firm + swp_excl_lt 
-la35 + exclusive_jensen 
-mills + lakeview + rialto + savpl_sgp_sbv
-cra_excl_ag + cra_excl_firm + cra_excl_lt
-blended_ag + blended_firm + blended_lt - annual_20x2020
-swp_excl_lt + cra_excl_lt + blended_lt
-la35_firm + la35_lt + la35_ag
-cr_aqueduct_firm + cr_aqueduct_lt + cr_aqueduct_ag
-savpl_sgp_sbv_firm + savpl_sgp_sbv_lt + savpl_sgp_sbv_ag
-rialto_firm + rialto_lt + rialto_ag
-lakeview_firm + lakeview_lt + lakeview_ag
-s_untreated_firm + s_untreated_lt + s_untreated_ag
-lower_feeder_firm + lower_feeder_lt + lower_feeder_ag
-upper_feeder1_firm + upper_feeder1_lt + upper_feeder1_ag
-upper_feeder2_firm + upper_feeder2_lt + upper_feeder2_ag
-cp_firm + cp_lt + cp_ag
-s_excl_firm + s_excl_lt + s_excl_ag
-m_excl_firm + m_excl_lt + m_excl_ag
-d_excl_firm + d_excl_lt + d_excl_ag
-w_excl_firm + w_excl_lt + w_excl_ag
-j_excl_firm + j_excl_lt + j_excl_ag
-total_energy_kwh / 1000
-swp_west_energy + swp_east_energy + cra_energy + desal_energy + recycling_energy + gwr_energy + groundwater_energy + treatment_energy + distribution_energy
-swp_west_kwh * swp_west
-2580
-swp_east_kwh * swp_east
-3236
-cra_kwh * intake_ps + cra_kwh * 0.27 * hayfield
-2031
-desal_kwh * desal_af 
-4400 
-recycling_kwh * recycling_af
-400
-gwr_kwh * gwr_af
-1700
-groundwater_kwh * groundwater_af
-700
-treatment_kwh * (jensen + weymouth + diemer + skinner + mills)
-458
-distribution_kwh * (swp_exclusive_west_af + swp_exclusive_east_af + cra_exclusive_af + blended_af)
-33
-exclusive_jensen + common_pool_from_j
-min(common_pool_from_j_goal, min(j_cap_remain, max_swp_from_j_to_common_pool))
-pct_common_pool_from_j_goal * common_pool
-0.5
-616000
-jensen_cap - exclusive_jensen
-max((swp_flow_to_blend - (pct_blend_goal * blended_demand)), 0)
-swp_to_blend + swp_blended_transfer.take + central_valley_blended_transfer.take
-0.3
-exclusive_weymouth + (common_pool_from_wd * w_pct_of_common_pool_from_wd)
-common_pool - common_pool_from_j
-(w_cap_remain / (total_wd_cap_remain))
-582400
-weymouth_cap - exclusive_weymouth
-d_cap_remain + w_cap_remain
-exclusive_diemer + (common_pool_from_wd * d_pct_of_common_pool_from_wd)
-1 - w_pct_of_common_pool_from_wd
-582400
-diemer_cap - exclusive_diemer
-blended_demand - common_pool_from_j
-dvl_carryover.resolved + castaic.resolved + perris.resolved + mathews.resolved + lake_skinner.resolved
-dvl_carryover + castaic + perris + mathews + lake_skinner
-dvl_carryover.put + dvl_emergency.put + castaic.put + perris.put + mathews.put + lake_skinner.put
-dvl_carryover.take + castaic.take + perris.take + mathews.take + lake_skinner.take
-dvl_carryover_cap + castaic_cap + perris_cap + mathews_cap + lake_skinner_cap
-lake_mead.resolved + swpcarryover.resolved + mwd_drop_2.resolved
-lake_mead + swpcarryover + mwd_drop_2
-lake_mead.put  + swpcarryover.put
-lake_mead.take + swpcarryover.take + mwd_drop_2.take
-lake_mead_cap + swpcarryover_cap
-storage_surface_inside + storage_surface_outside
-storage_surface_inside_start + storage_surface_outside_start
-storage_surface_inside_put + storage_surface_outside_put
-storage_surface_inside_take + storage_surface_outside_take
-storage_surface_inside_cap + storage_surface_outside_cap
-chino.resolved + compton_cup.resolved + elsinore.resolved + foothill_cup.resolved + lakewood.resolved + live_oak.resolved + long_beach.resolved + orange_county.resolved + upper_claremont.resolved + cyclicgroundwater.resolved 
-chino + compton_cup + elsinore + foothill_cup + lakewood + live_oak + long_beach + orange_county + upper_claremont + cyclicgroundwater
-chino.put + compton_cup.put + elsinore.put + foothill_cup.put + lakewood.put + live_oak.put + long_beach.put + orange_county.put + upper_claremont.put + cyclicgroundwater.put
-chino.take + compton_cup.take + elsinore.take + foothill_cup.take + lakewood.take + live_oak.take + long_beach.take + orange_county.take + upper_claremont.take + cyclicgroundwater.take
-chino_cap + compton_cup_cap + elsinore_cap + foothill_cup_cap + lakewood_cap + live_oak_cap + long_beach_cap + orange_county_cap + upper_claremont_cap + cyclicgroundwater_cap
-chino.resolved + compton_cup.resolved + elsinore.resolved + foothill_cup.resolved + lakewood.resolved + live_oak.resolved + long_beach.resolved + orange_county.resolved + upper_claremont.resolved 
-chino + compton_cup + elsinore + foothill_cup + lakewood + live_oak + long_beach + orange_county + upper_claremont 
-chino.put + compton_cup.put + elsinore.put + foothill_cup.put + lakewood.put + live_oak.put + long_beach.put + orange_county.put + upper_claremont.put 
-chino.take + compton_cup.take + elsinore.take + foothill_cup.take + lakewood.take + live_oak.take + long_beach.take + orange_county.take + upper_claremont.take 
-chino_cap + compton_cup_cap + elsinore_cap + foothill_cup_cap + lakewood_cap + live_oak_cap + long_beach_cap + orange_county_cap + upper_claremont_cap 
-semitropic.resolved + arvin.resolved + mojave.resolved + kerndelta.resolved + sbvmwd_carryover.resolved + dwcv.resolved + hayfield_end_balance
-semitropic + arvin + mojave + kerndelta + sbvmwd_carryover + dwcv + hayfield_start_balance
-semitropic.put + arvin.put + mojave.put + kerndelta.put + sbvmwd_carryover.put + dwcv.put
-semitropic.take + arvin.take + mojave.take + kerndelta.take + sbvmwd_carryover.take + hayfield
-semitropic_cap + arvin_cap + mojave_cap + kerndelta_cap + sbvmwd_carryover_cap + dwcv_cap
-storage_gw_inside + storage_gw_outside
-storage_gw_inside_start + storage_gw_outside_start
-storage_gw_inside_put + storage_gw_outside_put
-storage_gw_inside_take + storage_gw_outside_take
-storage_gw_inside_cap + storage_gw_outside_cap
-storage_gw_inside_start + storage_surface_inside_start
-storage_gw_inside + storage_surface_inside
-storage_gw_inside_put + storage_surface_inside_put
-storage_gw_inside_take + storage_surface_inside_take
-storage_gw_inside_cap + storage_surface_inside_cap
-semitropic + arvin + mojave + kerndelta + sbvmwd_carryover + swpcarryover 
-semitropic.resolved + arvin.resolved + mojave.resolved + kerndelta.resolved + sbvmwd_carryover.resolved + swpcarryover.resolved 
-semitropic.put + arvin.put + mojave.put + kerndelta.put + sbvmwd_carryover.put + swpcarryover.put 
-semitropic.take + arvin.take + mojave.take + kerndelta.take + sbvmwd_carryover.take + swpcarryover.take 
-semitropic_cap + arvin_cap + mojave_cap + kerndelta_cap + sbvmwd_carryover_cap + swpcarryover_cap 
-dwcv + hayfield_start_balance + lake_mead + mwd_drop_2
-dwcv.resolved + hayfield_end_balance + lake_mead.resolved + mwd_drop_2.resolved
-dwcv.put + lake_mead.put 
-hayfield + lake_mead.take + mwd_drop_2.take
-dwcv_cap + lake_mead_cap 
-storage_gw_start + storage_surface_start
-storage_gw + storage_surface
-storage_gw_put + storage_surface_put
-storage_gw_take + storage_surface_take
-storage_gw_cap + storage_surface_cap
-storage_gw / storage_gw_cap *100
-storage_surface / storage_surface_cap *100
-storage_total / storage_total_cap *100
-dvl_emergency.resolved + mathews_emergency + lake_skinner_emergency + perris_emergency
-storage_mwd_emergency + dwr_emergency
-lake_mead.resolved + dwcv.resolved + dvl_carryover.resolved 
-lake_mead_cap + dwcv_cap + dvl_carryover_cap 
-swp_total_transfer + cra_transfer.take
-swp_wasted + cra_wasted
-swp_exclusive_shortage.take + blended_shortage.take
-cra_service_area + swp_service_area + storage_gw_inside_take + storage_surface_inside_take - storage_gw_inside_put - storage_surface_inside_put - cra_losses
-max(total_shortage + transfer_total + storage_total_take - storage_total_put - wasted_total,0)
--min(total_shortage + transfer_total + storage_total_take - storage_total_put - wasted_total,0)
--(total_shortage + transfer_total + storage_total_take - storage_total_put - wasted_total)
-swp_exclusive_shortage.take * swp_west_demand/swp_demand
-swp_exclusive_shortage.take - swp_west_shortage
-blended_shortage.take * common_pool_from_j/blended_demand
-blended_shortage.take - blended_west_shortage
-total_imported_demand - swp_service_area - cra_service_area - storage_gw_inside_take + storage_gw_inside_put - storage_surface_inside_take + storage_surface_inside_put - total_shortage + cra_losses
-wasted_total - total_shortage
-blend_cap_array[_cyear-year0][1]																																											
-blend_cap_array[_cyear-year0][2]																																											
-blend_cap_array[_cyear-year0][3]																																											
-(skinner_blend_cap * (skinner + skinner_area_untreated) + diemer_blend_cap * (exclusive_diemer + common_pool*.25) + weymouth_blend_cap * (exclusive_weymouth + upper_feeder2 + common_pool*.25))/(skinner + skinner_area_untreated + upper_feeder2 + exclusive_diemer + exclusive_weymouth + common_pool*.5)																																											
-critical_blend * 100																																											
-max(max(0,cra - cra_demand - lake_mead_putmax - dwcv_putmax),cra_blended_demand_min)																																											
-blended_demand - min(swp_reservoir.resolved, critical_blend * blended_demand)																																											
-critical_blend/(1-critical_blend + 0.00000000000001)																																											
-if(critical_blend < 1, max( ((critical_blend_ratio * cra_to_blend) - swp_to_blend), 0), swp_remain)																																											
-min(swp_remain, swp_limit_intermediate)																																											
-if (critical_blend < 1, swp_limit/(1 + critical_blend_ratio), swp_remain)																																											
-min(swp_remain, swp_limit2_intermediate)																																											
-100 * (swp_to_blend/(swp_to_blend + cra_to_blend + 0.00000000000001))																																											
-_netsurplus
-_netsurplus
-swpcarryover.take
-swp_reservoir.resolved
-_netsurplus
-cra_reservoir.put
-cra_reservoir.resolved
-_netsurplus
-_netsurplus
-_netsurplus
-_netsurplus
-_netsurplus
-_netsurplus
-swp_reservoir.take
-sbvmwd_option.take	
-yuba_component_4.take	
-semitropic.take
-arvin.take	
-sbvmwd_carryover.take
-kerndelta.take
-mojave.take
-castaic.take	
-central_valley_exclusive_transfer.take
-swp_exclusive_transfer.take
-swp_exclusive_shortage.take
-_netsurplus
-cra_reservoir.resolved
-cra_reservoir.take
-_netsurplus
-cra_reservoir.take - cra_reservoir_take7
-swp_reservoir.take - swp_reservoir_take6
-snwa.take
-mwd_drop_2.take
-lake_mead.take
-dwcv_transfer1.take
-dwcv_transfer_reservoir.take
-dwcv_transfer2.take
-cra_reservoir.put 
-dvl_carryover.take
-mathews.take
-lake_skinner.take
-sbvmwd_option.take - sbvmwd_option_take6
-yuba_component_4.take - yuba_take6
-semitropic.take - semitropic_take6
-arvin.take - arvin_take6
-sbvmwd_carryover.take - sbvmwd_carryover_take6
-kerndelta.take - kerndelta_take6
-mojave.take - mojave_take6
-cyclicgroundwater.take
-chino.take + compton_cup.take + elsinore.take + foothill_cup.take + lakewood.take + live_oak.take + long_beach.take + orange_county.take + upper_claremont.take 
-castaic.take - castaic_take6
-perris.take 
-central_valley_blended_transfer.take
-_netsurplus
-cra_transfer.take
-_netsurplus
-swp_reservoir.take - swp_reservoir_take6 - swp_reservoir_take8  
-sbvmwd_option.take - sbvmwd_option_take6 - sbvmwd_option_take8
-yuba_component_4.take - yuba_take6 - yuba_take8
-semitropic.take - semitropic_take6 - semitropic_take8
-arvin.take - arvin_take6 - arvin_take8
-sbvmwd_carryover.take - sbvmwd_carryover_take6 - sbvmwd_carryover_take8
-kerndelta.take - kerndelta_take6 - kerndelta_take8
-mojave.take - mojave_take6 - mojave_take8
-castaic.take - castaic_take6 - castaic_take8
-_netsurplus
-central_valley_blended_transfer.take
-swp_blended_transfer.take
-blended_shortage.take
-_netsurplus
-cra_reservoir.resolved
-dvl_emergency.put
-dvl_carryover.put
-mathews.put
-lake_skinner.put
-dwcv.put
-lake_mead.put
-chino.put + compton_cup.put + elsinore.put + foothill_cup.put + lakewood.put + live_oak.put + long_beach.put + orange_county.put + upper_claremont.put 
-cra_reservoir.resolved
-cra_reservoir2.take
-_netsurplus
-swp_reservoir.resolved
-dvl_emergency.put - dvl_emergency_put12
-dvl_carryover.put - dvl_carryover_put12
-castaic.put 
-perris.put
-swp_reservoir.resolved
-_netsurplus
-chino.put + compton_cup.put + elsinore.put + foothill_cup.put + lakewood.put + live_oak.put + long_beach.put + orange_county.put + upper_claremont.put - blended_gw_put12
-semitropic.put 
-arvin.put
-sbvmwd_carryover.put
-kerndelta.put
-mojave.put
-swp_reservoir.resolved
-_netsurplus
-swpcarryover.put
-cyclicgroundwater.put
-swp_reservoir.resolved
-_netsurplus
-mathews.put - mathews_put12
-lake_skinner.put - lake_skinner_put12
-dwcv.put - dwcv_put12
-lake_mead.put - lake_mead_put12
-swp_reservoir.resolved
-_netsurplus
-castaic.put - castaic_put13
-perris.put - perris_put13
-semitropic.put - semitropic_put15
-arvin.put - arvin_put15
-sbvmwd_carryover.put - sbvmwd_carryover_put15
-kerndelta.put - kerndelta_put15
-mojave.put - mojave_put15
-swpcarryover.put - swpcarryover_put16
-cyclicgroundwater.put - cyclic_put16
-cra_reservoir.resolved
-_netsurplus
-swp_existing + dwcv_swp + mwd_article21 + sbvmwd_transfer_min + yuba_component_2 + yuba_component_3 
-5000000
-_supply.swp
-swp_maxsupply - _supply.swp
-if(_cyear<= end_dwcv_transfer, min(swp_existing/1911500,1), min(swp_existing/2011500,1))
-swp_alloc * 100
-swp_maxsupply - swp_reservoir.take + arvin.take - arvin.put + mojave.take - mojave.put + semitropic.take - semitropic.put + kerndelta.take - kerndelta.put - swpcarryover.put + sbvmwd_option.take + yuba_component_4.take + swp_exclusive_transfer.take + swp_blended_transfer.take + central_valley_exclusive_transfer.take + central_valley_blended_transfer.take
-swp_reservoir.take + arvin.take - arvin.put + mojave.take - mojave.put + semitropic.take - semitropic.put + kerndelta.take - kerndelta.put - swpcarryover.put + sbvmwd_option.take + yuba_component_4.take + swp_total_transfer
-total_edmonston - swp_west 
-swp_west_demand - swp_west_shortage - blended_west_shortage + castaic.put - castaic.take  
-total_edmonston + sbvmwd_carryover.take - sbvmwd_carryover.put
-max(swp_reservoir.take - swp_demand + arvin.take - arvin.put + mojave.take - mojave.put + semitropic.take - semitropic.put + kerndelta.take - kerndelta.put + sbvmwd_carryover.take - sbvmwd_carryover.put - swpcarryover.put + castaic.take - castaic.put + perris.take - perris.put + sbvmwd_option.take + yuba_component_4.take + swp_exclusive_transfer.take + swp_blended_transfer.take + central_valley_exclusive_transfer.take + central_valley_blended_transfer.take,0)
-swp_reservoir.take + sbvmwd_option.take + swp_total_transfer + arvin.take + semitropic.take + kerndelta.take + mojave.take + sbvmwd_carryover.take - kerndelta.put - arvin.put - semitropic.put - swpcarryover.put - mojave.put - sbvmwd_carryover.put	
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-1
-0
-0
-0
-0
-uniform(100,1)
-normal(100,1) 
-poisson(100)
-binomial(1,0.01)
-weibull(100,1)
-total_wq * L_per_af / mg_per_ton 
-blended_wq + blended_take_wq + local_wq + cra_exclusive_wq + swp_exclusive_west_wq + swp_exclusive_east_wq 
-1233481
-1000000000
-if(current_rain >= yeartype_wet,1,if(current_rain <= yeartype_dry,3,2))
-18.29
-8.93
-la_rain[hydro][1]																																																																																		
-if(_cyear == start_year, rain_1_yr, la_rain[hydro][2])																																																																																		
-if(_cyear == start_year, rain_2_yr, if(_cyear == (start_year + 1), rain_1_yr, la_rain[hydro][3]))																																																																																		
-9.39																																																																																		
-14.43																																																																																		
-if(current_sd_rain >= yeartype_sd_wet,1,if(current_sd_rain <= yeartype_sd_dry,3,2))
-12.50
-7.12
-sd_rain[hydro][1]																																																																																		
-if(_cyear == start_year, rain_sd_1_yr, sd_rain[hydro][2])																																																																																		
-if(_cyear == start_year, rain_sd_2_yr, if(_cyear == (start_year + 1), rain_sd_1_yr, sd_rain[hydro][3]))																																																																																		
-5.50																																																																																		
-11.11																																																																																		
-if(_tyear > 1924 && _tyear < 1946,(laa_lakemary_precip_array [_tyear-tyear0][1])*.95 + 4.66, laa_lakemary_precip_array [_tyear-tyear0][1])
-downey_precip_array[_tyear-tyear0][1]				
-san_bernardino_precip_array[_tyear-tyear0][1]	
-(all_american_lining_sd_array[_cyear-(year0)][1])		
-(all_american_lining_slr_array[_cyear-(year0)][1]) 		
-(basic_apportionment_array[_cyear-(year0)][_ctyear-tyear0])
-(coachella_lining_sd_array[_cyear-(year0)][1]) 	
-(coachella_lining_slr_array[_cyear-(year0)][1])		
-0
-0
-cra_reservoir.resolved + cra_reservoir2.resolved
-50000000
-min((cra_programs - cra_transfer.take), cra_remain)
-1000000
-if( flood_control_year == 1, 0, cvwd_35_transfer_array[_cyear-(year0)][1]*1000)
-start_year									
-if(_cyear >= start_dwcv && _cyear >= 2010,800000,if(_cyear >= start_dwcv, 600000,0))									
-dwcv_put_temp									
-if(_cyear >= start_dwcv,max(250000 - dwcv_remaining_obligation,0),0)									
-max(min(dwcv_put-dwcv.put,dwcv_cap-dwcv.resolved),0)									
-0									
-if(_cyear == start_year, min(dwcv_swp, dwcv), min (dwcv_swp, dwcv.resolved[_y-1]))									
-if(_cyear == start_year, max(dwcv_swp - dwcv,0), max (dwcv_swp - dwcv_loss,0))									
-max(original_dwcv_swp - dwcv,0)									
-max(dwcv_remaining_obligation - original_remaining_obligation,0)									
-dwcv_transfer_reservoir.resolved 
-250000									
-0									
-321000									
-2004		
-2035		
-2016		
-dwcv_table_a_exchange * swp_alloc
-if(_cyear>=start_dwcv_transfer && _cyear<=end_dwcv_transfer,100000,0)		
-if(swp_alloc < 0.4,0,if(dwcv.resolved [_y-1] >100000,0,if(_cyear>=start_dwcv_transfer && _cyear<=end_dwcv_transfer,min(swp_alloc,1)*100000,0)))		
-if(_cyear>=start_dwcv_transfer,10000000,0)		
-dwcv_transfer1.take + dwcv_transfer2.take		
-max(dwcv_transfer_take - callback_delivered, 0)
-max(if(dwcv_remaining_obligation >0, dwcv_transfer_take - transfer_remaining_obligation,0),0)									
-0
-dwcv_transfer_take									
-max(min(dwcv_transfer_reservoir_put-dwcv_transfer_reservoir.put,100000-dwcv_transfer_reservoir.resolved),0)									
-100000									
-callback_delivered - dwcv_transfer_reservoir.take									
-dwcv_transfer_reservoir.resolved									
-10000000		
-if(_cyear < callback_year, dwcv_transfer_take1_step1, dwcv_transfer_take1_step3)		
-if(full_surplus_year == 1, if(fds_counter >= 3, .5 * dwcv_transfer_take_temp, 0), .5 * dwcv_transfer_take_temp)		
-if(full_surplus_year == 1, 0, .5 * dwcv_transfer_take_temp)		
-if(dwcv_transfer_take1_counter >= 10, 0, dwcv_transfer_take1_step2)		
-if(_cyear > callback_year, dwcv_transfer_take1_counter[_y-1] + dwcv_transfer_take1_check, 0)		
-if(dwcv_transfer1.take[_y-1] > 0, 1, 0)		
-10000000		
-if(_cyear < callback_year, dwcv_transfer_take2_step1, dwcv_transfer_take2_step2)		
-(.5 * dwcv_transfer_take_temp)		
-if(dwcv_transfer_take2_counter >= 15, 0, .5 * dwcv_transfer_take_temp)		
-if(_cyear > callback_year, dwcv_transfer_take2_counter[_y-1] + dwcv_transfer_take2_check, 0)		
-if(dwcv_transfer2.take[_y-1] > 0, 1, 0)		
-iid_mwd_array[_cyear-(year0)][1] * 1000		
-(iid_sdcwa_array[_cyear-(year0)][1]) * 1000		
-2006					
-2026					
-if(_cyear>=start_lake_mead,1500000,0)					
-if(_cyear>=start_lake_mead && _cyear<=2007,50000 *(1-flood_control_year),if(_cyear>=2008 && _cyear<= 2014,lake_mead_put_initial *(1-flood_control_year),if(_cyear>=2015 && _cyear<= stop_lake_mead,400000*(1-flood_control_year),0)))					
-max(min(lake_mead_put-lake_mead.put,lake_mead_cap-lake_mead.resolved),0)					
-iid_mwd + 20000 + all_american_lining_slr + coachella_lining_slr + pvid_total					
-if(_cyear>=2008 && _cyear<= stop_lake_mead +10,400000,0)					
-(lake_mead.resolved - lake_mead_put_loss - lake_mead_evap) * flood_control_year					
-lake_mead.put[_y-1]*.05					
-(lake_mead.resolved[_y-1] - lake_mead_put_loss)*.03					
-min(lake_mead_put_loss + lake_mead_evap + lake_mead_surplus_loss, lake_mead.resolved)					
-434000					
-lower_colorado_wsp_array[_cyear-(year0)][1]		
-2008		
-2036		
-mwd_drop_2_take_temp		
-mwd_drop_2_take_array[_cyear-(year0)][1] 		
-66000		
-2004			
-2020			
-1000000		
-if(_cyear >= snwa_start && _cyear < snwa_end, snwa_array[_cyear-(year0)][1], 0)	
-if(_cyear==start_year,snwa_historical + snwa.take ,snwa_cumulative[_y-1] + snwa.take) 			
-if(_cyear => snwa_end, snwa_cumulative[_y-1] + snwa.take,0)			
-min(snwa_payback_array[_cyear-(year0)][1], snwa_payback_remain)	
-snwa_payback_cumulative [_y-1] + snwa_payback [_y-1]
-max(snwa_cumulative_2020 - snwa_payback_cumulative,0)  			
-snwa_take_2004 +  snwa_take_2005 + snwa_take_2006 + snwa_take_2007 + snwa_take_2008 + snwa_take_2009 + snwa_take_2010 + snwa_take_2011 + snwa_take_2012 + snwa_take_2013 + snwa_take_2014 + snwa_take_2015 + snwa_take_2016 + snwa_take_2017								
-snwa_activity_array [1][1]								
-snwa_activity_array [2][1]								
-snwa_activity_array [3][1]								
-snwa_activity_array [4][1]								
-snwa_activity_array [5][1]								
-snwa_activity_array [6][1]								
-snwa_activity_array [7][1]								
-snwa_activity_array [8][1]								
-snwa_activity_array [9][1]								
-snwa_activity_array [10][1]								
-snwa_activity_array [11][1]								
-snwa_activity_array [12][1]								
-snwa_activity_array [13][1]								
-snwa_activity_array [14][1]								
-0
-if (_cyear==start_year, 0 + hayfield, hayfield + hayfield_cumulative_end [_y-1])
-if (_cyear==start_year, 0, hayfield_cumulative_end [_y-1])
-max(100000 - hayfield_cumulative_start,0)					
-max(100000 - hayfield_cumulative_end,0)						
-2007
-2050
-0
-(ppr_array[_cyear-(year0)][1]) + quechan		
-2005			
-2037			
-pvid_minimum + pvid_option			
-(pvid_minimum_array [_cyear-(year0)][1]) * 1000			
-if(_cyear >= pvid_start && _cyear <= pvid_end,pvid_option_1 + pvid_option_2,0)			
-if(pvid_option_1 [_y-1] > 0 && pvid_option_consecutive_check_1 == 0 ,pvid_option_1 [_y-1],pvid_option_1_temp)			
-max(0,if(pvid_option_2 [_y-1] > 0 && pvid_option_consecutive_check_2 == 0 ,pvid_option_2 [_y-1],pvid_option_2_temp))			
-max(0,if(pvid_option_2 [_y-1] > 0 && pvid_option_consecutive_check_2 == 0, ((pvid_option_array [_cyear-(year0)][pvid_option_level_temp])*1000) - pvid_option_2 [_y-1],((pvid_option_array [_cyear-(year0)][pvid_option_level_temp]) * 1000)))			
-if(pvid_option_1 [_y-1] > 0 && pvid_option_consecutive_check_1 == 0, pvid_option_level_1 [_y-1],pvid_option_level_temp)			
-(pvid_option_array [_cyear-(year0)][pvid_option_level_temp])*1000 - pvid_option_1			
-if(pvid_option_2 [_y-1] > 0 && pvid_option_consecutive_check_2 == 0 ,pvid_option_level_2 [_y-1],pvid_option_level_temp)			
-if(_cyear <= (start_year + 1), pvid_option_evaluate_level_begin_sim ,pvid_option_evaluate_level)			
-if(storage_pvid [_y-2]/storage_pvid_cap [_y-2]<= 0.3 && pvid_max_take_count >= 10,3,if(storage_pvid [_y-2]/storage_pvid_cap [_y-2]<= 0.3,4,if(storage_pvid [_y-2]/storage_pvid_cap [_y-2]<= 0.5,3,if(storage_pvid [_y-2]/storage_pvid_cap [_y-2]<= 0.75,2,1))))			
-if(storage_pvid/storage_pvid_cap <=0.3 && pvid_max_take_count >= 10,3,if(storage_pvid/storage_pvid_cap <= 0.3,4,if(storage_pvid/storage_pvid_cap <= 0.5,3,if(storage_pvid/storage_pvid_cap <= 0.75,2,1))))			
-if(pvid_option_consecutive_check_1 [_y-1] == 1, 0,if(pvid_option_1 [_y-1] = pvid_option_1 [_y-2], 1, 0))			
-if(pvid_option_consecutive_check_2 [_y-1] == 1, 0,if(pvid_option_2 [_y-1] = pvid_option_2 [_y-2], 1, 0))			
-if(_cyear==start_year,0,pvid_option_take_count[_y-1] + pvid_option_check) 			
-if(pvid_option [_y-1] > 0, 1, 0)			
-if(_cyear==start_year,4,pvid_max_take_count[_y-1] + pvid_max_check) 			
-if(pvid_option [_y-1] => (102500 * 0.9), 1, 0)			
-quechan_array[_cyear-(year0)][1]		
-shortage_array[_cyear-(year0)][_tyear-tyear0]
-surplus_array[_cyear-(year0)][_tyear-tyear0]
-cra_maxsupply - (all_american_lining_sd + all_american_lining_slr + basic_apportionment + coachella_lining_sd + coachella_lining_slr + iid_mwd + iid_sdcwa - ppr + pvid_minimum + salton_sea - cvwd_35_transfer)
-min(flood_surplus + full_surplus,surplus_array[_cyear-(year0)][_tyear-tyear0])
-if(full_surplus_year > 0, min((surplus_step1), surplus_cap), 0)
-full_surplus_year_array[_cyear-(year0)][_ctyear-tyear0]
-if(_cyear == start_year, 0, if(full_surplus_year == 0, fds_counter[_y-1], fds_counter[_y-1] + 1))
-if(flood_control_year > 0, min((surplus_step1), surplus_cap),0)
-min(flood_control_year_array[_cyear-(year0)][_ctyear-tyear0],1)
-if(_cyear == start_year, 0, if(flood_control_year == 0, flood_control_counter[_y-1], flood_control_counter[_y-1] + 1))
-0
-2004					
-if(_cyear>=start_chino,100000,0)					
-if(_cyear >= start_chino,25000,0)					
-if(_cyear >= (start_chino + 4),33000,0)					
-chino_put_temp					
-max(min(chino_put-chino.put,chino_cap-chino.resolved),0)					
-chino_take_temp					
-33000					
-25000					
-0					
-2005						
-if(_cyear >= start_compton_cup,2289,0)						
-if(_cyear >= start_compton_cup,572,0)						
-if(_cyear >= (start_compton_cup + 4),763,0)						
-compton_cup_put_temp						
-max(min(compton_cup_put-compton_cup.put,compton_cup_cap-compton_cup.resolved),0)						
-compton_cup_take_temp						
-763						
-572						
-0					
-2005					
-if(_cyear>=start_cyclicgroundwater, 140000,0)					
-0
-max(min(cyclicgroundwater_put-cyclicgroundwater.put,cyclicgroundwater_cap-cyclicgroundwater.resolved),0)					
-min(cyclicgroundwater_take_temp,total_longterm_demand)
-if(_cyear >= start_cyclicgroundwater,140000,0)
-140000					
-114000					
-0					
-max(810000-dvl_emergency_cap,0)					
-max(dvl_put-dvl_emergency.put,0)					
-min(810000,dvl_carryover_takelimit)					
-dvl_carryover_put_temp					
-max(min(dvl_carryover_put-dvl_carryover.put,dvl_carryover_cap-dvl_carryover.resolved),0)					
-dvl_carryover_take_temp					
-if(_cyear==start_year,0,if(dvl_carryover.take[_y-1]>0,1,if(dvl_carryover.put[_y-1]>0,0,dvl_carryover_indicator[_y-1])))					
-dvl_carryover_takelimit_initial					
-max(if(dvl_carryover_indicator==0,(dvl_carryover-dvl_carryover.loss+dvl_carryover.gain)/3,dvl_carryover_takelimit[_y-1]-dvl_carryover.loss+dvl_carryover.gain),0)					
-400000					
-400000					
-dvl_emergency_loss					
-if(_cyear==start_year,0,if(dvl_emergency_cap>dvl_emergency_cap[_y-1],dvl_emergency_cap-dvl_emergency_cap[_y-1],0))					
-min(dvl_carryover-dvl_carryover_loss,dvl_evap)					
-dvl_carryover_loss+dvl_carryover_evap					
-525652					
-dvl_emergency_demand					
-dvl_put					
-0					
-dvl_emergency_put_temp					
-max(min(dvl_emergency_put-dvl_emergency.put,dvl_emergency_cap-dvl_emergency.resolved),0)					
-dvl_emergency_take_temp					
-0					
-400000					
-dvl_carryover_loss					
-if(dvl_emergency>dvl_emergency_cap,dvl_emergency-dvl_emergency_cap,0)					
-dvl_evap-dvl_carryover_evap					
-dvl_emergency_loss+dvl_emergency_evap					
-204000					
-dvl_carryover.put + dvl_emergency.put					
-dvl_carryover.take + dvl_emergency.take					
-if(_cyear==start_year,dvl_evap,dvl_level[_y-1] + dvl_put_total - dvl_take_total - dvl_level)					
-dvl_carryover.resolved + dvl_emergency.resolved					
-dvl_carryover + dvl_emergency					
-500000					
-20000					
-2009					
-if(_cyear>=start_elsinore,12000,0)					
-if(_cyear >= start_elsinore,3000,0)					
-if(_cyear >= start_elsinore,4000,0)					
-elsinore_put_temp					
-max(min(elsinore_put-elsinore.put,elsinore_cap-elsinore.resolved),0)					
-elsinore_take_temp					
-4000					
-3000					
-7000					
-78500		
-33800		
-5400		
-328900		
-if(_cyear>2014,90000,18000)		
-(dvl_emergency_demand_array[_cyear-(year0)][1]) 	
-2003					
-if(_cyear>=start_foothill_cup,9000,0)					
-if(_cyear >= start_foothill_cup,2250,0)					
-if(_cyear >= (start_foothill_cup + 4),3000,0)					
-foothill_cup_put_temp					
-max(min(foothill_cup_put-foothill_cup.put,foothill_cup_cap-foothill_cup.resolved),0)					
-foothill_cup_take_temp					
-3000					
-2250					
-0					
-groundwater_array[_ctyear-tyear0][_cyear-(year0)]																																					
-surface_array[_ctyear-tyear0][_cyear-(year0)]																																					
-laa_array[_ctyear-tyear0][_cyear-(year0)]																																					
-desal_array[_ctyear-tyear0][_cyear-(year0)]																																					
-gw_recovery_array[_ctyear-tyear0][_cyear-(year0)]																																					
-recycling_array[_ctyear-tyear0][_cyear-(year0)]																																					
-154000					
-154000					
-max(min(castaic_put-castaic.put,castaic_cap-castaic.resolved),0)					
-154000					
-154000					
-154000					
-154000					
-65000					
-65000					
-max(min(perris_put-perris.put,perris_cap-perris.resolved),0)					
-65000					
-65000					
-65000					
-65000					
-2005					
-if(_cyear>=start_lakewood,3600,0)					
-if(_cyear >= start_lakewood,900,0)					
-if(_cyear >= (start_lakewood + 4),1200,0)					
-lakewood_put_temp					
-max(min(lakewood_put-lakewood.put,lakewood_cap-lakewood.resolved),0)					
-lakewood_take_temp					
-1200					
-900					
-1000					
-2002					
-if(_cyear>=start_live_oak,3000,0)					
-if(_cyear >= start_live_oak,750,0)					
-if(_cyear >= (start_live_oak + 4),1000,0)					
-live_oak_put_temp					
-max(min(live_oak_put-live_oak.put,live_oak_cap-live_oak.resolved),0)					
-live_oak_take_temp					
-1000					
-750					
-2000					
-2002					
-if(_cyear>=start_long_beach,13000,0)					
-if(_cyear >= start_long_beach,3250,0)					
-if(_cyear >= (start_long_beach + 4),4333,0)					
-long_beach_put_temp					
-max(min(long_beach_put-long_beach.put,long_beach_cap-long_beach.resolved),0)					
-long_beach_take_temp					
-4333					
-3250					
-6000					
-20000000
-total_longterm_demand
-max(total_longterm_demand - longterm_cut.take,0) 
-longterm_delivered/total_longterm_demand
-100000					
-100000					
-max(min(mathews_put-mathews.put,mathews_cap-mathews.resolved),0)					
-100000					
-100000					
-100000					
-57500					
-2004					
-if(_cyear>=start_orange_county,66000,0)					
-if(_cyear >= start_orange_county,15000,0)					
-if(_cyear >= (start_orange_county + 4),20000,0)					
-orange_county_put_temp					
-max(min(orange_county_put-orange_county.put,orange_county_cap-orange_county.resolved),0)					
-orange_county_take_temp					
-20000					
-15000					
-50000					
-10000					
-10000					
-max(min(lake_skinner_put-lake_skinner.put,lake_skinner_cap-lake_skinner.resolved),0)					
-10000					
-10000					
-10000					
-3200					
-2005					
-if(_cyear>=start_upper_claremont,3000,0)					
-if(_cyear >= start_upper_claremont,750,0)					
-if(_cyear >= (start_upper_claremont + 4),1000,0)					
-upper_claremont_put_temp					
-max(min(upper_claremont_put-upper_claremont.put,upper_claremont_cap-upper_claremont.resolved),0)					
-upper_claremont_take_temp					
-1000					
-750					
-2000				
-2002										
-2051										
-if(_cyear >= start_arvin,350000,0)										
-if(_cyear >= 2009 && _cyear <= stop_arvin + 10, 75000,arvin_take_temp)										
-if(_cyear>=start_arvin && _cyear <= stop_arvin + 10,min(arvin_take_array[arvin_take_row][arvin_take_counter],swp_remain)*1000,0)										
-arvin_take_row_array[_ctyear-tyear0][1]										
-if(arvin.take[_y-1]>0,1,0)										
-min(max(((arvin_take_counter1 + arvin_take_counter[_y-1]) * arvin_take_counter1),1),7)										
-arvin_put_temp										
-if(_cyear >= start_arvin && _cyear <= stop_arvin,111111,0)										
-max(min(arvin_put-arvin.put,arvin_cap-arvin.resolved),0)										
-75000										
-111111										
-arvin.put[_y-1]*.10										
-0
-arvin_contractual_loss + arvin_2027_loss										
-219000										
-if( _cyear == start_year, arvin_historical_take, arvin_cumulative_end [_y-1])   										
-if( _cyear == start_year, arvin_historical_take + arvin.take, arvin_cumulative_end [_y-1] + arvin.take)  										
-arvin_take_1997 + arvin_take_1998 + arvin_take_1999 + arvin_take_2000 + arvin_take_2001 + arvin_take_2002 + arvin_take_2003 + arvin_take_2004 + arvin_take_2005 + arvin_take_2006 + arvin_take_2007 + arvin_take_2008 + arvin_take_2009 + arvin_take_2010 + arvin_take_2011 + arvin_take_2012 										
-250000										
-arvin_om_activity_array [1][3]										
-arvin_om_activity_array [2][3]										
-arvin_om_activity_array [3][3]										
-arvin_om_activity_array [4][3]										
-arvin_om_activity_array [5][3]										
-arvin_om_activity_array [6][3]										
-arvin_om_activity_array [7][3]										
-arvin_om_activity_array [8][3]										
-arvin_om_activity_array [9][3]										
-arvin_om_activity_array [10][3]										
-arvin_om_activity_array [11][3]										
-arvin_om_activity_array [12][3]										
-arvin_om_activity_array [13][3]										
-arvin_om_activity_array [14][3]										
-arvin_om_activity_array [15][3]										
-arvin_om_activity_array [16][3]										
-original_dwcv_swp + dwcv_transfer_initial
-dwcv_table_a_contract * swp_alloc
-if(_cyear < 2010, 71100, 94100) + dwcv_table_a_exchange
-2003									
-2051									
-if(_cyear >= start_kerndelta,250000,0)									
-min(if(_cyear >= start_kerndelta && _cyear <= stop_kerndelta,56200,0),kerndelta_put_remain)									
-max(min(kerndelta_put-kerndelta.put,kerndelta_cap-kerndelta.resolved),0)									
-if(_cyear==start_year,kerndelta_historical_put + kerndelta.put,kerndelta_cumulative_put[_y-1] + kerndelta.put)  									
-max(450000 - kerndelta_cumulative_put,0)									
-280899									
-if(_cyear == 2010, max(kerndelta_put_target - kerndelta_cumulative_begin - kerndelta.put - kerndelta_put_credits_purchased [_y-1],0),0)  									
-kerndelta_credit_2004 + kerndelta_credit_2005 + kerndelta_credit_2006 + kerndelta_credit_2007 + kerndelta_credit_2008 + kerndelta_credit_2009 + kerndelta_credit_2010									
-if(_cyear == start_year, kerndelta_put_credits_purchased + kerndelta_put_purchase,kerndelta_put_credits_cumulative[_y-1] +kerndelta_put_purchase)
-if(_cyear >= start_kerndelta + 2 && _cyear <= stop_kerndelta,25000,if(_cyear >= 2010 && _cyear <= stop_kerndelta, kerndelta_take_array[kerndelta_take_counter][1],0))									
-if(kerndelta.take[_y-1]>0,1,0)									
-min(max(((kerndelta_take_counter1 + kerndelta_take_counter[_y-1]) * kerndelta_take_counter1),1),8)									
-kerndelta.put[_y-1]*.11									
-50000									
-56200									
-180000									
-if( _cyear == start_year, kerndelta_historical_put, kerndelta_cumulative_end [_y-1])   									
-if( _cyear == start_year, kerndelta_historical_put + kerndelta.put, kerndelta_cumulative_end [_y-1] + kerndelta.put)  									
-kerndelta_put_2003 + kerndelta_put_2004 + kerndelta_put_2005 + kerndelta_put_2006 + kerndelta_put_2007 + kerndelta_put_2008 + kerndelta_put_2009 + kerndelta_put_2010 + kerndelta_put_2011 + kerndelta_put_2012 									
-kerndelta_om_activity_array [1][2]									
-kerndelta_om_activity_array [2][2]									
-kerndelta_om_activity_array [3][2]									
-kerndelta_om_activity_array [4][2]									
-kerndelta_om_activity_array [5][2]									
-kerndelta_om_activity_array [6][2]									
-kerndelta_om_activity_array [7][2]									
-kerndelta_om_activity_array [8][2]									
-kerndelta_om_activity_array [9][2]									
-kerndelta_om_activity_array [10][2]									
-kerndelta_om_activity_array [2][4]									
-kerndelta_om_activity_array [3][4]									
-kerndelta_om_activity_array [4][4]									
-kerndelta_om_activity_array [5][4]									
-kerndelta_om_activity_array [6][4]									
-kerndelta_om_activity_array [7][4]									
-kerndelta_om_activity_array [8][4]									
-2004					
-2051					
-if(_cyear >= start_mojave,390000,0)					
-min(60000,mojave_put_remain)					
-max(390000 - mojave_cumulative_put,0)									
-if(_cyear==start_year,mojave_historical_put + mojave.put,mojave_cumulative_put[_y-1] + mojave.put)  									
-45000
-mojave_take_temp					
-max((75800 * swp_alloc) - 19800,0)					
-0					
-75000					
-75000					
-max(min(mojave_put-mojave.put,mojave_cap-mojave.resolved),0)					
-60000					
-swp_existing_temp + swp_end_dwcv_transfer
-if(_cyear<=2025,(existing_array[_tyear-tyear0][1]) * 1000, (existing_array[_tyear-tyear0][2]) * 1000)
-if(_cyear > end_dwcv_transfer,100000 * swp_existing_temp/1911500,0)
-2011500 - dwcv_table_a_exchange
-if(_cyear<=2025,(article21_array[_tyear-tyear0][1]) * 1000, (article21_array[_tyear-tyear0][2]) * 1000)
-2001					
-2051					
-if(_cyear>=start_sbvmwd,min(20000,sbvmwd_swp_available),0)					
-max(20000 - sbvmwd_transfer_min,0)					
-sbvmwd_option_take_temp
-if(_cyear>=start_sbvmwd,min(60000*swp_alloc,max(sbvmwd_swp_available-sbvmwd_transfer_min,0)),0) 					
-102600*swp_alloc					
-max(0,sbvmwd_swp-sbvmwd_demand)					
-25000					
-sbvmwd_option.take + sbvmwd_transfer_min					
-3000000					
-50000					
-if(_cyear >= start_sbvmwd,min(20000,sbvmwd_transfer),0)					
-max(min(sbvmwd_carryover_put-sbvmwd_carryover.put,sbvmwd_carryover_cap-sbvmwd_carryover.resolved),0)					
-50000					
-0					
-50000					
-20000					
-0					
-min(max(sbvmwd_take_capacity - sbvmwd_carryover.take,0),swp_limit)					
-sbvmwd_exchange_take + sbvmwd_pumpback_take  					
-if(_cyear <= 2008,18000,22000)					
-if(_cyear>=start_sbvmwd,max(sbvmwd_swp_available - sbvmwd_option.take - sbvmwd_transfer_min,0),0)					
-2002								
-2051								
-if(semitropic <= 350000,350000,semitropic)								
-if(_cyear >= start_semitropic && _cyear <= stop_semitropic,semitropic_cap_calc,0)								
-155000								
-semitropic_entitlement * swp_alloc								
-max((semitropic_alloc - 22000) * .35,0)								
-if(_cyear >= start_semitropic && _cyear <= stop_semitropic,35194,0)								
-if(_cyear >= start_semitropic && _cyear <= stop_semitropic,(31500 + semitropic_exchange),0)								
-semitropic_put_temp								
-max(min(semitropic_put-semitropic.put,semitropic_cap-semitropic.resolved),0)								
-semitropic_take_temp								
-semitropic.put[_y-1]*.10								
-78050								
-35194								
-286000								
-semitropic_cumulative_end [_y-1] + semitropic.take  								
-semitropic_cumulative_end [_y-1]   								
-semitropic_om_1993 +  semitropic_om_1994 + semitropic_om_1995 + semitropic_om_1996 + semitropic_om_1997 + semitropic_om_1998 + semitropic_om_1999 + semitropic_om_2000 + semitropic_om_2001 + semitropic_om_2002 + semitropic_om_2003 + semitropic_om_2004 + semitropic_om_2005 + semitropic_om_2006 + semitropic_om_2007 + semitropic_om_2008 + semitropic_om_2009 + semitropic_om_2010 + semitropic_om_2011 + semitropic_om_2012 								
-if(_cyear == start_year, semitropic_om_historical + semitropic_om_activity, semitropic_om_cumulative [_y-1] + semitropic_om_activity)								
-semitropic.take + semitropic.put								
-semitropic_take_1993 +  semitropic_take_1994 + semitropic_take_1995 + semitropic_take_1996 + semitropic_take_1997 + semitropic_take_1998 + semitropic_take_1999 + semitropic_take_2000 + semitropic_take_2001 + semitropic_take_2002 + semitropic_take_2003 + semitropic_take_2004 + semitropic_take_2005 + semitropic_take_2006 + semitropic_take_2007 + semitropic_take_2008 + semitropic_take_2009  + semitropic_take_2010  + semitropic_take_2011  + semitropic_take_2012  								
-if(_cyear == start_year, semitropic_take_historical + semitropic.take, semitropic_take_cumulative [_y-1] + semitropic.take)								
-(semitropic_om_10 + semitropic_om_9 + semitropic_om_8 + semitropic_om_7 + semitropic_om_6 + semitropic_om_5 + semitropic_om_4 + semitropic_om_3 + semitropic_om_2 + semitropic_om_1)/10								
-max(350000 - semitropic_take_cumulative,0)								
-semitropic_om_activity_array [1][4]								
-semitropic_om_activity_array [1][3]								
-semitropic_om_activity_array [2][4]								
-semitropic_om_activity_array [2][3]								
-semitropic_om_activity_array [3][4]								
-semitropic_om_activity_array [3][3]								
-semitropic_om_activity_array [4][4]								
-semitropic_om_activity_array [4][3]								
-semitropic_om_activity_array [5][4]								
-semitropic_om_activity_array [5][3]								
-semitropic_om_activity_array [6][4]								
-semitropic_om_activity_array [6][3]								
-semitropic_om_activity_array [7][4]								
-semitropic_om_activity_array [7][3]								
-semitropic_om_activity_array [8][4]								
-semitropic_om_activity_array [8][3]								
-semitropic_om_activity_array [9][4]								
-semitropic_om_activity_array [9][3]								
-semitropic_om_activity_array [10][4]								
-semitropic_om_activity_array [10][3]				
-semitropic_om_activity_array [11][4]								
-semitropic_om_activity_array [11][3]								
-semitropic_om_activity_array [12][4]								
-semitropic_om_activity_array [12][3]								
-semitropic_om_activity_array [13][4]								
-semitropic_om_activity_array [13][3]								
-semitropic_om_activity_array [14][4]								
-semitropic_om_activity_array [14][3]								
-semitropic_om_activity_array [15][4]								
-semitropic_om_activity_array [15][3]								
-semitropic_om_activity_array [16][4]								
-semitropic_om_activity_array [16][3]								
-semitropic_om_activity_array [17][4]								
-semitropic_om_activity_array [17][3]								
-semitropic_om_activity_array [18][4]								
-semitropic_om_activity_array [18][3]								
-semitropic_om_activity_array [19][4]								
-semitropic_om_activity_array [19][3]								
-semitropic_om_activity_array [20][4]								
-semitropic_om_activity_array [20][3]								
-if(_cyear <  start_year +9, semitropic_om_activity_array [_cyear-2002][4] + semitropic_om_activity[_y-10], semitropic_om_activity [_y-10])								
-if(_cyear < start_year +9, semitropic_om_activity_array [_cyear-2001][4] + semitropic_om_activity[_y-9], semitropic_om_activity[_y-9])								
-if(_cyear < start_year +9, semitropic_om_activity_array [_cyear-2000][4] + semitropic_om_activity[_y-8], semitropic_om_activity[_y-8])								
-if(_cyear < start_year +9, semitropic_om_activity_array [_cyear-1999][4] + semitropic_om_activity[_y-7], semitropic_om_activity[_y-7])								
-if(_cyear < start_year +9, semitropic_om_activity_array [_cyear-1998][4] + semitropic_om_activity[_y-6], semitropic_om_activity[_y-6])								
-if(_cyear < start_year +9, semitropic_om_activity_array [_cyear-1997][4] + semitropic_om_activity[_y-5], semitropic_om_activity[_y-5])								
-if(_cyear < start_year +9, semitropic_om_activity_array [_cyear-1996][4] + semitropic_om_activity[_y-4], semitropic_om_activity[_y-4])								
-if(_cyear < start_year +9, semitropic_om_activity_array [_cyear-1995][4] + semitropic_om_activity[_y-3], semitropic_om_activity[_y-3])								
-if(_cyear < start_year +9, semitropic_om_activity_array [_cyear-1994][4] + semitropic_om_activity[_y-2], semitropic_om_activity[_y-2])								
-if(_cyear < start_year +9, semitropic_om_activity_array [_cyear-1993][4] + semitropic_om_activity[_y-1], semitropic_om_activity[_y-1])								
-2002					
-if(_cyear>=start_swpcarryover,if(_cyear == 2007, 350000 ,285550),0)					
-if(_cyear >= start_swpcarryover,if(swp_alloc <= 0.5, min(mwd_table_a_contract *0.25 ,100000) + min(dwcv_table_a_contract *0.25 ,100000),if(swp_alloc >= 0.75,min (swp_existing*0.5 ,200000) + min(dwcv_table_a_contract*0.5 ,200000), min((swp_alloc - 0.25) * mwd_table_a_contract,(swp_alloc - 0.25) * 400000) + min((swp_alloc - 0.25) * dwcv_table_a_contract,(swp_alloc - 0.25) * 400000))),0)					
-if(_cyear >= start_swpcarryover,swpcarryover,0)					
-swpcarryover_put_temp					
-max(min(swpcarryover_put-swpcarryover.put,swpcarryover_cap-swpcarryover.resolved),0)					
-swpcarryover_take_temp					
-285550					
-285550					
-200000					
-0
-swp_reservoir.resolved
-20000000
-0
-2000000000
-0
-2000000000
-0
-0
-0
-0
-central_valley_exclusive_transfer.take + central_valley_blended_transfer.take
-swp_exclusive_transfer.take + swp_blended_transfer.take
-spot_transfer + central_valley_transfer_total + swp_transfer.take
-max(swp_transfer_cap - yuba - swp_total_transfer - other_transfers,0)
-0
-if(_cyear >=2020 + delay_mwd_alloc,(swp_transfer_cap_array[_tyear-tyear0][2]) * 1000,(swp_transfer_cap_array[_tyear-tyear0][1]) * 1000)
-2008 
-2025
-yuba_component_2 + yuba_component_3 + yuba_component_4.take 
-if(swp_alloc_percent <= 20, 6000,0)		
-if(swp_alloc_percent >20 && swp_alloc_percent <=60, 3000,0)		
-max(yuba_component_2_temp_1,yuba_component_2_temp_2) 		
-if(_cyear >= start_yuba && _cyear <= stop_yuba,yuba_component_2_temp,0) 
-if(swp_alloc_percent <= 60 , 8000, 0)		
-if(_cyear >= start_yuba && _cyear <= stop_yuba,yuba_component_3_temp,0) 
-20000000
-if(_cyear >= start_yuba && _cyear <= stop_yuba,8000,0) 
-retail_array[_ctyear-tyear0][_cyear-year0]																																																																																																			
-total_lt_replenishment_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-swp_excl_lt_array[_ctyear-tyear0][_cyear-year0]																																																		
-cra_excl_lt_array[_ctyear-tyear0][_cyear-year0]																																																		
-blended_lt_array[_ctyear-tyear0][_cyear-year0]																																																		
-cp_lt_array[_ctyear-tyear0][_cyear-year0]																																																		
-w_excl_lt_array[_ctyear-tyear0][_cyear-year0]																																																		
-d_excl_lt_array[_ctyear-tyear0][_cyear-year0]																																																		
-j_excl_lt_array[_ctyear-tyear0][_cyear-year0]																																																		
-s_excl_lt_array[_ctyear-tyear0][_cyear-year0]																																																		
-m_excl_lt_array[_ctyear-tyear0][_cyear-year0]																																																		
-upper_feeder1_lt_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-cr_aqueduct_lt_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-upper_feeder2_lt_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-lower_feeder_lt_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-rialto_lt_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-savpl_sgp_sbv_lt_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-lakeview_lt_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-la35_lt_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-s_untreated_lt_array[_ctyear-tyear0][_cyear-year0]																																																		
-swp_excl_ag_array[_ctyear-tyear0][_cyear-year0]																																																																																																			
-cra_excl_ag_array[_ctyear-tyear0][_cyear-year0]																																																																																																			
-blended_ag_array[_ctyear-tyear0][_cyear-year0]																																																																																																			
-cp_ag_array[_ctyear-tyear0][_cyear-year0]																																																																																																			
-w_excl_ag_array[_ctyear-tyear0][_cyear-year0]																																																																																																			
-d_excl_ag_array[_ctyear-tyear0][_cyear-year0]																																																																																																			
-j_excl_ag_array[_ctyear-tyear0][_cyear-year0]																																																																																																			
-s_excl_ag_array[_ctyear-tyear0][_cyear-year0]																																																																																																			
-m_excl_ag_array[_ctyear-tyear0][_cyear-year0]																																																																																																			
-upper_feeder1_ag_array[_ctyear-tyear0][_cyear-(year0)]																																																																																																			
-cr_aqueduct_ag_array[_ctyear-tyear0][_cyear-(year0)]																																																																																																			
-upper_feeder2_ag_array[_ctyear-tyear0][_cyear-(year0)]																																																																																																			
-lower_feeder_ag_array[_ctyear-tyear0][_cyear-(year0)]																																																																																																			
-rialto_ag_array[_ctyear-tyear0][_cyear-(year0)]																																																																																																			
-savpl_sgp_sbv_ag_array[_ctyear-tyear0][_cyear-(year0)]																																																																																																			
-lakeview_ag_array[_ctyear-tyear0][_cyear-(year0)]																																																																																																			
-la35_ag_array[_ctyear-tyear0][_cyear-(year0)]																																																																																																			
-s_untreated_ag_array[_ctyear-tyear0][_cyear-year0]																																																																																																			
-swp_excl_firm_array[_ctyear-tyear0][_cyear-year0]																																																		
-cra_excl_firm_array[_ctyear-tyear0][_cyear-year0]																																																		
-blended_firm_array[_ctyear-tyear0][_cyear-year0]																																																		
-cp_firm_array[_ctyear-tyear0][_cyear-year0]																																																		
-w_excl_firm_array[_ctyear-tyear0][_cyear-year0]																																																		
-d_excl_firm_array[_ctyear-tyear0][_cyear-year0]																																																		
-j_excl_firm_array[_ctyear-tyear0][_cyear-year0]																																																		
-s_excl_firm_array[_ctyear-tyear0][_cyear-year0]																																																		
-m_excl_firm_array[_ctyear-tyear0][_cyear-year0]																																																		
-upper_feeder1_firm_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-cr_aqueduct_firm_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-upper_feeder2_firm_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-lower_feeder_firm_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-rialto_firm_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-savpl_sgp_sbv_firm_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-lakeview_firm_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-la35_firm_array[_ctyear-tyear0][_cyear-(year0)]																																																		
-s_untreated_firm_array[_ctyear-tyear0][_cyear-year0]																																																		
-hoover_energy_cost + parker_energy_cost + supplemental_energy_cost 
-cra_power_real / discount
-1018036355
-hoover_energy - max(hoover_energy - cra_energy,0)  
-hoover_energy_fee * hoover_energy_need/hoover_energy
-(hoover_energy_fee_array[_cyear-(year0)][1])
-225000000
-max(parker_energy - max(parker_energy + hoover_energy - cra_energy,0),0)   
-parker_energy_fee * parker_energy_need/parker_energy
-(parker_energy_fee_array[_cyear-(year0)][1])
-295198831
-max(benefit_energy - max(benefit_energy + parker_energy + hoover_energy - cra_energy,0),0)   
-max(cra_energy - hoover_energy - parker_energy - benefit_energy,0) 
-supplemental_energy_fee * supplemental_energy_need /1000	
-(supplemental_energy_fee_array[_cyear-(year0)][1])		
-350.00
-cra_transfer.take * cra_transfer_fee  * escalation
-cra_transfer_cost_real / discount
-if(_cyear == start_year, cra_transfer_cost_real, cra_transfer_forecast_cost_real [_y-1] + cra_transfer_cost_real)
-if(_cyear == start_year, cra_transfer_cost_pv, cra_transfer_forecast_cost_pv [_y-1] + cra_transfer_cost_pv)
-12000000 * escalation
-if(dwcv_transfer1.take > 0, dwcv_callback_fixed_fee, 0)
-if(dwcv_transfer2.take > 0, dwcv_callback_fixed_fee, 0)
-edmonston_power
-(dwcv_transfer1.take + dwcv_transfer2.take) * dwcv_callback_variable_fee * escalation + dwcv_callback_fixed_cost1 + dwcv_callback_fixed_cost2
-dwcv_callback_cost_real / discount
-if(_cyear == start_year, dwcv_callback_cost_real, dwcv_callback_forecast_cost_real [_y-1] + dwcv_callback_cost_real)
-if(_cyear == start_year, dwcv_callback_cost_pv, dwcv_callback_forecast_cost_pv [_y-1] + dwcv_callback_cost_pv)
-148.16
-pvid_total * pvid_fee * escalation 
-pvid_cost / discount
-if(_cyear == start_year, pvid_cost, pvid_forecast_cost_real [_y-1] + pvid_cost)
-if(_cyear == start_year, pvid_cost_pv, pvid_forecast_cost_pv [_y-1] + pvid_cost_pv)
-140.00
-chino_take_fee * escalation * chino.take
-chino_take_cost 
-if(_cyear == start_year, chino_cost_real, chino_forecast_cost_real [_y-1] + chino_cost_real)
-chino_cost_real / discount
-if(_cyear == start_year, chino_cost_pv, chino_forecast_cost_pv [_y-1] + chino_cost_pv)
-140.00
-compton_cup_take_fee * escalation * compton_cup.take  
-compton_cup_take_cost 
-if(_cyear == start_year, compton_cup_cost_real, compton_cup_forecast_cost_real [_y-1] + compton_cup_cost_real)
-compton_cup_cost_real / discount
-if(_cyear == start_year, compton_cup_cost_pv, compton_cup_forecast_cost_pv [_y-1] + compton_cup_cost_pv)
-0
-cyclic_take_fee * escalation * cyclicgroundwater.take 
-if(_cyear == start_year, cyclic_cost_real, cyclic_forecast_cost_real [_y-1] + cyclic_cost_real)
-cyclic_cost_real / discount
-if(_cyear == start_year, cyclic_cost_pv, cyclic_forecast_cost_pv [_y-1] + cyclic_cost_pv)
-140.00
-elsinore_take_fee * escalation * elsinore.take
-elsinore_take_cost 
-if(_cyear == start_year, elsinore_cost_real, elsinore_forecast_cost_real [_y-1] + elsinore_cost_real)
-elsinore_cost_real / discount
-if(_cyear == start_year, elsinore_cost_pv, elsinore_forecast_cost_pv [_y-1] + elsinore_cost_pv)
-140.00
-foothill_cup_take_fee * escalation * foothill_cup.take 
-foothill_cup_take_cost 
-if(_cyear == start_year, foothill_cup_cost_real, foothill_cup_forecast_cost_real [_y-1] + foothill_cup_cost_real)
-foothill_cup_cost_real / discount
-if(_cyear == start_year, foothill_cup_cost_pv, foothill_cup_forecast_cost_pv [_y-1] + foothill_cup_cost_pv)
-140.00
-lakewood_take_fee * escalation * lakewood.take
-lakewood_take_cost 
-if(_cyear == start_year, lakewood_cost_real, lakewood_forecast_cost_real [_y-1] + lakewood_cost_real)
-lakewood_cost_real / discount
-140.00
-live_oak_take_fee * escalation * live_oak.take
-live_oak_take_cost 
-if(_cyear == start_year, live_oak_cost_real, live_oak_forecast_cost_real [_y-1] + live_oak_cost_real)
-live_oak_cost_real / discount
-if(_cyear == start_year, live_oak_cost_pv, live_oak_forecast_cost_pv [_y-1] + live_oak_cost_pv)
-140.00
-long_beach_take_fee * escalation * long_beach.take  
-long_beach_take_cost 
-if(_cyear == start_year, long_beach_cost_real, long_beach_forecast_cost_real [_y-1] + long_beach_cost_real)
-long_beach_cost_real / discount
-if(_cyear == start_year, long_beach_cost_pv, long_beach_forecast_cost_pv [_y-1] + long_beach_cost_pv)
-1410.00
-orange_county_take_fee * escalation * orange_county.take
-orange_county_take_cost 
-if(_cyear == start_year, orange_county_cost_real, orange_county_forecast_cost_real [_y-1] + orange_county_cost_real)
-orange_county_cost_real / discount
-if(_cyear == start_year, orange_county_cost_pv, orange_county_forecast_cost_pv [_y-1] + orange_county_cost_pv)
-140.00
-upper_claremont_take_fee * escalation * upper_claremont.take
-upper_claremont_take_cost 
-if(_cyear == start_year, upper_claremont_cost_real, upper_claremont_forecast_cost_real [_y-1] + upper_claremont_cost_real)
-upper_claremont_cost_real / discount
-if(_cyear == start_year, upper_claremont_cost_pv, upper_claremont_forecast_cost_pv [_y-1] + upper_claremont_cost_pv)
-treatment_fee * treatment_need * cost_increase_treatment
-(total_imported_demand - total_shortage) * (weymouth + diemer + skinner + jensen + mills)/total_imported_demand
-treatment_fee_array [_cyear-(year0)] [1]
-treatment_cost / discount
-if(_cyear == start_year, treatment_cost, cumulative_treatment_cost [_y-1] + treatment_cost)
-if(_cyear == start_year, treatment_cost_pv, cumulative_treatment_cost_pv [_y-1] + treatment_cost_pv)
-63.78
-35.07
-9.59
-arvin.put * (arvin_regulation_fee_delivered + arvin_put_power_fee + arvin_put_om) * escalation 
-81.01 
-73.94 
-12.49 
-(arvin_regulation_fee_returned_non_capital + arvin_take_power_fee + arvin_take_om)* arvin.take * escalation
-arvin_put_cost + arvin_take_cost
-if(_cyear == start_year, arvin_cost_real, arvin_forecast_cost_real [_y-1] + arvin_cost_real) 
-arvin_cost_real / discount
-if(_cyear == start_year, arvin_cost_pv, arvin_forecast_cost_pv [_y-1] + arvin_cost_pv) 
-67.10
-16.96 
-12.94
-13.53
-(kerndelta_deposit_fee + kerndelta_put_om_fee + kerndelta_put_power_fee) * escalation
-48.49
-21.82
-46.69
-kerndelta.take * (kerndelta_take_fee + kerndelta_take_om_fee + kerndelta_take_power_fee) * escalation
-kerndelta_put_cost + kerndelta_take_cost
-if(_cyear == start_year, kerndelta_cost_real, kerndelta_forecast_cost_real [_y-1] + kerndelta_cost_real)
-kerndelta_cost_real / discount
-if(_cyear == start_year, kerndelta_cost_pv, kerndelta_forecast_cost_pv [_y-1] + kerndelta_cost_pv)
-mojave_siphon_power * mojave.take
-devil_canyon_power * mojave.take
-mojave_put_cost + mojave_take_cost
-if(_cyear == start_year, mojave_cost_real, mojave_forecast_cost_real [_y-1] + mojave_cost_real)
-mojave_cost_real / discount
-if(_cyear == start_year, mojave_cost_pv, mojave_forecast_cost_pv [_y-1] + mojave_cost_pv)
-97.66
-(sbvmwd_purchase_fee + devil_canyon_power) * sbvmwd_option.take
-87.08
-sbvmwd_power_fee * escalation_energy * sbvmwd_carryover.take
-sbvmwd_purchase_cost + sbvmwd_take_cost
-if(_cyear == start_year, sbvmwd_cost_real, sbvmwd_forecast_cost_real [_y-1] + sbvmwd_cost_real)
-sbvmwd_cost_real / discount
-if(_cyear == start_year, sbvmwd_cost_pv, sbvmwd_forecast_cost_pv [_y-1] + sbvmwd_cost_pv)
-77.01
-semitropic_put_fee_2 * escalation * semitropic.put
-77.01
-87.84 
-semitropic.take * (semitropic_take_fee_2  + semitropic_take_power_fee) * escalation
-0 
-if(_cyear <= 2012 && semitropic_cumulative_end >= semitropic_extraction_target,1,if(_cyear > 2012,semitropic_om_2012_check [_y-1],0))
-if(semitropic_om_2012_check == 1 && semitropic_om_average >= 35000, 0, semitropic_om_fee * escalation * 350000)
-if(semitropic_om_2012_check == 1 && semitropic_om_average < 35000, semitropic_om_fee * escalation * 350000, 0)
-if(semitropic_om_2012_check == 1 && semitropic_om_average >= 35000, min(semitropic_take_cost + semitropic_put_cost, semitropic_om_credits_cumulative [_y-1]),0) *-1
-semitropic_om_credits_cumulative [_y-1] + semitropic_om_credits_earned + semitropic_om_credits
-if(semitropic_cumulative_begin >= semitropic_extraction_target, max(semitropic_om_cost, semitropic_put_cost + semitropic_take_cost), max(semitropic_om_cost, semitropic_put_cost) + semitropic_take_cost) + semitropic_om_credits
-if(_cyear == start_year, semitropic_cost_real, semitropic_forecast_cost_real [_y-1] + semitropic_cost_real)
-semitropic_cost_real / discount
-if(_cyear == start_year, semitropic_cost_pv, semitropic_forecast_cost_pv [_y-1] + semitropic_cost_pv)
-if(_cyear <= 2035, alamo_power_array[_cyear-year0][1],alamo_power_array[_cyear-year0][1]* escalation_energy_2035)
-if(_cyear <= 2035, banks_power_array[_cyear-year0][1],banks_power_array[_cyear-year0][1] * escalation_energy_2035)
-if(_cyear <= 2035, dos_amigos_power_array[_cyear-year0][1],dos_amigos_power_array[_cyear-year0][1] * escalation_energy_2035)
-if(_cyear <= 2035, buena_vista_power_array[_cyear-year0][1],buena_vista_power_array[_cyear-year0][1] * escalation_energy_2035)
-if(_cyear <= 2035, edmonston_power_array[_cyear-year0][1],edmonston_power_array[_cyear-year0][1] * escalation_energy_2035)
-if(_cyear <= 2035, mojave_siphon_power_array[_cyear-year0][1],mojave_siphon_power_array[_cyear-year0][1] * escalation_energy_2035)
-if(_cyear <= 2035, devil_canyon_power_array[_cyear-year0][1],devil_canyon_power_array[_cyear-year0][1] * escalation_energy_2035)
-if(_cyear <= 2035, castaic_power_array[_cyear-year0][1],castaic_power_array[_cyear-year0][1] * escalation_energy_2035)
-if(_cyear <= 2035, polonio_power_array[_cyear-year0][1],polonio_power_array[_cyear-year0][1]* escalation_energy_2035)
-if(_cyear <= 2035, southbay_power_array[_cyear-year0][1],southbay_power_array[_cyear-year0][1]* escalation_energy_2035)
-delta_power_real + swp_east_power_real + swp_west_power_real + arvin_power_real + semitropic_power_real + kerndelta_power_real
-swp_power_real / discount
-(swp_existing + mwd_article21 + sbvmwd_transfer_min + yuba_component_2 + yuba_component_3) * edmonston_power 
-delta_power_real / discount
-devil_canyon_power - edmonston_power
-swp_east_power * (swp_east - dwcv_swp) 
-swp_east_power_real / discount
-castaic_power - edmonston_power
-swp_west_power * swp_west 
-swp_west_power_real / discount
-buena_vista_power
-edmonston_power - buena_vista_power
-(arvin_put_swp_power * arvin.put) + (arvin_take_swp_power * arvin.take)
-arvin_power_real / discount
-dos_amigos_power
-edmonston_power - dos_amigos_power
-(kerndelta_put_swp_power * kerndelta.put) + (kerndelta_take_swp_power * kerndelta.take)
-kerndelta_power_real / discount
-0
-0
-0
-0
-dos_amigos_power
-edmonston_power - dos_amigos_power
-(semitropic_put_swp_power * semitropic.put) + (semitropic_take_swp_power * semitropic.take)
-semitropic_power_real / discount
-260 * cost_increase_swp_transfer * escalation * swp_total_transfer
-swp_transfer_cost / discount
-if(_cyear == start_year, swp_transfer_cost, cumulative_swp_transfer_cost [_y-1] + swp_transfer_cost)
-if(_cyear == start_year, swp_transfer_cost_pv, cumulative_swp_transfer_cost_pv [_y-1] + swp_transfer_cost_pv)
-(delta_fix_fee + delta_interim_fee) * escalation 
-if(_cyear == 2022 + delay_mwd_alloc, 10000000000 * 0.25,0)
-if(_cyear == 2012 + delay_mwd_alloc,0,0)
-delta_fix_cost / discount
-if(_cyear == start_year, delta_fix_cost, cumulative_delta_fix_cost [_y-1] + delta_fix_cost)
-if(_cyear == start_year, delta_fix_cost_pv, cumulative_delta_fix_cost_pv [_y-1] + delta_fix_cost_pv)
-yuba_cost2_real + yuba_cost3_real + yuba_cost4_real
-if(_cyear == start_year, yuba_cost_real, yuba_forecast_cost_real [_y-1] + yuba_cost_real)
-yuba_cost2_pv + yuba_cost3_pv + yuba_cost4_pv
-if(_cyear == start_year, yuba_cost_pv, yuba_forecast_cost_pv [_y-1] + yuba_cost_pv)
-93.75
-75.00
-if(swp_alloc_percent <= 20,yuba_critical_fee2,yuba_dry_fee2)
-yuba_fee2 * yuba_component_2 * 1.25
-yuba_cost2_real / discount  
-125.00
-100.00
-75.00
-50.00
-25.00
-if(swp_alloc_percent <= 20,yuba_critical_fee34,if(swp_alloc_percent >20 && swp_alloc_percent <=60,yuba_dry_fee34,if(swp_alloc_percent >60 && swp_alloc_percent <=70,yuba_below_normal_fee34,if(swp_alloc_percent >70 && swp_alloc_percent <=80,yuba_above_normal_fee34,yuba_wet_fee34))))
-yuba_fee34 * yuba_component_3 * 1.25
-yuba_cost3_real / discount  
-yuba_fee34 * yuba_component_4.take * 1.25 * yuba_gw_om_cost_real
-yuba_cost4_real / discount  
-11.25
-yuba_gw_om_fee * escalation
-cra_exclusive_wq * L_per_af / mg_per_ton
-cra_exclusive_af * cra_tds 
-cra_demand
-cra_tds_array[_tyear-tyear0][1]
-(blended_wq + blended_take_wq + local_wq) / (blended_af + local_af)
-blended_wq * L_per_af / mg_per_ton 
-blended_take_wq * L_per_af / mg_per_ton
-chino_take_wq + compton_cup_take_wq + elsinore_take_wq + foothill_cup_take_wq + lakewood_take_wq + live_oak_take_wq  + long_beach_take_wq + orange_county_take_wq + dvl_take_wq + lake_skinner_take_wq  
-chino.take + compton_cup.take + elsinore.take + foothill_cup.take + lakewood.take + live_oak.take  + long_beach.take + orange_county.take + dvl_take_total + lake_skinner.take  
-cra_blended_wq + swp_east_blended_wq + swp_west_blended_wq 
-max(blended_demand - blended_shortage.take,0) 
-cra_blended_af * cra_tds
-cra_to_blend
-swp_east_blended_af * swp_tds
-max(blended_demand - blended_shortage.take - swp_west_blended_af - cra_blended_af - blended_take_af,0)
-swp_west_blended_af * swp_west_tds
-common_pool_from_j - blended_west_shortage
-desal_wq + gwr_wq + groundwater_wq + surface_wq + recycling_wq + laa_wq 
-desal_af + gwr_af + groundwater_af + surface_af + recycling_af + laa_af 
-chino_take_wq * L_per_af / mg_per_ton 
-chino_tds_start * chino
-if(_cyear == start_year, 510, chino_tds_end [_y-1]) 
-chino.put * blended_tds				
-chino.take * chino_tds_start 				
-max(chino_wq_start + chino_put_wq - chino_take_wq,0)
-chino_wq_end/(chino.resolved + .000000001)
-compton_cup_take_wq * L_per_af / mg_per_ton 
-compton_cup_tds_start * compton_cup
-compton_cup.put * blended_tds				
-compton_cup.take * compton_cup_tds_start 				
-max(compton_cup_wq_start + compton_cup_put_wq - compton_cup_take_wq,0)
-if(_cyear == start_year, 429, compton_cup_tds_end [_y-1]) 
-compton_cup_wq_end/(compton_cup.resolved + 0.000000001)
-desal_wq * L_per_af / mg_per_ton 
-desal_af * desal_tds 
-desal 
-50
-dvl_take_wq * L_per_af / mg_per_ton 
-dvl_tds_start * dvl_level_start
-dvl_put_total * blended_tds				
-dvl_take_total * dvl_tds_start 				
-max(dvl_wq_start + dvl_put_wq - dvl_take_wq,0)
-if(_cyear == start_year, 464, dvl_tds_end [_y-1]) 
-dvl_wq_end/(dvl_level + 0.000000001)
-elsinore_take_wq * L_per_af / mg_per_ton 
-elsinore_tds_start * elsinore
-elsinore.put * blended_tds				
-elsinore.take * elsinore_tds_start 				
-max(elsinore_wq_start + elsinore_put_wq - elsinore_take_wq,0)
-if(_cyear == start_year, 600, elsinore_tds_end [_y-1]) 
-elsinore_wq_end/(elsinore.resolved + 0.000000001)
-foothill_cup_take_wq * L_per_af / mg_per_ton 
-foothill_cup_tds_start * foothill_cup
-foothill_cup.put * blended_tds				
-foothill_cup.take * foothill_cup_tds_start 				
-max(foothill_cup_wq_start + foothill_cup_put_wq - foothill_cup_take_wq,0)
-if(_cyear == start_year, 500, foothill_cup_tds_end [_y-1]) 
-foothill_cup_wq_end/(foothill_cup.resolved + 0.000000001)
-groundwater_wq * L_per_af / mg_per_ton 
-500
-groundwater
-gwr_wq * L_per_af / mg_per_ton 
-gwr_af * gwr_tds 
-gw_recovery 
-500
-laa_wq * L_per_af / mg_per_ton 
-laa_af * laa_tds 
-laa
-250
-lakewood_take_wq * L_per_af / mg_per_ton 
-lakewood_tds_start * lakewood
-lakewood.put * blended_tds				
-lakewood.take * lakewood_tds_start 				
-max(lakewood_wq_start + lakewood_put_wq - lakewood_take_wq,0)
-if(_cyear == start_year, 429, lakewood_tds_end [_y-1]) 
-lakewood_wq_end/(lakewood.resolved + 0.000000001)
-live_oak_take_wq * L_per_af / mg_per_ton 
-live_oak_tds_start * live_oak
-live_oak.put * blended_tds				
-live_oak.take * live_oak_tds_start 				
-max(live_oak_wq_start + live_oak_put_wq - live_oak_take_wq,0)
-if(_cyear == start_year, 510, live_oak_tds_end [_y-1]) 
-live_oak_wq_end/(live_oak.resolved + 0.000000001)
-long_beach_take_wq * L_per_af / mg_per_ton 
-long_beach_tds_start * long_beach
-long_beach.put * blended_tds				
-long_beach.take * long_beach_tds_start 				
-max(long_beach_wq_start + long_beach_put_wq - long_beach_take_wq,0)
-if(_cyear == start_year, 429, long_beach_tds_end [_y-1]) 
-long_beach_wq_end/(long_beach.resolved + 0.000000001)
-orange_county_take_wq * L_per_af / mg_per_ton 
-orange_county_tds_start * orange_county
-orange_county.put * blended_tds				
-orange_county.take * orange_county_tds_start 				
-max(orange_county_wq_start + orange_county_put_wq - orange_county_take_wq,0)
-if(_cyear == start_year, 441, orange_county_tds_end [_y-1]) 
-orange_county_wq_end/(orange_county.resolved + 0.000000001)
-recycling_wq * L_per_af / mg_per_ton 
-recycling_af * recycling_tds 
-recycling 
-if(_cyear == start_year, 750, blended_tds [_y-1] + 325)
-lake_skinner_take_wq * L_per_af / mg_per_ton 
-lake_skinner_tds_start * lake_skinner
-lake_skinner.put * blended_tds				
-lake_skinner.take * lake_skinner_tds_start 				
-max(lake_skinner_wq_start + lake_skinner_put_wq - lake_skinner_take_wq,0)
-if(_cyear == start_year, 562, lake_skinner_tds_end [_y-1]) 
-lake_skinner_wq_end/(lake_skinner.resolved + 0.000000001)
-surface_wq * L_per_af / mg_per_ton 
-surface_af * surface_tds 
-surface
-if(_cyear == start_year, 200,blended_tds [_y-1])
-upper_claremont_take_wq * L_per_af / mg_per_ton 
-upper_claremont_tds_start * upper_claremont
-upper_claremont.put * blended_tds				
-upper_claremont.take * upper_claremont_tds_start 				
-max(upper_claremont_wq_start + upper_claremont_put_wq - upper_claremont_take_wq,0)
-if(_cyear == start_year, 510, upper_claremont_tds_end [_y-1]) 
-upper_claremont_wq_end/(upper_claremont.resolved + 0.000000001)
-swp_exclusive_west_wq * L_per_af / mg_per_ton 
-swp_exclusive_west_af * swp_west_tds
-swp_tds + 75
-max(swp_west_demand - swp_west_shortage,0)
-swp_exclusive_east_wq * L_per_af / mg_per_ton 
-swp_exclusive_east_af * swp_tds 
-max(swp_east_demand - swp_east_shortage,0) 
-(delta_wq + arvin_wq + kerndelta_wq + semitropic_wq)/(delta_af + arvin.take + kerndelta.take + semitropic.take)  
-delta_af * delta_tds
-mwd_delta_af + other_delta_af
-swp_existing + dwcv_swp + mwd_article21 + yuba_component_2 + yuba_component_3 + swpcarryover.take + yuba_component_4.take + swp_exclusive_transfer.take + swp_blended_transfer.take + central_valley_exclusive_transfer.take + central_valley_blended_transfer.take
-central_coast_contractors + so_cal_contractors + san_joaquin_contractors
-70486 * swp_alloc
-(2593100 - 1911500 - 171100) * swp_alloc
-1170000  * swp_alloc
-delta_tds_array[_tyear-tyear0][1]
-arvin.take * arvin_tds 									
-213
-kerndelta.take * kerndelta_tds									
-282
-semitropic.take * semitropic_tds 									
-421

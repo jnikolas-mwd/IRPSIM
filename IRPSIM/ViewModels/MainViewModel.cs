@@ -19,35 +19,6 @@ using System.Windows.Media;
 
 namespace IRPSIM.ViewModels
 {
-    class ProgressToProgressVisibleConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            int n = int.Parse(value.ToString());
-            return (n > 0 && n < 100 ? Visibility.Visible : Visibility.Hidden);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return DependencyProperty.UnsetValue;
-        }
-    }
-
-    class SelectedToForegroundConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            Debug.WriteLine(value);
-            bool b = Boolean.Parse(value.ToString());
-            return (b ? Brushes.Red : Brushes.Black);
-        }
-
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-        {
-            return DependencyProperty.UnsetValue;
-        }
-    }
-
     class MainViewModel : ViewModelBase
     {
         //*** TODO: Abstract out as an IFilesViewModel interface injected as a dependency through MainViewModel constructor
@@ -58,14 +29,14 @@ namespace IRPSIM.ViewModels
         private BackgroundWorker backgroundWorkerOpenProject = new BackgroundWorker();
         private BackgroundWorker backgroundWorkerRunSimulation = new BackgroundWorker();
 
-        private List<ErrorViewModel> _errors = new List<ErrorViewModel>();
+        private List<ErrorViewModel> _threadsafeerrors = new List<ErrorViewModel>();
 
         private IGetFileName _getFileNameService;
                                
         private int _notify(int ntype, String msg, int data)
         {
             if (ntype == 1 || ntype == 2)
-                _errors.Add(new ErrorViewModel(ntype, msg));
+                _threadsafeerrors.Add(new ErrorViewModel(ntype, msg));
             else if (ntype == 3 || ntype == 4)
                 this.Log += (msg + System.Environment.NewLine);
             else if (ntype == 6)
@@ -109,7 +80,7 @@ namespace IRPSIM.ViewModels
                 _selectedObject = value;
                 CMWrappedIrpObject obj = value as CMWrappedIrpObject;
                 if (obj != null)
-                    Debug.WriteLine(obj.FileId);
+                    Debug.WriteLine(obj.FileIndex);
                 RaisePropertyChanged("SelectedObject");
             }
         }
@@ -175,7 +146,21 @@ namespace IRPSIM.ViewModels
 
         public string ProjectTitle
         {
-            get { string ret = irpApp.ProjectName; return ret == "" ? "IRPSIM" : ret; }
+            get { string ret = irpApp.ProjectFile; return ret == "" ? "IRPSIM" : ret; }
+        }
+
+        bool _isSimulationRunning = false;
+        public bool IsSimulationRunning
+        {
+            get { return _isSimulationRunning; }
+            set
+            {
+                if (value != _isSimulationRunning)
+                {
+                    _isSimulationRunning = value;
+                    RaisePropertyChanged("IsSimulationRunning");
+                }
+            }
         }
 
         bool _canRunSimulation = false;
@@ -210,32 +195,6 @@ namespace IRPSIM.ViewModels
  
         #endregion
 
-        public string IrpObjectType(object obj)
-        {
-            CMWrappedIrpObject wo = obj as CMWrappedIrpObject;
-
-            if (wo == null)
-                return "None";
-
-            if (wo is CMWrappedVariable)
-            {
-                CMWrappedVariable v = wo as CMWrappedVariable;
-
-                if (v.NType == NodeType.Demand)
-                    return "Demand";
-                if (v.NType == NodeType.Supply)
-                    return "Supply";
-                if (v.NType == NodeType.Storage)
-                    return "Storage";
-                if (v.NType == NodeType.Cost)
-                    return "Cost";
-                return (v.FileId >= 0 ? "UserVariable" : "SystemVariable");
-            }
-
-            return wo.Type.Substring(2);
-        }
-
-
         #region Commands
 
         RelayCommand<object> _testCommand;
@@ -259,6 +218,7 @@ namespace IRPSIM.ViewModels
                 return _testCommand2;
             }
         }
+        
         RelayCommand _projectOpenCommand;
         public RelayCommand ProjectOpenCommand
         {
@@ -266,6 +226,28 @@ namespace IRPSIM.ViewModels
                 if (_projectOpenCommand==null)
                     _projectOpenCommand = new RelayCommand(openProjectDelegate, () => { return CanOpenProject; });
                 return _projectOpenCommand;
+            }
+        }
+
+        RelayCommand _projectCloseCommand;
+        public RelayCommand ProjectCloseCommand
+        {
+            get
+            {
+                if (_projectCloseCommand == null)
+                    _projectCloseCommand = new RelayCommand(closeProjectDelegate);
+                return _projectCloseCommand;
+            }
+        }
+
+        RelayCommand _projectReloadCommand;
+        public RelayCommand ProjectReloadCommand
+        {
+            get
+            {
+                if (_projectReloadCommand == null)
+                    _projectReloadCommand = new RelayCommand(reloadProjectDelegate);
+                return _projectReloadCommand;
             }
         }
         
@@ -282,6 +264,8 @@ namespace IRPSIM.ViewModels
 
         #endregion
 
+        #region Command Delegates
+
         private void testDelegate(object param)
         {
             CMWrappedIrpObject obj = param as CMWrappedIrpObject;
@@ -297,7 +281,7 @@ namespace IRPSIM.ViewModels
 
             KeyEventArgs a = param as KeyEventArgs;
 
-            if (a.Key == Key.Space) 
+            if (a.Key == Key.Space)
                 obj.Selected = !obj.Selected;
         }
 
@@ -311,7 +295,28 @@ namespace IRPSIM.ViewModels
 
             string path = _getFileNameService.GetFileName();
 
-            if (path!=null)
+            if (path != null)
+            {
+                CanOpenProject = false;
+                CanRunSimulation = false;
+                backgroundWorkerOpenProject.RunWorkerAsync(path);
+            }
+        }
+
+        private void closeProjectDelegate()
+        {
+            Log = "";
+            Errors.Clear();
+            irpApp.CloseProject();
+            CanOpenProject = true;
+            CanRunSimulation = false;
+        }
+
+        private void reloadProjectDelegate()
+        {
+            string path = irpApp.ProjectFile;
+            closeProjectDelegate();
+            if (path != "")
             {
                 CanOpenProject = false;
                 CanRunSimulation = false;
@@ -328,8 +333,44 @@ namespace IRPSIM.ViewModels
                 return;
             }
             */
+            _threadsafeerrors.Clear();
+            Errors.Clear();
+
+            IsSimulationRunning = true;
+
             backgroundWorkerRunSimulation.RunWorkerAsync();
         }
+
+        #endregion
+        
+        #region Methods
+
+        public string IrpObjectType(object obj)
+        {
+            CMWrappedIrpObject wo = obj as CMWrappedIrpObject;
+
+            if (wo == null)
+                return "None";
+
+            if (wo is CMWrappedVariable)
+            {
+                CMWrappedVariable v = wo as CMWrappedVariable;
+
+                if (v.NType == IrpNodeType.Demand)
+                    return "Demand";
+                if (v.NType == IrpNodeType.Supply)
+                    return "Supply";
+                if (v.NType == IrpNodeType.Storage)
+                    return "Storage";
+                if (v.NType == IrpNodeType.Cost)
+                    return "Cost";
+                return (v.FileId >= 0 ? "UserVariable" : "SystemVariable");
+            }
+
+            return wo.Type.Substring(2);
+        }
+
+        #endregion
 
         private void backgroundWorkerOpenProject_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -340,14 +381,18 @@ namespace IRPSIM.ViewModels
         {
             RaisePropertyChanged("ProjectTitle");
             irpApp.AfterOpenProject();
-            CanRunSimulation = true;
             CanOpenProject = true;
-  
-            foreach (ErrorViewModel m in _errors)
-            {
+
+            foreach (ErrorViewModel m in _threadsafeerrors)
                 Errors.Add(m);
-                HasErrors = true;
+
+            if (_threadsafeerrors.Count > 0)
+            {
+                HasErrors=true;
+                CanRunSimulation = false;
             }
+            else
+                CanRunSimulation=true;
          }
 
         private void backgroundWorkerRunSimulation_DoWork(object sender, DoWorkEventArgs e)
@@ -359,11 +404,13 @@ namespace IRPSIM.ViewModels
 
         private void backgroundWorkerRunSimulation_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            foreach (ErrorViewModel m in _errors)
-            {
+            foreach (ErrorViewModel m in _threadsafeerrors)
                 Errors.Add(m);
+ 
+            if (_threadsafeerrors.Count>0)
                 HasErrors = true;
-            }
+
+            IsSimulationRunning = false;
         }
 
         private void openProject(string filename)
