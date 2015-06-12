@@ -26,7 +26,7 @@
 #include "cmdefs.h"
 #include "bgvarray.h"
 #include "smvarray.h"
-#include "cmstring.h"
+#include "string.h"
 
 #include <fstream>
 using namespace std;
@@ -46,7 +46,7 @@ public:
 
 class _IRPCLASS CMSimulationArray
 {
-	CMString   filename;
+	string   filename;
 	wfstream* file;
     wchar_t     head[16];
 	float*   fbuffer;
@@ -79,18 +79,18 @@ public:
    void  DeleteFileOnClose(int action)
    	{if (action) state|=deletefileonclose;else state&=~deletefileonclose;}
 	void  SetSaveSize(long sz);
-	void  AssignVariable(unsigned short var,const CMString& name,const CMString& type,int s)
+	void  AssignVariable(unsigned short var,const string& name,const string& type,int s)
 		{if (vardesc) vardesc->AddAt(var,CMVariableDescriptor(name,type,s));}
 	void  AddAt(const CMTime& t,unsigned var,long trial,float val);
 //	void  Add(float val);
 	float At(const CMTime& t,unsigned var,long trial,int usekey=0);
-	float At(const CMTime& t,const CMString& var,long trial,int usekey=0)
+	float At(const CMTime& t,const string& var,long trial,int usekey=0)
 		{return At(t,VariableIndex(var),trial,usekey);}
 // 	float Sum(const CMTime& time,unsigned var,long trial,int timesteps);
-// 	float Sum(const CMTime& time,const CMString& var,long trial,int timesteps)
+// 	float Sum(const CMTime& time,const string& var,long trial,int timesteps)
 //		{return Sum(time,VariableIndex(var),trial,timesteps);}
 	CMTime Aggregate(const CMTime& time,long trial,int resolution,unsigned* varindex,float* results,unsigned n);
-	float Aggregate(const CMTime& time,const CMString& var,long trial,int resolution);
+	float Aggregate(const CMTime& time,const string& var,long trial,int resolution);
 	CMTime Summary(const CMTime& time,int resolution,unsigned* varindex,float* vmean,float* vstderr,float* vmin,float* vmax,unsigned n,long begtrial=-1,long endtrial=-1);
 
 	long Count() const {return filecount + array->Count();}
@@ -102,11 +102,11 @@ public:
 	unsigned short Variables()  const {return nvars;}
 	CMTimeMachine TimeMachine()  const {return time;}
 	int MakeKey(const CMTime& t,int var);
-	CMString GetVariableName(unsigned n) const;
-	CMString GetVariableType(unsigned n) const;
+	string GetVariableName(unsigned n) const;
+	string GetVariableType(unsigned n) const;
 	int  GetVariableState(unsigned n) const;
 	void SetVariableState(unsigned n,int aState,BOOL action);
-   unsigned VariableIndex(const CMString& name) const;
+   unsigned VariableIndex(const string& name) const;
 	void WriteBinary();
 	void WriteBinary(wostream& s);
 	void ReadBinary();

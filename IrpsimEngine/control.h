@@ -35,7 +35,7 @@ class _IRPCLASS CMControlItem
    int state;
    enum {sDontRenew=0x0001};
 public:
-	CMControlItem(const CMString& def);
+	CMControlItem(const string& def);
    void Initialize(CMTimeMachine* t);
    double LimitAmount(CMTimeMachine* t)
    	{return controlvalue.GetValue(t,CM_BIGDOUBLE,1);}
@@ -48,10 +48,10 @@ class _IRPCLASS CMControl
 	class _IRPCLASS CMPSmallArray<CMControlItem> control_items;
    double default_value;
 public:
-	CMControl(const CMString& def,double dv);
+	CMControl(const string& def,double dv);
 	CMControl(double dv) : control_items() , default_value(dv) {}
 	~CMControl();
-   void Set(const CMString& def);
+   void Set(const string& def);
    void Initialize(CMTimeMachine* t);
 	double LimitAmount(CMTimeMachine* t);
    double AmountRemainingNow(CMTimeMachine* t);

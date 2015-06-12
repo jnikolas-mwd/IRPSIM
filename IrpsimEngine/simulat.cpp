@@ -91,7 +91,7 @@ state(0)
 }
 
 /*
-CMSimulation::CMSimulation(const CMString& fname,short mode,CMIrpApplication* a) :
+CMSimulation::CMSimulation(const string& fname,short mode,CMIrpApplication* a) :
 filename(fname),
 pApp(a),
 script(0),
@@ -130,7 +130,7 @@ CMSimulation::~CMSimulation()
 }
 
 /*
-BOOL CMSimulation::LoadSimulationFile(const CMString& fname,short mode)
+BOOL CMSimulation::LoadSimulationFile(const string& fname,short mode)
 {
 	if (Running())
 		return FALSE;
@@ -213,7 +213,7 @@ void CMSimulation::initialize()
 
 	begintime = CM_BIGTIME;
 
-   CMString yearendstr = options.GetOption(L"yearend");
+   string yearendstr = options.GetOption(L"yearend");
 	int yearend = yearendstr.length() ? CMTime::Month(yearendstr.c_str()) : 12;
 
 	timemachine->AddCycle(options.GetOption(L"simbegin").c_str(),
@@ -236,7 +236,7 @@ void CMSimulation::initialize()
 	for (i = 0; pApp && i<pApp->LoadedFilesCount(); i++) {
 		loadedfiles.Add(pApp->LoadedFile(i));
 		CMTokenizer next(pApp->LoadedFile(i));
-      CMString name = next(L" \t\r\n");
+      string name = next(L" \t\r\n");
       is.open(name.c_str(),ios::in | IOS_BINARY);
       if (!is.fail()) {
 		  os << file_header << L" " << pApp->LoadedFile(i) << ENDL;
@@ -250,7 +250,7 @@ void CMSimulation::initialize()
 	if (script) {
 		script->SetSimulationContext(this, pApp);
 		if (script->Fail()) {
-			CMNotifier::Notify(CMNotifier::ERROR, CMString(L"problem with script <" + script->GetName() + L">"));
+			CMNotifier::Notify(CMNotifier::ERROR, string(L"problem with script <" + script->GetName() + L">"));
 			state |= sBadScript;
 		}
    }
@@ -302,7 +302,7 @@ void CMSimulation::initialize()
 	state |= sInitialized;
 }
 
-void CMSimulation::SetScript(const CMString& sname)
+void CMSimulation::SetScript(const string& sname)
 {
 	// return if simulation is already initialized (or loaded from a file)
 	if (state&(sInitialized))
@@ -336,7 +336,7 @@ void CMSimulation::IgnoreMissingVariables()
 	state &= ~sMissingVariables;
 }
 
-int CMSimulation::UsesVariable(const CMString& varname)
+int CMSimulation::UsesVariable(const string& varname)
 {
 	for (unsigned i=0;i<summaryvars.Count();i++)
    	if (varname == summaryvars[i]->GetName())
@@ -376,11 +376,11 @@ int CMSimulation::find_missing_variables()
 				if (!CMVariable::Find(vname) && !CMDefinitions::IsDefined(vname)) {
 					if (!missingvars.Contains(vname)) {
 						missingvars.Add(vname);
-						CMNotifier::Notify(CMNotifier::ERROR, L"Missing variable or definition " + CMString(vname) + L" in definition of " + v->GetName());
+						CMNotifier::Notify(CMNotifier::ERROR, L"Missing variable or definition " + string(vname) + L" in definition of " + v->GetName());
 					}
 				}
 			}
-			CMString atype,aname;
+			string atype,aname;
 			for (int i=0;v->GetAssociation(i,atype,aname);i++) {
 				CMVariable* vassoc = CMVariable::Find(aname);
 				if (vassoc) {
@@ -389,7 +389,7 @@ int CMSimulation::find_missing_variables()
 						if (!CMVariable::Find(vname)) {
 							if (!missingvars.Contains(vname)) {
 								missingvars.Add(vname);
-								CMNotifier::Notify(CMNotifier::ERROR, L"Missing variable or definition " + CMString(vname) + L" in definition of " + v->GetName());
+								CMNotifier::Notify(CMNotifier::ERROR, L"Missing variable or definition " + string(vname) + L" in definition of " + v->GetName());
 							}
 						}
 					}
@@ -426,11 +426,11 @@ void CMSimulation::save_simulation_tail(wostream& s,int startpoint)
 */
 
 /*
-int CMSimulation::SaveTo(const CMString& fname)
+int CMSimulation::SaveTo(const string& fname)
 {
 	wfstream s(fname.c_str(),ios::out|IOS_BINARY);
 	if (!s.fail()) {
-		if (pApp) pApp->LogMessage(CMString(L"Saving Simulation ") + GetName() + CMString(L" to ") + fname, 1);
+		if (pApp) pApp->LogMessage(string(L"Saving Simulation ") + GetName() + string(L" to ") + fname, 1);
 		simarray->WriteBinary(s);
       save_simulation_tail(s,0);
 	}
@@ -450,7 +450,7 @@ void CMSimulation::Save()
 	}
 	else if (!(state&sRunning) && timemachine->AtBeginning()) {
 		simarray->DeleteFileOnClose(0);
-		CMString msg = CMString(L"Saving Simulation ") + GetName();
+		string msg = string(L"Saving Simulation ") + GetName();
 		if (pApp) pApp->LogMessage(msg, 1);
 		if (pApp) pApp->InfoMessage(msg);
 		simarray->WriteBinary();
@@ -466,7 +466,7 @@ void CMSimulation::SetOptions(const CMOptions& op)
 		SetOption(op.At(i)->GetName(),op.At(i)->GetValue());
 }
 
-void CMSimulation::SetOption(const CMString& opname,const CMString& opval)
+void CMSimulation::SetOption(const string& opname,const string& opval)
 {
 	// return if simulation has been initialized and option is from
 	// set of options that can't be changed after initialization
@@ -497,15 +497,15 @@ double CMSimulation::get_cost(int region)
 }
 
 /*
-int CMSimulation::RebuildFiles(const CMString& path)
+int CMSimulation::RebuildFiles(const string& path)
 {
-	int oldcase = CMString::set_case_sensitive(0);
-	CMString dir(path);
+	int oldcase = string::set_case_sensitive(0);
+	string dir(path);
    if (dir[dir.length()-1] != L'\\') dir += L"\\";
    wifstream is(tempfile.c_str(),IOS_BINARY);
 
    wofstream os;
-	CMString line,token;
+	string line,token;
    int reading = 0;
 
    while (!is.fail() && !is.eof()) {
@@ -524,14 +524,14 @@ int CMSimulation::RebuildFiles(const CMString& path)
       }
       else if (token == file_header) {
       	token = dir + strippath(next(L" \t\r\n"));
-		if (pApp) pApp->InfoMessage(CMString(L"Rebuilding file ") + token);
+		if (pApp) pApp->InfoMessage(string(L"Rebuilding file ") + token);
          os.open(token.c_str(),ios::out|IOS_BINARY);
          reading = 1;
       }
 	}
 
    if (pApp) pApp->InfoMessage(L"");
-	CMString::set_case_sensitive(oldcase);
+	string::set_case_sensitive(oldcase);
 	return 1;
 }
 */
@@ -568,7 +568,7 @@ DWORD WINAPI CMSimulation::SimRunProc(LPVOID lpParameter)
 			if (atbeginning) {
 				CMVariable::ResetTrial();
 				if (sim->trialno == 0 && pApp)
-					pApp->LogMessage(CMString(L"Start Simulation ") + sim->GetName(), 1);
+					pApp->LogMessage(string(L"Start Simulation ") + sim->GetName(), 1);
 			}
 
 			if (script) script->Run(timemachine);
@@ -590,7 +590,7 @@ DWORD WINAPI CMSimulation::SimRunProc(LPVOID lpParameter)
 			sim->state |= sStopped;
 			sim->trialno--;
 			if (pApp) {
-				CMString msg(L"End Simulation ");
+				string msg(L"End Simulation ");
 				pApp->LogMessage(msg + sim->GetName(), 1);
 				if (sim->options.GetOption(L"autooutcomes")==L"yes")
 					pApp->WriteOutcomes(sim->options.GetOption(L"outcomefile"), sim);
@@ -682,7 +682,7 @@ BOOL CMSimulation::Run()
 		state |= sStopped;
 		trialno--;
 		if (pApp) {
-			CMString fileName;
+			string fileName;
 			CMNotifier::Notify(CMNotifier::LOGTIME, L"End Simulation " + GetName());
 			if (options.GetOption(L"autooutcomes") == L"yes") {
 				fileName = options.GetOption(L"outcomefile");
@@ -739,7 +739,7 @@ void CMSimulation::Run()
 		if (atbeginning) {
 			CMVariable::ResetTrial();
 			if (trialno==0 && pApp)
-				pApp->LogMessage(CMString("Start Simulation ") + GetName(),1);
+				pApp->LogMessage(string("Start Simulation ") + GetName(),1);
 		}
 
 		if (script) script->Run(timemachine);
@@ -760,7 +760,7 @@ void CMSimulation::Run()
 		state |= sStopped;
 		trialno--;
 		if (pApp) {
-			CMString msg("End Simulation ");
+			string msg("End Simulation ");
 			pApp->LogMessage(msg+GetName(),1);
 			if (options.GetOption("autooutcomes")=="yes")
 				pApp->WriteOutcomes(options.GetOption("outcomefile"),this);

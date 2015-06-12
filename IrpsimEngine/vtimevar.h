@@ -32,9 +32,9 @@ protected:
 	virtual double evaluate(CMTimeMachine* t,int index1=0,int index2=0);
 	virtual void update_variable_links();
 public:
-	CMVTimevar(const CMString& aName);
+	CMVTimevar(const string& aName);
 	~CMVTimevar();
-	virtual CMString VariableType() {return GetEvalType();}
+	virtual string VariableType() {return GetEvalType();}
     virtual void SetSpecialValues(CMTimeMachine* t,double v1=0,double v2=0,double v3=0,double v4=0);
 	static const wchar_t* GetEvalType() {return L"CMVTimevar";}
 };

@@ -32,7 +32,7 @@ type(Null)
 	Set(val);
 }
 
-CMVariableOrConstant::CMVariableOrConstant(const CMString& str) :
+CMVariableOrConstant::CMVariableOrConstant(const string& str) :
 type(Null)
 {
 	Set(str);
@@ -47,7 +47,7 @@ CMVariableOrConstant::CMVariableOrConstant(const CMVariableOrConstant& vc)
    	u.v = vc.u.v;
 }
 
-void CMVariableOrConstant::Set(const CMString& str)
+void CMVariableOrConstant::Set(const string& str)
 {
 	if (str.is_null())
    	type = Null;

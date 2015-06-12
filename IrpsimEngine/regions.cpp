@@ -21,9 +21,9 @@
 #include "StdAfx.h"
 #include "regions.h"
 
-CMVSmallArray<CMString> CMRegions::regions;
+CMVSmallArray<string> CMRegions::regions;
 
-int CMRegions::GetRegionId(const CMString& name)
+int CMRegions::GetRegionId(const string& name)
 {
 	unsigned short loc;
 	if (name.is_null())
@@ -34,10 +34,10 @@ int CMRegions::GetRegionId(const CMString& name)
    return regions.Count()-1;
 }
 
-CMString CMRegions::GetRegionName(int id)
+string CMRegions::GetRegionName(int id)
 {
 	if (id>=0 && id<regions.Count())
    	return regions.At((unsigned short)id);
-   return CMString();
+   return string();
 }
 

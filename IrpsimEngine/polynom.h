@@ -28,7 +28,7 @@
 #include "smparray.h"
 #include "cmdefs.h"
 #include "function.h"
-#include "cmstring.h"
+#include "string.h"
 #include <iostream>
 using namespace std;
 
@@ -44,7 +44,7 @@ class _IRPCLASS CMPolynomial
 	friend class _IRPCLASS CMPolynomialIterator;
 
 	class _IRPCLASS CMVSmallArray<double> 		 constants;
-	class _IRPCLASS CMVSmallArray<CMString> 	 varnames;
+	class _IRPCLASS CMVSmallArray<string> 	 varnames;
 	class _IRPCLASS CMPSmallArray<CMIrpObject> 	 variables;
 	class _IRPCLASS CMPSmallArray<CMPolynomial>  expressions;
 	class _IRPCLASS CMVSmallArray<CMFunction> 	 functions;
@@ -56,7 +56,7 @@ class _IRPCLASS CMPolynomial
 	static int globalstate;
 	int state;
 
-	CMString* original;
+	string* original;
 
 // used during evaluation
 
@@ -126,12 +126,12 @@ class _IRPCLASS CMPolynomial
 
 	void set_equal_to(const CMPolynomial& p);
 	int translate(const wchar_t* aString);
-	int translate_next_token(wchar_t*& ptr, int& tok, CMString& str, int& n, CMVSmallArray<CMString>& args);
-	int translate_variable_arg(const CMString& str,int& tok,CMString& s);
-	int add_constant_or_expression(CMString& str);
-	int get_to_stop_symbol(const wchar_t* symbols, wchar_t*& ps, CMString& str);
+	int translate_next_token(wchar_t*& ptr, int& tok, string& str, int& n, CMVSmallArray<string>& args);
+	int translate_variable_arg(const string& str,int& tok,string& s);
+	int add_constant_or_expression(string& str);
+	int get_to_stop_symbol(const wchar_t* symbols, wchar_t*& ps, string& str);
 	int find_bugs();
-	void report_error(int code,const CMString& t);
+	void report_error(int code,const string& t);
 
 	wostream& write(wostream& os);
 	wostream& debug(wostream& os);
@@ -147,11 +147,11 @@ public:
 /*
 	class CMXPolynomial : public xmsg
 	{
-		static CMString make_string(int c,const CMString& t);
-		CMString text;
+		static string make_string(int c,const string& t);
+		string text;
 		int code;
 	public:
-		CMXPolynomial(int c,const CMString& t) :
+		CMXPolynomial(int c,const string& t) :
 			code(c), text(t) , xmsg(make_string(c,t)) {}
 		CMXPolynomial(const CMXPolynomial& xp) :
 			code(xp.code), text(xp.text) , xmsg(make_string(xp.code,xp.text)) {}
@@ -161,13 +161,13 @@ public:
 	CMPolynomial(const wchar_t* str = 0);
 	CMPolynomial(const CMPolynomial& p);
 	~CMPolynomial();
-	CMString GetString();
+	string GetString();
 	void UpdateVariableLinks();
 	int  ContainsVariables() {return (state&hasvariables);}
 	double Evaluate(CMTimeMachine* t);
 	int Fail() {return (state&failed);}
 	int GetErrorCode() { return err_code; }
-	CMString GetErrorString() { return err_code<0 ? L"" : errorstrings[err_code]; }
+	string GetErrorString() { return err_code<0 ? L"" : errorstrings[err_code]; }
 	CMPolynomial& operator = (const wchar_t* str) { translate(str); return *this; }
 	CMPolynomial& operator = (const CMPolynomial& p) {set_equal_to(p);return *this;}
 

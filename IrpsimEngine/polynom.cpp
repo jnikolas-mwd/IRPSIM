@@ -84,7 +84,7 @@ state(0)
 		err_code = errorcode;
 		state |= failed;
 		report_error(errorcode, str);
-//		throw CMXPolynomial(errorcode,CMString(str));
+//		throw CMXPolynomial(errorcode,string(str));
 	}
 }
 
@@ -107,9 +107,9 @@ CMPolynomial::~CMPolynomial()
    if (original) delete original;
 }
 
-void CMPolynomial::report_error(int code,const CMString& t)
+void CMPolynomial::report_error(int code,const string& t)
 {
-	CMString s(errorstrings[code]);
+	string s(errorstrings[code]);
 	s += L" : " + t;
 	CMNotifier::Notify(CMNotifier::ERROR,s);
 }
@@ -130,7 +130,7 @@ void CMPolynomial::set_equal_to(const CMPolynomial& p)
    }
 
    if (p.original)
-	  	original = new CMString(*p.original);
+	  	original = new string(*p.original);
 
    unsigned short i;
 
@@ -207,8 +207,8 @@ int CMPolynomial::translate(const wchar_t* aString)
    }
 
     wchar_t* ptr = (wchar_t*)aString;
-	CMString str;
-	CMVSmallArray<CMString> args;
+	string str;
+	CMVSmallArray<string> args;
 	int tok;  // the token
 	int n;  // the number of modifiers or offset (e.g. for definitions)
 
@@ -230,7 +230,7 @@ int CMPolynomial::translate(const wchar_t* aString)
 			varnames.Add(str.c_str());
 			variables.Add(0);
 			int toktype;
-			CMString s;
+			string s;
 			for (int i=0;i<n&&errorcode<0;i++) {
 				// type of variable arg (index or lag) will appear in
 				// toktype, the argument itself will appear in s
@@ -271,7 +271,7 @@ int CMPolynomial::translate(const wchar_t* aString)
 	if (errorcode<0)
 		errorcode = find_bugs();
 	if (errorcode>=0)
-		original = new CMString(stripends(CMString(aString)));
+		original = new string(stripends(string(aString)));
 
 	if (constants.Count()) 		constants.Resize(constants.Count());
 	if (varnames.Count())  		varnames.Resize(varnames.Count());
@@ -321,7 +321,7 @@ int CMPolynomial::find_bugs()
 	return err;
 }
 
-int CMPolynomial::add_constant_or_expression(CMString& str)
+int CMPolynomial::add_constant_or_expression(string& str)
 {
 	int ret = -1;
 	if (isnumber(str.c_str())) {
@@ -339,7 +339,7 @@ int CMPolynomial::add_constant_or_expression(CMString& str)
 	return ret;
 }
 
-int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, CMString& str, int& n, CMVSmallArray<CMString>& args)
+int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, string& str, int& n, CMVSmallArray<string>& args)
 {
 	int i;
 	int err=-1;
@@ -362,7 +362,7 @@ int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, CMString& str, i
 	// check to see if item is #IF
 	if (!_wcsnicmp(ptr,L"@IF",3)) {
 		n=1;
-		args.AddAt(0,CMString());
+		args.AddAt(0,string());
 		tok = If;
 		ptr += 3;
 		skipwhite(ptr);
@@ -377,7 +377,7 @@ int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, CMString& str, i
 			skipwhite(ptr);
 		}
 		symb = *ptr++;
-		args.AddAt(1,CMString());
+		args.AddAt(1,string());
 		n=2;
 		if (!(symb==L'(' || symb==L'{'))
 			return XIllegalCondition;
@@ -386,7 +386,7 @@ int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, CMString& str, i
 		skipwhite(ptr);
 		if (!_wcsnicmp(ptr, L"@ELSE", 5)) {
 			n=3;
-			args.AddAt(2,CMString());
+			args.AddAt(2,string());
 			ptr+=5;
 			skipwhite(ptr);
 			symb = *ptr++;
@@ -435,7 +435,7 @@ int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, CMString& str, i
 			// if it is in the list of definitions and the next symbol is not
 			// a letter or '_' (implying a variable name that happens to begin
 			// with the same letters as a special symbol), then add the 'special'
-			// token to the CMString.
+			// token to the string.
 			if (!(iswalnum(*(ptr+len))) && *(ptr+len) != L'_') {
 				tok = Definition;
 				n = i;
@@ -455,13 +455,13 @@ int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, CMString& str, i
 			skipwhite(ptr);
 			if (*ptr++ != L'(')
 				return XMissingArgument;
-			CMString arglist;
+			string arglist;
 			if (get_to_stop_symbol(L")",ptr,arglist)>=0)
 				return XBadArgumentList;
 			arglist += L',';
 			wchar_t* argptr = (wchar_t*)arglist.c_str();
 			for (n=0;*argptr && err<0;n++) {
-				args.AddAt(n,CMString());
+				args.AddAt(n,string());
 				if (get_to_stop_symbol(L",:",argptr,args[n])>=0)
 					err = XBadArgumentList;
 			}
@@ -478,13 +478,13 @@ int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, CMString& str, i
 		skipwhite(ptr);
 		if (*ptr++ != L'(')
 			return XMissingArgument;
-		CMString arglist;
+		string arglist;
 		if (get_to_stop_symbol(L")",ptr,arglist)>=0)
 			return XBadArgumentList;
 		arglist += L',';
 		wchar_t* argptr = (wchar_t*)arglist.c_str();
 		for (n=0;*argptr && err<0;n++) {
-			args.AddAt(n,CMString());
+			args.AddAt(n,string());
 			if (get_to_stop_symbol(L",:",argptr,args[n])>=0)
 				err = XBadArgumentList;
 		}
@@ -497,7 +497,7 @@ int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, CMString& str, i
 	while (iswalnum(*ptr) || (*ptr == L'_') || (*ptr == L'@') || (*ptr == L'.') )
 		str.append(*ptr++);
 
-	CMString indexstr;
+	string indexstr;
 	n = 0;
 	tok = Variable;
 	while (skipwhite(ptr) && err<0) {
@@ -506,7 +506,7 @@ int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, CMString& str, i
 			ptr++;
 		}
 		if (*ptr == L'[') {
-			args.AddAt(n,CMString());
+			args.AddAt(n,string());
 			if (n < 4)
 				err =	get_to_stop_symbol(L"]",++ptr,args[n++]);
 			else
@@ -519,12 +519,12 @@ int CMPolynomial::translate_next_token(wchar_t*& ptr, int& tok, CMString& str, i
 	return err;
 }
 
-/* translate_variable_arg(const CMString& str,int& tok,CMString& s) translates
+/* translate_variable_arg(const string& str,int& tok,string& s) translates
 str (appearing between [ and ]) into a lag or forward token or an
-array index. The CMString s is the lag or array index
+array index. The string s is the lag or array index
 (may be a number or expression) */
 
-int CMPolynomial::translate_variable_arg(const CMString& str,int& tok,CMString& s)
+int CMPolynomial::translate_variable_arg(const string& str,int& tok,string& s)
 {
 	enum {_t=0,_s,_i,_h,_d,_w,_m,_y};
 
@@ -571,7 +571,7 @@ int CMPolynomial::translate_variable_arg(const CMString& str,int& tok,CMString& 
 	return -1;
 }
 
-int CMPolynomial::get_to_stop_symbol(const wchar_t* rsymbols,wchar_t*& ps,CMString& str)
+int CMPolynomial::get_to_stop_symbol(const wchar_t* rsymbols,wchar_t*& ps,string& str)
 {
 	int ret = -1;
 	int count = 1;
@@ -600,9 +600,9 @@ int CMPolynomial::get_to_stop_symbol(const wchar_t* rsymbols,wchar_t*& ps,CMStri
 	return ret;
 }
 
-CMString CMPolynomial::GetString()
+string CMPolynomial::GetString()
 {
-	CMString ret;
+	string ret;
 	if (Fail()) {
    		if (original) 
 			return *original;

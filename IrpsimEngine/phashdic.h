@@ -8,7 +8,7 @@
 // DESCRIPTION:	
 // ==========================================================================
 // Template class CMPHashDictionary implements a hash of <TP> objects with 
-// a CMString key
+// a string key
 // ==========================================================================
 //
 // ==========================================================================  
@@ -21,7 +21,7 @@
 #if !defined (__PHASHDIC_H)
 #define __PHASHDIC_H
 
-#include "cmstring.h"
+#include "string.h"
 #include "smparray.h"
 
 template <class TP> class CMPHashDictionaryIterator;
@@ -37,9 +37,9 @@ public:
 	~CMPHashDictionary();
 	void Add(TP* val);
 	void Reset(int destroy=0);
-	int  Detach(const CMString& val,int destroy=0);
+	int  Detach(const string& val,int destroy=0);
     long Count();
-	TP* Find(const CMString& val);
+	TP* Find(const string& val);
 };
 
 template <class TP> class CMPHashDictionaryIterator

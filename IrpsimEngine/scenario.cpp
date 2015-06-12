@@ -32,9 +32,9 @@ CMScenario::~CMScenario()
 	options.ResetAndDestroy();
 }
 
-void CMScenario::AddEntry(const CMString& nm,const CMString& value,int forceoption)
+void CMScenario::AddEntry(const string& nm,const string& value,int forceoption)
 {
-	CMString val = stripends(value);
+	string val = stripends(value);
 	int len = nm.length();
 	if (nm[0] == L'#' || forceoption) {
 		CMOption* o = new CMOption(nm,val,this->GetApplicationId());
@@ -46,7 +46,7 @@ void CMScenario::AddEntry(const CMString& nm,const CMString& value,int forceopti
 		/*
 		int flg = 0;
 		CMTokenizer next(value);
-		CMString token;
+		string token;
 		while (!(token=next(L" \t")).is_null()) {
 			if (to_lower(token[0]) == L's') flg |= SaveFlag;
 			else if (to_lower(token[0]) == L'w') flg |= WriteFlag;
@@ -81,7 +81,7 @@ wistream& CMScenario::read(wistream& s)
 	varnames.Reset(1);
 	//flags.Reset(1);
 
-	CMString line;
+	string line;
 
 	int begin = 0;
 
@@ -91,7 +91,7 @@ wistream& CMScenario::read(wistream& s)
 		if (line.is_null() || line[0]==L'*')
 			continue;
 		CMTokenizer next(line);
-		CMString first = next(L" \t");
+		string first = next(L" \t");
 		if (line(0,wcslen(header)) == header) {
 			name = stripends(next(L"\r\n"));
 			begin = 1;

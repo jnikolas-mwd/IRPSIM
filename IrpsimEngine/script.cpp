@@ -115,7 +115,7 @@ void CMScript::reset()
    sim=0;
 }
 
-int CMScript::evaluate_token(const CMString& token)
+int CMScript::evaluate_token(const string& token)
 {
 	for (int i=0;i<=(TokEnd-TokEvaluate);i++)
    	if (token==script_tokens[i])
@@ -159,38 +159,38 @@ int CMScript::resolve_pointers()
       	script[i+1]=nline++;
    }
 	if (nif<nendif)
-		CMNotifier::Notify(CMNotifier::ERROR, CMString(error_strings[XMisplacedEndif]) + L" script <" + name + L">");
+		CMNotifier::Notify(CMNotifier::ERROR, string(error_strings[XMisplacedEndif]) + L" script <" + name + L">");
 	if (nif<nelse)
-		CMNotifier::Notify(CMNotifier::ERROR, CMString(error_strings[XMisplacedElse]) + L" script <" + name + L">");
+		CMNotifier::Notify(CMNotifier::ERROR, string(error_strings[XMisplacedElse]) + L" script <" + name + L">");
 	if (nif>nendif)
-		CMNotifier::Notify(CMNotifier::ERROR, CMString(error_strings[XMissingEndif]) + L" script <" + name + L">");
+		CMNotifier::Notify(CMNotifier::ERROR, string(error_strings[XMissingEndif]) + L" script <" + name + L">");
 	return ((nif==nendif) && (nif>=nelse)) ? 1 : 0;
 }
 
-int CMScript::parse_line(const CMString &aline,CMIrpApplication& a)
+int CMScript::parse_line(const string &aline,CMIrpApplication& a)
 {
 	static const wchar_t* delims = L" \t\r\n";
-	CMString line = stripends(aline);
+	string line = stripends(aline);
 	size_t comment_found = line.find(L"//");
    if (comment_found != CM_NPOS)
    	line = line.substr(0,comment_found);
 	CMTokenizer next(line);
 	if (line.is_null() || line[0]==L'*')
 		return ParseComment;
-   CMString token;
+   string token;
    int ret = ParseOK;
    int firsttoken=1;
    while (!(token=next(delims)).is_null()) {
    	int tok = evaluate_token(token);
       if (tok>TokEnd) {
       	ret = ParseError;
-		CMNotifier::Notify(CMNotifier::ERROR, CMString(error_strings[XSyntaxError]) + L" script <" + name + L"> line <" + line + L"> token <" + token + L">");
+		CMNotifier::Notify(CMNotifier::ERROR, string(error_strings[XSyntaxError]) + L" script <" + name + L"> line <" + line + L"> token <" + token + L">");
       }
 		if (tok==TokDo) {
 			CMScript* sfound = a.FindScript(stripends(next(L"\r\n")));
          if (sfound == 0) {
 	      	ret = ParseError;
-			CMNotifier::Notify(CMNotifier::ERROR, CMString(error_strings[XMissingScript]) + L" script <" + name + L"> line <" + line + L">");
+			CMNotifier::Notify(CMNotifier::ERROR, string(error_strings[XMissingScript]) + L" script <" + name + L"> line <" + line + L">");
          }
 		 else
          	parse_lines(*sfound,a);
@@ -204,7 +204,7 @@ int CMScript::parse_line(const CMString &aline,CMIrpApplication& a)
       script.Add(tok);
       if (tok==TokCategory || tok==TokStage || tok==TokNode) {
 		   unsigned short loc;
-			CMVSmallArray<CMString>* names = &categorynames;
+			CMVSmallArray<string>* names = &categorynames;
          if (tok==TokStage) names = &stagenames;
          else if (tok==TokNode) names = &nodenames;
 			token = next(delims);
@@ -219,7 +219,7 @@ int CMScript::parse_line(const CMString &aline,CMIrpApplication& a)
          int rule = CMAllocationUnit::TranslateAllocationRule(token);
          if (rule == CMAllocationUnit::Preserve) {
 	      	ret = ParseError;
-			CMNotifier::Notify(CMNotifier::ERROR, CMString(error_strings[XBadAllocationRule]) + L" script <" + name + L"> line <" + line + L">");
+			CMNotifier::Notify(CMNotifier::ERROR, string(error_strings[XBadAllocationRule]) + L" script <" + name + L"> line <" + line + L">");
          }
 			script.Add(rule);
       }
@@ -229,7 +229,7 @@ int CMScript::parse_line(const CMString &aline,CMIrpApplication& a)
 			if (beg != CM_NPOS) {
          	if (end==CM_NPOS) {
 		      	ret = ParseError;
-				CMNotifier::Notify(CMNotifier::ERROR, CMString(error_strings[XMissingBracket]) + L" script <" + name + L"> line <" + line + L">");
+				CMNotifier::Notify(CMNotifier::ERROR, string(error_strings[XMissingBracket]) + L" script <" + name + L"> line <" + line + L">");
                end = line.length()-1;
             }
             token = line.substr(beg+1,end-beg-1);
@@ -428,7 +428,7 @@ int CMScript::SetSimulationContext(CMSimulation* s,CMIrpApplication* app)
  	for (i=0;i<nodenames.Count();i++) {
    	  CMNode* n = CMNode::AddNode(nodenames[i]);
       if (n==0) {
-		  CMNotifier::Notify(CMNotifier::ERROR, CMString(L"undefined node in script <") + name + L">: " + nodenames[i]);
+		  CMNotifier::Notify(CMNotifier::ERROR, string(L"undefined node in script <") + name + L">: " + nodenames[i]);
          state |= sFail;
       }
 		nodes.AddAt(i,n);
@@ -437,7 +437,7 @@ int CMScript::SetSimulationContext(CMSimulation* s,CMIrpApplication* app)
 	for (i=0;i<categorynames.Count();i++) {
 		CMCategory* cat = app->FindCategory(categorynames[i]);
       if (cat==0) {
-		  CMNotifier::Notify(CMNotifier::ERROR, CMString(L"undefined category in script <") + name + L">: " + categorynames[i]);
+		  CMNotifier::Notify(CMNotifier::ERROR, string(L"undefined category in script <") + name + L">: " + categorynames[i]);
          state |= sFail;
       }
       else {
@@ -488,7 +488,7 @@ int CMScript::Run(CMTimeMachine* t)
    tm = t;
 
 	if (Fail()) {
-		CMNotifier::Notify(CMNotifier::ERROR, CMString(L"can't run script <") + name + L">: " + error_strings[XSyntaxError]);
+		CMNotifier::Notify(CMNotifier::ERROR, string(L"can't run script <") + name + L">: " + error_strings[XSyntaxError]);
 		return 0;
    }
 
@@ -592,14 +592,14 @@ wistream& CMScript::read(wistream& s)
 {
 	lines.Reset(1);
 	reset();
-	CMString line;
+	string line;
 	while (!s.eof()) {
 		line.read_line(s);
    		line = stripends(line);
 		if (line.is_null())
       		continue;
 		else if (line(0,wcslen(header)) == header)
-      		name = stripends(CMString(line.c_str()+wcslen(header)));
+      		name = stripends(string(line.c_str()+wcslen(header)));
 		else if (line(0,wcslen(footer)) == footer)
    			break;
 		else
@@ -610,20 +610,20 @@ wistream& CMScript::read(wistream& s)
 
 void CMScript::parse_lines(CMScript& s,CMIrpApplication& a)
 {
-	CMString line;
-	int oldcase = CMString::set_case_sensitive(0);
+	string line;
+	int oldcase = string::set_case_sensitive(0);
    for (unsigned short i=0;i<s.lines.Count();i++) {
 		if (parse_line(s.lines[i],a) == ParseError)
 	     	state |= sFail;
    }
-	CMString::set_case_sensitive(oldcase);
+	string::set_case_sensitive(oldcase);
 }
 
 void CMScript::Parse(CMIrpApplication& a)
 {
-	CMString line;
+	string line;
 	int begin = 0;
-	int oldcase = CMString::set_case_sensitive(0);
+	int oldcase = string::set_case_sensitive(0);
    reset();
 	parse_lines(*this, a);
 	if (!resolve_pointers())
@@ -631,7 +631,7 @@ void CMScript::Parse(CMIrpApplication& a)
 	int nstage = stagenames.Count();
    if (nstage > 0)
    	stages = new CMPSmallArray<CMVariable>[nstage];
-	CMString::set_case_sensitive(oldcase);
+	string::set_case_sensitive(oldcase);
 }
 
 wostream& CMScript::write(wostream& s)

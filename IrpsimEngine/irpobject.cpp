@@ -60,7 +60,7 @@ const wchar_t* CMIrpObjectIterator::GetNext()
 	return ret;
 }
 
-CMIrpObject::CMIrpObject(const CMString& n, int id) :
+CMIrpObject::CMIrpObject(const string& n, int id) :
 name(n),
 app_id(id)
 {

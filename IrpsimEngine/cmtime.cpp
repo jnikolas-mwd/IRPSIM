@@ -95,18 +95,18 @@ short CMTime::SetOutputFormat(short format)
 	return old;
 }
 
-void CMTime::set_to_string(const CMString& str)
+void CMTime::set_to_string(const string& str)
 {
 	int y=1995,m=1,d=1,h=0,mn=0,s=0;
 
    int len = str.length();
 
-	if (len >= 4)	y = _wtoi(((CMString)str.substr(0,4)).c_str());
-	if (len >= 6)	m = _wtoi(((CMString)str.substr(4, 2)).c_str());
-	if (len >= 8)	d = _wtoi(((CMString)str.substr(6, 2)).c_str());
-	if (len >= 10)	h = _wtoi(((CMString)str.substr(8, 2)).c_str());
-	if (len >= 12)	mn = _wtoi(((CMString)str.substr(10, 2)).c_str());
-	if (len >= 14)	s = _wtoi(((CMString)str.substr(12, 2)).c_str());
+	if (len >= 4)	y = _wtoi(((string)str.substr(0,4)).c_str());
+	if (len >= 6)	m = _wtoi(((string)str.substr(4, 2)).c_str());
+	if (len >= 8)	d = _wtoi(((string)str.substr(6, 2)).c_str());
+	if (len >= 10)	h = _wtoi(((string)str.substr(8, 2)).c_str());
+	if (len >= 12)	mn = _wtoi(((string)str.substr(10, 2)).c_str());
+	if (len >= 14)	s = _wtoi(((string)str.substr(12, 2)).c_str());
 
 	SetTime(y,m,d,h,mn,s);
 };
@@ -498,9 +498,9 @@ CMTIMEUNIT CMTime::GetResolution(const wchar_t* str)
    return resolution;
 }
 
-CMTIMEUNIT CMTime::StringToTimeUnit(const CMString& str)
+CMTIMEUNIT CMTime::StringToTimeUnit(const string& str)
 {
-	int flag = CMString::set_case_sensitive(0);
+	int flag = string::set_case_sensitive(0);
 	CMTIMEUNIT ret = CM_YEAR;
 
 	if (str.contains(L"sec"))			ret = CM_SECOND;
@@ -510,11 +510,11 @@ CMTIMEUNIT CMTime::StringToTimeUnit(const CMString& str)
 	else if (str.contains(L"week"))	ret = CM_WEEK;
 	else if (str.contains(L"mon")) 	ret = CM_MONTH;
 
-	CMString::set_case_sensitive(flag);
+	string::set_case_sensitive(flag);
 	return ret;
 }
 
-CMString CMTime::TimeUnitToString(CMTIMEUNIT units)
+string CMTime::TimeUnitToString(CMTIMEUNIT units)
 {
 	switch (units) {
    	case CM_YEAR:	 return L"year";
@@ -528,14 +528,14 @@ CMString CMTime::TimeUnitToString(CMTIMEUNIT units)
    return L"unknown";
 }
 
-CMTime CMTime::GetStartPoint(const CMString& s,CMTIMEUNIT units)
+CMTime CMTime::GetStartPoint(const string& s,CMTIMEUNIT units)
 {
    CMTime ret(s);
    ret = ret.AtBeginning(GetResolution(s.c_str()));
 	return ret.AtEnd(units);
 }
 
-CMTime CMTime::GetEndPoint(const CMString& s,CMTIMEUNIT units)
+CMTime CMTime::GetEndPoint(const string& s,CMTIMEUNIT units)
 {
    CMTime ret(s);
    ret = ret.AtEnd(GetResolution(s.c_str()));
@@ -600,7 +600,7 @@ wistream& CMTime::Read(wistream& is,int binary)
 		is.read((wchar_t*)&nseconds, sizeof(nseconds));
 	}
 	else {
-		CMString str;
+		string str;
 		is >> str;
 		set_to_string(str);
 	}

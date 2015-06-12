@@ -36,7 +36,7 @@ const wchar_t* CMInterval::footer = L"#END";
 
 const wchar_t* CMInterval::IsA() { return L"CMInterval"; }
 
-CMInterval::CMInterval(const CMString& def) :
+CMInterval::CMInterval(const string& def) :
 CMIrpObject(),
 duration_unit(CM_MONTH),
 duration_length(12),
@@ -45,12 +45,12 @@ state(0)
 {
 	static const wchar_t* delims = L" ,;:\t\r\n";
    CMTokenizer next(def);
-   CMString token;
+   string token;
    name = next(delims);
 	token = next(delims);
    if (token==L"float") state |= sFloatingStart;
 	else intervalstart = token;
-	duration_length = _wtoi(((CMString)next(delims)).c_str());
+	duration_length = _wtoi(((string)next(delims)).c_str());
    duration_unit = CMTime::StringToTimeUnit(next(delims));
    if (duration_length<1) duration_length = 1;
 }
@@ -90,14 +90,14 @@ void CMInterval::Reset()
 	intervals.ResetAndDestroy(1);
 }
 
-CMInterval* CMInterval::AddInterval(const CMString& def)
+CMInterval* CMInterval::AddInterval(const string& def)
 {
 	CMInterval* ret = new CMInterval(def);
 	intervals.Add(ret);
    return ret;
 }
 
-CMInterval* CMInterval::Find(const CMString& aname)
+CMInterval* CMInterval::Find(const string& aname)
 {
 	for (unsigned short i=0;i<intervals.Count();i++)
    	if (aname==intervals[i]->GetName())
@@ -129,7 +129,7 @@ void CMInterval::SetApplicationIndexAll(long index)
 
 wistream& CMInterval::Read(wistream& s)
 {
-	CMString line;
+	string line;
 	while (!s.eof()) {
 		line.read_line(s);
    	line = stripends(line);

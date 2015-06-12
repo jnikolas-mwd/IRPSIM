@@ -39,8 +39,8 @@ CMIrpObjectIterator* CMVSingleExpression::create_iterator()
 
 void CMVSingleExpression::read_body(wistream& s)
 {
-	CMString str;
-	CMString expr;
+	string str;
+	string expr;
 
 	while(!s.eof()) {
 		str.read_line(s);
@@ -48,7 +48,7 @@ void CMVSingleExpression::read_body(wistream& s)
 			continue;
 		if (str(0,wcslen(vardef_end)) == vardef_end)
 			break;
-		expr += str.strip(CMString::stripType::Trailing, L'\r');
+		expr += str.strip(string::stripType::Trailing, L'\r');
 	}
 	SetExpression(expr.c_str());
 	if (expression.Fail()) {

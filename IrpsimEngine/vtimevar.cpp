@@ -25,7 +25,7 @@
 //#include <fstream.h>
 //static ofstream vdebug("vtimevar.deb");
 
-CMVTimevar::CMVTimevar(const CMString& aName) :
+CMVTimevar::CMVTimevar(const string& aName) :
 CMVariable(aName),
 duration_unit(CM_MONTH),
 duration_length(12),
@@ -47,12 +47,12 @@ double CMVTimevar::evaluate(CMTimeMachine* t,int,int)
 void CMVTimevar::update_variable_links()
 {
 	static const wchar_t* delims = L" ,;:\t\r\n";
-	CMString period = GetAssociation(L"period");
+	string period = GetAssociation(L"period");
    CMTokenizer next(period);
-   CMString token = next(delims);
+   string token = next(delims);
    if (token==L"float") vtimevar_state |= vtFloatingStart;
 	else intervalstart = token;
-	duration_length = _wtoi(((CMString)next(delims)).c_str());
+	duration_length = _wtoi(((string)next(delims)).c_str());
    duration_unit = CMTime::StringToTimeUnit(next(delims));
    if (duration_length<1) duration_length = 1;
 }

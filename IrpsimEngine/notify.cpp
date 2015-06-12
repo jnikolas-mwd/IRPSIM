@@ -23,14 +23,14 @@
 
 CMNotifier* CMNotifier::pNotifier = nullptr;
 
-int CMNotifier::Notify(CMNotifier::ntype type, const CMString& msg, int data)
+int CMNotifier::Notify(CMNotifier::ntype type, const string& msg, int data)
 {
 	if (pNotifier==nullptr)
 		return 0;
 	
 	if (type==CMNotifier::LOGTIME) {
 		int oldformat = CMTime::SetOutputFormat(CMTime::formatFull);
-		CMString newmsg = CMTime().GetString() + L": " + msg;
+		string newmsg = CMTime().GetString() + L": " + msg;
 		CMTime::SetOutputFormat(oldformat);
 		return pNotifier->notify(type, newmsg.c_str(), data);
 	}

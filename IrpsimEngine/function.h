@@ -22,7 +22,7 @@
 #include "irp.h"
 #include "cmdefs.h"
 #include "smvarray.h"
-#include "cmstring.h"
+#include "string.h"
 
 class _IRPCLASS CMFunction
 {

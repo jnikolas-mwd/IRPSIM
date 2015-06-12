@@ -19,19 +19,19 @@
 #include "strval.h"
 #include "smparray.h"
 
-typedef class _IRPCLASS CMStringValue<CMString> CMSTRINGVALUESTRING;
-typedef class _IRPCLASS CMPSmallArray<CMSTRINGVALUESTRING> CMPSMALLSTRINGVALUESTRINGARRAY;
+typedef class _IRPCLASS stringValue<string> stringVALUESTRING;
+typedef class _IRPCLASS CMPSmallArray<stringVALUESTRING> CMPSMALLSTRINGVALUESTRINGARRAY;
 
 class _IRPCLASS	CMAssociations : public CMPSMALLSTRINGVALUESTRINGARRAY
 {
 public:
-	CMAssociations(unsigned short sz=0,unsigned short d=16) : CMPSmallArray< CMStringValue<CMString> > (sz,d) {}
-	void   AddAssociation(const CMString& aName,const CMString& val);
-	CMString GetName(unsigned short n);
-	CMString GetValue(unsigned short n);
-	CMString GetValue(const CMString& aName);
-    int	 GetAssociationIndex(const CMString& aName);
-	int  GetAssociation(unsigned short n,CMString& s1,CMString& s2);
-	int  IsAssociation(CMString& s1,CMString& s2);
+	CMAssociations(unsigned short sz=0,unsigned short d=16) : CMPSmallArray< stringValue<string> > (sz,d) {}
+	void   AddAssociation(const string& aName,const string& val);
+	string GetName(unsigned short n);
+	string GetValue(unsigned short n);
+	string GetValue(const string& aName);
+    int	 GetAssociationIndex(const string& aName);
+	int  GetAssociation(unsigned short n,string& s1,string& s2);
+	int  IsAssociation(string& s1,string& s2);
     void   Compact();
 };

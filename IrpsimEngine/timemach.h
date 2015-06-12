@@ -22,7 +22,7 @@
 
 #include "irp.h"
 #include "cmtime.h"
-#include "cmstring.h"
+#include "string.h"
 #include "smvarray.h"
 
 class _IRPCLASS CMTimeCycle
@@ -93,7 +93,7 @@ public:
 	ULONG Count() const {return count;}
 	operator CMTime& () const {return cycles[0];}
 
-	CMString CycleAsString(unsigned n) const;
+	string CycleAsString(unsigned n) const;
 	CMTimeCycle& At(unsigned short n) const {return cycles.At(n);}
 	CMTimeCycle& operator [] (unsigned short n) const {return cycles.At(n);}
 	void AddCycle(const wchar_t* b, const wchar_t* e, const wchar_t* s = 0, int lastmonth = 12, CMTIMEUNIT si = CM_NOTIMEUNIT);

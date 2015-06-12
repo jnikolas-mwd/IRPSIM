@@ -49,11 +49,11 @@ protected:
 	int arraystate;
 	enum {containsPolynomials=0x0001};
 public:
-	CMVArray(const CMString& aName,int rows=0,int cols=0);
+	CMVArray(const string& aName,int rows=0,int cols=0);
 	~CMVArray();
 	void SetSize(int rows,int cols);
-	void Set(int row,int col,const CMString& str);
+	void Set(int row,int col,const string& str);
    CMExpression* GetExpression(int row,int col) {return array[(long)row*ncols+col];}
-	virtual CMString VariableType() {return GetEvalType();}
+	virtual string VariableType() {return GetEvalType();}
 	static const wchar_t* GetEvalType() { return L"CMVArray"; }
 };

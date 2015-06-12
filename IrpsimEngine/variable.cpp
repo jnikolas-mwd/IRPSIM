@@ -90,7 +90,7 @@ CMVariableCollection* CMVariable::variables = 0;
 
 const wchar_t* CMVariable::IsA() { return L"CMVariable"; }
 
-CMVariable::CMVariable(const CMString& aName,ULONG astate,int id) :
+CMVariable::CMVariable(const string& aName,ULONG astate,int id) :
 CMIrpObject(aName,id),
 //name(aName),
 iterator(0),
@@ -129,7 +129,7 @@ CMVariable::~CMVariable()
 void CMVariable::ReportError(int c,CMTime* t)
 {
 	static wchar_t* separator = L" : ";
-	CMString ret(errorstrings[c]);
+	string ret(errorstrings[c]);
 	ret += separator;
 	ret += GetName();
 	if (t) {
@@ -139,11 +139,11 @@ void CMVariable::ReportError(int c,CMTime* t)
 	CMNotifier::Notify(CMNotifier::ERROR, ret);
 }
 
-void CMVariable::ReportError(int c,const CMString& str,CMTime* t)
+void CMVariable::ReportError(int c,const string& str,CMTime* t)
 {
 	static wchar_t* separator = L" : ";
 
-	CMString ret(errorstrings[c]);
+	string ret(errorstrings[c]);
 	ret += separator;
 	ret += GetName();
 	if (t) {
@@ -195,7 +195,7 @@ void CMVariable::DestroyVariables(ULONG stateflag)
 	CMVariableIterator iter;
 	static_state |= ssDestroying;
 	CMVariable* v;
-	CMVSmallArray<CMString> varnames;
+	CMVSmallArray<string> varnames;
 	while ((v=iter())!=0)
 		if ( (v->GetState()&stateflag) == stateflag)
 			varnames.Add(v->GetName());
@@ -248,7 +248,7 @@ void CMVariable::ResetTrial()
 	if (variables) variables->SetStateAll(vsResetRequired,TRUE);
 }
 
-void CMVariable::SetType(const CMString& aName)
+void CMVariable::SetType(const string& aName)
 {
 	int aType;
 	if (aName == L"carryforward")
@@ -268,7 +268,7 @@ void CMVariable::SetType(const CMString& aName)
 		if (CMVariableTypes::IsVarSum(type)) SetState(vsSum,TRUE);
 	}
 	else
-		types.Add(new CMString(aName));
+		types.Add(new string(aName));
 }
 
 void CMVariable::SetType(int val)
@@ -277,7 +277,7 @@ void CMVariable::SetType(int val)
 		type=val;
 }
 
-int CMVariable::IsType(const CMString& aName)
+int CMVariable::IsType(const string& aName)
 {
 	int ret=0;
 	if (type!=NOTYPE && type>=0 && (type%100)==0)
@@ -287,24 +287,24 @@ int CMVariable::IsType(const CMString& aName)
 	return ret;
 }
 
-CMString CMVariable::GetSpecialType()
+string CMVariable::GetSpecialType()
 {
 	const wchar_t* stype = CMVariableTypes::VarStringFromInt(type, 1);
-	if (stype) return CMString(stype);
-   return CMString();
+	if (stype) return string(stype);
+   return string();
 }
 
-void CMVariable::AddAssociation(const CMString& aName,const CMString& val)
+void CMVariable::AddAssociation(const string& aName,const string& val)
 {
 	associations.AddAssociation(aName,val);
 }
 
-CMString CMVariable::GetAssociation(const CMString& aName)
+string CMVariable::GetAssociation(const string& aName)
 {
 	return associations.GetValue(aName);
 }
 
-int CMVariable::GetAssociation(int n,CMString& s1,CMString& s2)
+int CMVariable::GetAssociation(int n,string& s1,string& s2)
 {
 	return associations.GetAssociation(n,s1,s2);
 }
@@ -327,7 +327,7 @@ CMIrpObjectIterator* CMVariable::CreateIterator()
 	return iterator;
 }
 
-CMVariable* CMVariable::Find(const CMString& aName)
+CMVariable* CMVariable::Find(const string& aName)
 {
 	return variables ? variables->Find(aName) : 0;
 }
@@ -419,7 +419,7 @@ void CMVariable::set_value_queue(int sz)
 
 wistream& CMVariable::read(wistream& s)
 {
-	CMString str,token,token2;
+	string str,token,token2;
 	if (state&vsDontEdit)
    	return s;
 	long pos = (long)s.tellg();
@@ -467,7 +467,7 @@ wistream& CMVariable::read(wistream& s)
 
 void CMVariable::read_body(wistream& s)
 {
-	CMString str;
+	string str;
 	while(!s.eof()) {
 		str.read_line(s);
 		if (str(0,wcslen(vardef_end)) == vardef_end)

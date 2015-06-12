@@ -20,30 +20,30 @@
 #pragma once
 
 #include "irp.h"
-#include "cmstring.h"
+#include "string.h"
 #include "smvarray.h"
 
 #pragma warning( disable : 4290 ) 
 
 class _IRPCLASS CMException {
-	CMString what;
+	string what;
 public:
-	CMException(const CMString& str) {what=str;}
-    CMString What() {return what;}
+	CMException(const string& str) {what=str;}
+    string What() {return what;}
 };
 
 class _IRPCLASS CMError {
-	static class _IRPCLASS CMVSmallArray<CMString> errors;
+	static class _IRPCLASS CMVSmallArray<string> errors;
    static int maxwarn;
 	static int warncount;
    static int maxerr;
 	static int errcount;
 public:
-	static void ReportError(const CMString& err) throw (CMException);
-	static void ReportWarning(const CMString& err) throw (CMException);
+	static void ReportError(const string& err) throw (CMException);
+	static void ReportWarning(const string& err) throw (CMException);
 	static void Reset();
 	static unsigned short Errors() {return errors.Count();}
-	static CMString Error(unsigned short n);
-	static CMString LatestError();
+	static string Error(unsigned short n);
+	static string LatestError();
    static void SetExceptionTriggers(int err,int warn) {maxerr=err;maxwarn=warn;}
 };

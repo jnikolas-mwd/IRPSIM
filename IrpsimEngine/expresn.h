@@ -22,7 +22,7 @@
 
 #include "irp.h"
 #include "cmdefs.h"
-#include "cmstring.h"
+#include "string.h"
 #include <iostream>
 using namespace std;
 
@@ -54,7 +54,7 @@ public:
 	void UpdateVariableLinks();
 	double Evaluate(CMTimeMachine* t);
 	int Fail();
-	CMString GetString();
+	string GetString();
 	CMExpression& operator = (const wchar_t* str);
 	CMExpression& operator = (const CMExpression& ex);
    static void IgnoreMissingVariables(int action);

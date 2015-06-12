@@ -37,6 +37,6 @@ public:
          Sin1D,Sin2D,Sin3D,Sin4D,Sin5D,Sin6D,Cos1D,Cos2D,Cos3D,Cos4D,Cos5D,Cos6D,
          Last=Cos6D};
 	CMVTime(int aType);
-	virtual CMString VariableType() {return GetEvalType();}
+	virtual string VariableType() {return GetEvalType();}
 	static const wchar_t* GetEvalType() { return L"CMVTime"; }
 };

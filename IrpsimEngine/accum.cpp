@@ -141,18 +141,18 @@
 		delete vardesc;
 	}
 
-	CMString CMAccumulatorArray::GetVariableName(unsigned n) const
+	string CMAccumulatorArray::GetVariableName(unsigned n) const
 	{
 		if (n < vardesc->Count())
 			return vardesc->At(n).Name();
-		return CMString();
+		return string();
 	}
 
-	CMString CMAccumulatorArray::GetVariableType(unsigned n) const
+	string CMAccumulatorArray::GetVariableType(unsigned n) const
 	{
 		if (n < vardesc->Count())
 			return vardesc->At(n).Type();
-		return CMString();
+		return string();
 	}
 
 	int CMAccumulatorArray::GetVariableState(unsigned n) const
@@ -218,7 +218,7 @@
 		return periodlength;
 	}
 
-	unsigned CMAccumulatorArray::VariableIndex(const CMString& name) const
+	unsigned CMAccumulatorArray::VariableIndex(const string& name) const
 	{
 		for (unsigned i = 0; i < vardesc->Count(); i++)
 		if (vardesc->At(i) == name)

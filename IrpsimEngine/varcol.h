@@ -23,7 +23,7 @@
 #include "irp.h"
 #include "variable.h"
 
-#include "cmstring.h"
+#include "string.h"
 #include "cmdefs.h"
 #include "smvarray.h"
 #include "phashdic.h"
@@ -52,8 +52,8 @@ public:
 
    void ResetCollection();
 
-   int DestroyVariable(const CMString& vdef,BOOL bForce,BOOL bUpdate=TRUE);
-   //CMVariable* AddVariable(const CMString& vdef);
+   int DestroyVariable(const string& vdef,BOOL bForce,BOOL bUpdate=TRUE);
+   //CMVariable* AddVariable(const string& vdef);
 };
 
 class _IRPCLASS CMVariableIterator

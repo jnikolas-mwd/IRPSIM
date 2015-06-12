@@ -107,7 +107,7 @@ public:
    static void InitAggregateVariables(CMTimeMachine* t);
 	static void DestroyNodes();
    static unsigned short NodeCount() {return nodes.Count();}
-   static CMNode* AddNode(const CMString& name);
+   static CMNode* AddNode(const string& name);
 	static CMNode* GetNode(unsigned short n) {return n<nodes.Count() ? nodes[n] : 0;}
    static double PutPotential();
    static double TakePotential();

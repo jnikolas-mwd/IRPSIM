@@ -20,7 +20,7 @@
 #pragma once
 
 #include "irp.h"
-#include "cmstring.h"
+#include "string.h"
 #include "smparray.h"
 //#include <iostream.h>
 #include <iostream>
@@ -29,7 +29,7 @@ using namespace std;
 class _IRPCLASS CMIrpObjectIterator
 {
 	friend class _IRPCLASS CMIrpObject;
-	class _IRPCLASS CMPSSmallArray<CMString> array;
+	class _IRPCLASS CMPSSmallArray<string> array;
 	int pos;
 protected:
 	CMIrpObject* obj;
@@ -51,7 +51,7 @@ class _IRPCLASS CMIrpObject
 
 	// Data elements ***************
 protected:
-	CMString name;
+	string name;
 	int app_id=-1;
 	long app_index=0;
 	bool is_iterating = false;
@@ -64,7 +64,7 @@ public:
 	//CMIrpObject(const wchar_t* aName = NULL, int id = -1);
 	CMIrpObject() { name = L""; app_id = -1; }
 	CMIrpObject(int id) { name = L""; app_id = id; }
-	CMIrpObject(const CMString& aName,int id=-1);
+	CMIrpObject(const string& aName,int id=-1);
 
 	bool IsIterating() { return is_iterating; }
 	void SetIterating(bool val) { is_iterating = val; }
@@ -75,7 +75,7 @@ public:
 	void  SetApplicationIndex(long index) { app_index = index; }
 	long   GetApplicationIndex() const { return app_index; }
 
-	const CMString& GetName() const {return name;}
+	const string& GetName() const {return name;}
 
 	virtual CMIrpObjectIterator* CreateIterator() { return 0; }
 	virtual const wchar_t* IsA();

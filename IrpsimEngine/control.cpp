@@ -33,7 +33,7 @@
 // a return value if time limit has been exceeded
 #define CM_TIME_LIMIT_EXCEEDED -10000
 
-CMControlItem::CMControlItem(const CMString& def) :
+CMControlItem::CMControlItem(const string& def) :
 controlvalue(0),
 vinterval(0),
 lastindex(-LONG_MAX),
@@ -41,9 +41,9 @@ limit(0),
 amtused(0),
 state(0)
 {
-	int flag = CMString::set_case_sensitive(0);
+	int flag = string::set_case_sensitive(0);
 	CMTokenizer next(def);
-	CMString token = next();
+	string token = next();
    controlvalue.Set(token);
 	while (!(token=next()).is_null()) {
 	   if (token==L"per") {
@@ -57,7 +57,7 @@ state(0)
       else if (token==L"dontrenew")
       	state |= sDontRenew;
    }
-	CMString::set_case_sensitive(flag);
+	string::set_case_sensitive(flag);
 }
 
 int operator == (const CMControlItem& c1,const CMControlItem& c2)
@@ -104,17 +104,17 @@ double CMControlItem::AmountRemaining(CMTimeMachine* t)
    return limit-amtused;
 }
 
-CMControl::CMControl(const CMString& def,double dv) :
+CMControl::CMControl(const string& def,double dv) :
 default_value(dv)
 {
 	Set(def);
 }
 
-void CMControl::Set(const CMString& def)
+void CMControl::Set(const string& def)
 {
 	control_items.ResetAndDestroy(1);
 	CMTokenizer next(def);
-   CMString token;
+   string token;
    while (!(token=next(L";:,")).is_null())
    	control_items.Add(new CMControlItem(token));
 }

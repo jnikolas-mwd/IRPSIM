@@ -27,7 +27,7 @@
 #include "cmdefs.h"
 #include "units.h"
 #include "smparray.h"
-#include "cmstring.h"
+#include "string.h"
 
 #include <fstream>
 using namespace std;
@@ -53,12 +53,12 @@ private:
 	float* aggresults;
    unsigned* aggindex;
 	void get_data_from_simulation();
-    wofstream* open_file(const CMString& name);
+    wofstream* open_file(const string& name);
 	double last_timestep_in_interval(const CMTime& t);
 	void output_realizations_record(const CMTime& t,long trialno,long row);
 	float get_realization(const CMTime& t,unsigned var,long trial);
 	CMTime get_realizations(const CMTime& t,long trial);
-   CMString message_header;
+   string message_header;
 protected:
 	static const wchar_t* realization_header_names[];
 	static const wchar_t* summary_header_names[];
@@ -99,9 +99,9 @@ protected:
 public:
 	CMSaveSimulation(CMSimulation& s,CMIrpApplication* a=0);
 	~CMSaveSimulation();
-   void AddOutputVariable(const CMString& name);
-   int Outcomes(const CMString& fname);
-   int Summary(const CMString& fname);
-   int ReliabilitySeries(const CMString& fname);
-   int ReliabilityDetail(const CMString& fname);
+   void AddOutputVariable(const string& name);
+   int Outcomes(const string& fname);
+   int Summary(const string& fname);
+   int ReliabilitySeries(const string& fname);
+   int ReliabilityDetail(const string& fname);
 };

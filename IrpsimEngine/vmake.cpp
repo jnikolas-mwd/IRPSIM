@@ -33,9 +33,9 @@ using namespace std;
 //#include <fstream>
 //static wofstream sdebug(L"debug_vmake.txt");
 
-CMString CMVariable::get_next_eval_type(wistream& s,CMString& aname)
+string CMVariable::get_next_eval_type(wistream& s,string& aname)
 {
-	CMString str,token,token2,ret;
+	string str,token,token2,ret;
 	long pos = (long)s.tellg();
 	int begin = 0;
 
@@ -89,9 +89,9 @@ CMString CMVariable::get_next_eval_type(wistream& s,CMString& aname)
 CMVariable* CMVariable::Make(wistream& s)
 {
 	CMVariable* v = 0;
-	CMString aname;
+	string aname;
 
-	CMString eval_type = get_next_eval_type(s,aname);
+	string eval_type = get_next_eval_type(s,aname);
 
 	if (eval_type == CMVSingleExpression::GetEvalType())
 		v = new CMVSingleExpression(aname);

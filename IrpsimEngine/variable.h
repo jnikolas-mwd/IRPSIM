@@ -24,7 +24,7 @@
 #include "timemach.h"
 #include "assoc.h"
 #include "irpobject.h"
-#include "cmstring.h"
+#include "string.h"
 #include "cmdefs.h"
 #include "tmarray.h"
 #include "smparray.h"
@@ -45,7 +45,7 @@ class _IRPCLASS CMVariable : public CMIrpObject
 	int errorcode;
 	CMIrpObjectIterator* iterator;
 	//CMPSMALLSTRINGARRAY types;
-	CMPSmallArray<CMString> types;
+	CMPSmallArray<string> types;
 
 	CMAssociations associations;
    int region;
@@ -63,7 +63,7 @@ class _IRPCLASS CMVariable : public CMIrpObject
 	void	 reset_trial(CMTimeMachine* t);
 	void 	 delete_iterator() {if (iterator) delete iterator;iterator=0;}
 	void   set_value_queue(int sz); // set variable to maintain realized values;
-	static CMString get_next_eval_type(wistream& s,CMString& aname);
+	static string get_next_eval_type(wistream& s,string& aname);
    enum {NOTYPE=32000};
 protected:
 	static const wchar_t* vardef_begin;
@@ -123,12 +123,12 @@ public:
 			XIncorrectNumRows,XIncorrectNumColumns,XBadVardef,
 			XIllegalTimeLag,XTimeOutOfRange,XNoAssociatedVariable};
 
-	CMVariable(const CMString& aName,ULONG astate=0L,int id=-1);
+	CMVariable(const string& aName,ULONG astate=0L,int id=-1);
 	~CMVariable();
 
 	void   ReportError(int c,CMTime* t=0);
-	void   ReportError(int c,const CMString& st,CMTime* t=0);
-	virtual CMString VariableType() {return GetEvalType();}
+	void   ReportError(int c,const string& st,CMTime* t=0);
+	virtual string VariableType() {return GetEvalType();}
 	// For setting variable-specific quantities
    virtual void SetSpecialValues(CMTimeMachine* t,double v1=0,double v2=0,double v3=0,double v4=0) {}
 
@@ -141,21 +141,21 @@ public:
 	BOOL  GetState(ULONG aState) const {return (state&aState) ? TRUE : FALSE;}
 	BOOL  ToggleState(ULONG aState);
 	ULONG SetState(ULONG aState,BOOL action);
-//	const CMString& GetName() {return name;}
+//	const string& GetName() {return name;}
 	double GetValue(CMTimeMachine* t,int current=1,int index1=0,int index2=0,int force_evaluation=0);
 	void   SetValue(CMTimeMachine* t,double val);
 	void   AddTo(CMTimeMachine* t,double val)
 		{double v=GetValue(t,1);v+=val;SetValue(t,v);}
 
-	void   AddAssociation(const CMString& aName,const CMString& val);
-	CMString GetAssociation(const CMString& aName);
-	int 	 GetAssociation(int n,CMString& s1,CMString& s2);
+	void   AddAssociation(const string& aName,const string& val);
+	string GetAssociation(const string& aName);
+	int 	 GetAssociation(int n,string& s1,string& s2);
 
-	void   SetType(const CMString& aName);
+	void   SetType(const string& aName);
 	void   SetType(int val); // for setting negative types
-	int	 IsType(const CMString& aName);
+	int	 IsType(const string& aName);
 
-	CMString GetSpecialType();
+	string GetSpecialType();
 
 	void	UpdateVariableLinks();
 	void	UpdateLinkStatus();
@@ -166,7 +166,7 @@ public:
 
 	static const wchar_t* GetEvalType() { return L"CMVariable"; }
 	static CMVariable* Make(wistream& s);
-	static CMVariable* Find(const CMString& aName);
+	static CMVariable* Find(const string& aName);
 	static void SetSortMethod(int meth) {sort_method = meth;}
 
 	static void ResetTrial();
@@ -177,7 +177,7 @@ public:
 /*
 inline int operator == (const CMVariable& v1,const CMVariable& v2)
 {
-	CMString::set_case_sensitive(0);return (v1.name==v2.name);
+	string::set_case_sensitive(0);return (v1.name==v2.name);
 }
 
 inline istream& operator >> (istream& s, CMVariable& v)

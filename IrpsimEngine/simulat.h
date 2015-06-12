@@ -55,7 +55,7 @@ class _IRPCLASS CMSimulation
 	//DWORD  dwThreadId;  // Id of simulation run thread.
 
 	short state;
-	CMString filename,simname,comments; //, tempfile
+	string filename,simname,comments; //, tempfile
 	long trialno;
 	long elapsedtime;
 	CMTime begintime;
@@ -67,8 +67,8 @@ class _IRPCLASS CMSimulation
    class _IRPCLASS CMPSSmallArray<CMVariable> 	costvars;
    class _IRPCLASS CMPSSmallArray<CMVariable> 	summaryvars;
    class _IRPCLASS CMPSSmallArray<CMVariable> 	outcomevars;
-   class _IRPCLASS CMVSmallArray<CMString>		missingvars;
-   //class _IRPCLASS CMVSmallArray<CMString>		loadedfiles;
+   class _IRPCLASS CMVSmallArray<string>		missingvars;
+   //class _IRPCLASS CMVSmallArray<string>		loadedfiles;
 
 	CMSimulationArray*  simarray;
 	CMAccumulatorArray* accumulator;
@@ -86,7 +86,7 @@ class _IRPCLASS CMSimulation
 //protected:
 	//friend class CMIrpApplication;
 	// These functions should only be called by CMIrpApplication;
-	//CMSimulation(const CMString& fname,short mode=0,CMIrpApplication* a=0);
+	//CMSimulation(const string& fname,short mode=0,CMIrpApplication* a=0);
 public:
 	CMSimulation(CMIrpApplication* a);
 	~CMSimulation();
@@ -95,15 +95,15 @@ public:
 	void Pause(BOOL action) { if (action) state |= sPaused; else state &= ~sPaused; }
 	void Stop()   { state |= sStopped; }
 
-	//BOOL LoadSimulationFile(const CMString& fname,short mode=0);
+	//BOOL LoadSimulationFile(const string& fname,short mode=0);
 
 	static CMSimulation* ActiveSimulation() {return active_simulation;}
 
-	CMString GetName() const {return simname;}
-	CMString GetFileName() const {return filename;}
+	string GetName() const {return simname;}
+	string GetFileName() const {return filename;}
 
 	void Reset();
-	//int  SaveTo(const CMString& fname);
+	//int  SaveTo(const string& fname);
 	//void Save();
 	BOOL Fail()    {return (state&0xFF00) ? TRUE : FALSE;}
 	BOOL Paused()  {return (state&sPaused) ? TRUE : FALSE;}
@@ -112,24 +112,24 @@ public:
 	//BOOL FromFile() {return (state&sFromFile) ? TRUE : FALSE;}
 	BOOL Initialized() {return (state&sInitialized) ? TRUE : FALSE;}
 
-   int UsesVariable(const CMString& varname);
+   int UsesVariable(const string& varname);
 
 	CMTime BeginTime() {return begintime;}
    CMTime CurrentTimeStep() {return timemachine->Now();}
 	const CMTimeMachine* TimeMachine() {return timemachine;}
 	void GetOptions(CMOptions& op) {op = options;}
 	void SetOptions(const CMOptions& op);
-	CMString GetOption(const CMString& opname) {return options.GetOption(opname);}
-	const wchar_t* GetOptionString(const CMString& opname) { return options.GetOption(opname).c_str(); }
-	void SetOption(const CMString& opname,const CMString& opval);
-   CMString GetComments() {return comments;}
-   void SetComments(const CMString& c) {comments=c;}
+	string GetOption(const string& opname) {return options.GetOption(opname);}
+	const wchar_t* GetOptionString(const string& opname) { return options.GetOption(opname).c_str(); }
+	void SetOption(const string& opname,const string& opval);
+   string GetComments() {return comments;}
+   void SetComments(const string& c) {comments=c;}
 	
-	void SetScript(const CMString& sname);
+	void SetScript(const string& sname);
 
 	//int LoadedFiles() {return loadedfiles.Count();}
-	//CMString LoadedFile(unsigned short n) {if (n<loadedfiles.Count()) return loadedfiles[n]; return CMString();}
-    //int RebuildFiles(const CMString& path);
+	//string LoadedFile(unsigned short n) {if (n<loadedfiles.Count()) return loadedfiles[n]; return string();}
+    //int RebuildFiles(const string& path);
 
 	long   ElapsedSeconds() {return elapsedtime;}
 	long   Trial() {return trialno;}
@@ -140,7 +140,7 @@ public:
 
 	void IgnoreMissingVariables();
 	int MissingVariables() {return missingvars.Count();}
-	CMString MissingVariable(unsigned short n) {if (n<missingvars.Count()) return missingvars[n];return L"";}
+	string MissingVariable(unsigned short n) {if (n<missingvars.Count()) return missingvars[n];return L"";}
 };
 
 inline int operator == (const CMSimulation& s1,const CMSimulation& s2)

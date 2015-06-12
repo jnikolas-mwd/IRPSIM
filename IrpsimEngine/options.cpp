@@ -98,7 +98,7 @@ pbMWDAllocationVar	mwd_allocation
 */
 
 /*
-CMOption::CMOption(const CMString& n,const CMString& v , int app_id) :
+CMOption::CMOption(const string& n,const string& v , int app_id) :
 name(n)
 {
   name.to_lower();
@@ -109,7 +109,7 @@ name(n)
 }
 */
 
-void CMOption::SetValue(const CMString& v)
+void CMOption::SetValue(const string& v)
 {
 	value = stripends(v);
 }
@@ -158,53 +158,53 @@ void CMOptions::SetDefaults()
 	options.ResetAndDestroy(1);
 	maxwidth=0;
 	for (int i=0;defaults[i].name;i++) {
-		CMString n(defaults[i].name);
+		string n(defaults[i].name);
 		if ((int)n.length()>maxwidth) maxwidth = (int)n.length();
 		options.Add(new CMOption(n,defaults[i].value,-1));
 	}
 }
 
-CMString CMOptions::GetOption(const CMString& option)
+string CMOptions::GetOption(const string& option)
 {
-	CMString ret;
+	string ret;
 	CMOption* op = options.Find(option);
 	if (op)
 		ret = op->GetValue();
 	return ret;
 }
 
-const wchar_t* CMOptions::GetOptionString(const CMString& option)
+const wchar_t* CMOptions::GetOptionString(const string& option)
 {
-	CMString op = GetOption(option);
+	string op = GetOption(option);
 	return op.c_str();
 }
 
-double CMOptions::GetOptionDouble(const CMString& option)
+double CMOptions::GetOptionDouble(const string& option)
 {
 	return _wtof(GetOption(option).c_str());
 }
 
-short CMOptions::GetOptionInt(const CMString& option)
+short CMOptions::GetOptionInt(const string& option)
 {
 	return _wtoi(GetOption(option).c_str());
 }
 
-long CMOptions::GetOptionLong(const CMString& option)
+long CMOptions::GetOptionLong(const string& option)
 {
 	return _wtol(GetOption(option).c_str());
 }
 
-CMOption* CMOptions::SetOption(const CMString& line, int id)
+CMOption* CMOptions::SetOption(const string& line, int id)
 {
 	CMTokenizer next(line);
-	CMString name  = next(L" \t\r\n");
-	CMString value = next(L"\r\n");
+	string name  = next(L" \t\r\n");
+	string value = next(L"\r\n");
 	return SetOption(name, value, id);
 }
 
-CMOption* CMOptions::SetOption(const CMString& name, const CMString& value, int id)
+CMOption* CMOptions::SetOption(const string& name, const string& value, int id)
 {
-	CMString nm = stripends(name);
+	string nm = stripends(name);
 	int len = nm.length();
 	if (len>maxwidth) maxwidth=len;
 	CMOption* op = options.Find(nm);
@@ -216,7 +216,7 @@ CMOption* CMOptions::SetOption(const CMString& name, const CMString& value, int 
 	return op;
 }
 
-CMOption* CMOptions::SetOption(const CMString& name, double option, int id)
+CMOption* CMOptions::SetOption(const string& name, double option, int id)
 {
 	wchar_t buffer[64];
 	swprintf_s(buffer, 64, L"%.12g",option);
@@ -246,7 +246,7 @@ wistream& operator >> (wistream& s, CMOptions& o)
 	static wchar_t* header = L"#options";
 	static wchar_t* footer = L"#end";
 	o.options.Reset(1);
-	CMString line;
+	string line;
 
 	int begin = 0;
 
@@ -270,7 +270,7 @@ wistream& operator >> (wistream& s, CMOptions& o)
 		}
 		while (line.length() && line[line.length()-1] == L'\\') {
 			line = line(0,line.length()-1);
-			CMString cont;
+			string cont;
 			cont.read_line(s);
 			line += stripends(cont);
 		}

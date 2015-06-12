@@ -61,7 +61,7 @@ const wchar_t* CMVArrayIterator::get_next()
 	return 0;
 }
 
-CMVArray::CMVArray(const CMString& aName,int rows,int cols) :
+CMVArray::CMVArray(const string& aName,int rows,int cols) :
 CMVariable(aName),
 array()
 {
@@ -103,7 +103,7 @@ void CMVArray::update_variable_links()
 			array[j]->UpdateVariableLinks();
 }
 
-void CMVArray::Set(int row,int col,const CMString& str)
+void CMVArray::Set(int row,int col,const string& str)
 {
 	if (row>=0 && row<nrows && col>=0 && col<ncols) {
 		CMExpression* e = new CMExpression(str.c_str());
@@ -118,7 +118,7 @@ void CMVArray::Set(int row,int col,const CMString& str)
 
 void CMVArray::read_body(wistream& s)
 {
-	CMString str,token,token2;
+	string str,token,token2;
 	int nr=0,nc=0;
 
 	token=GetAssociation(L"rows");
@@ -152,14 +152,14 @@ void CMVArray::read_body(wistream& s)
 					if (*ptr2==L'{') bracketindex++;
 					else if (*ptr2==L'}') bracketindex--;
 				}
-				token = (CMString((const wchar_t*)ptr))(0, j - 1);
+				token = (string((const wchar_t*)ptr))(0, j - 1);
 			}
 			else {
 				while (*ptr2 > L' ') {
 					ptr2++;
 					j++;
 				}
-				token = (CMString((const wchar_t*)ptr))(0, j);
+				token = (string((const wchar_t*)ptr))(0, j);
 			}
 			ptr += j;
 			Set(nr,nc++,token);
