@@ -124,15 +124,15 @@ wostream& operator << (wostream& os,CMExpression& ex)
 	return os;
 }
 
-string CMExpression::GetString()
+CMString CMExpression::GetString()
 {
 	if (type==Constant) {
-		string ret;
+		CMString ret;
       ret += u.v;
 		return ret;
 	}
 	else
-		return string(u.p->GetString());
+		return CMString(u.p->GetString());
 }
 
 void CMExpression::IgnoreMissingVariables(int action)

@@ -21,7 +21,7 @@
 
 #include "irp.h"
 #include "cmdefs.h"
-#include "string.h"
+#include "cmstring.h"
 #include "smparray.h"
 #include "bgvarray.h"
 #include "cmtime.h"
@@ -34,14 +34,14 @@ class _IRPCLASS CMTimeMachine;
 
 class _IRPCLASS CMReliabilityTarget
 {
-	string shortagevarname, percentagevarname;
+	CMString shortagevarname, percentagevarname;
 	CMVariable *shortagevar, *percentagevar;
 	double shortage_target,percent_target;
 	short state;
 	enum  {isPercent=0x0001,changeSignShortage=0x0002,changeSignDenom=0x0004};
 public:
 	CMReliabilityTarget();
-	CMReliabilityTarget(const string& def);
+	CMReliabilityTarget(const CMString& def);
 	CMReliabilityTarget& operator = (const CMReliabilityTarget& t)
 		{shortagevarname=t.shortagevarname;percentagevarname=t.percentagevarname;
 		 shortagevar=t.shortagevar;percentagevar=t.percentagevar;
@@ -51,17 +51,17 @@ public:
 		{return (shortagevarname==t.shortagevarname && percentagevarname==t.percentagevarname &&
 					shortage_target==t.shortage_target && percent_target==t.percent_target &&
 					state==t.state);}
-	void Set(const string& def);
+	void Set(const CMString& def);
 	int  Process(CMTimeMachine* t);
-	string ShortageVariable() const {return shortagevarname;}
-	string PercentageVariable() const {return percentagevarname;}
+	CMString ShortageVariable() const {return shortagevarname;}
+	CMString PercentageVariable() const {return percentagevarname;}
 	short IsPercent() const {return (state&isPercent);}
 	short ShortageSign() const {return (state&changeSignShortage) ? -1 : 1;}
 	short PercentSign()  const {return (state&changeSignDenom) ? -1 : 1;}
 	double ShortageTarget() const {return shortage_target;}
 	double PercentTarget() const {return percent_target;}
 	int SameCurveAs(const CMReliabilityTarget& t);
-	string GetString();
+	CMString GetString();
 	wostream& WriteBinary(wostream& s);
 	wistream& ReadBinary(wistream& s);
 	int BinarySize();
@@ -97,7 +97,7 @@ class _IRPCLASS CMReliability
 	long index(const CMTime& t,unsigned aTarget);
 	enum {rsFail=0x0001};
 public:
-	CMReliability(const CMTimeMachine& t,const string& def);
+	CMReliability(const CMTimeMachine& t,const CMString& def);
 	CMReliability();
 	~CMReliability();
 	short Fail() {return (state&rsFail);}

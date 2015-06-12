@@ -139,7 +139,7 @@ const wchar_t* CMVTableIterator::get_next()
 	return 0;
 }
 
-CMVTable::CMVTable(const string& aName) :
+CMVTable::CMVTable(const CMString& aName) :
 CMVariable(aName),
 array(0,32),
 rowselectornames(0,1),
@@ -182,13 +182,13 @@ void CMVTable::update_variable_links()
 		ReportError(XNoAssociatedVariable);
 }
 
-void CMVTable::SetRowSelector(int n,const string& nm)
+void CMVTable::SetRowSelector(int n,const CMString& nm)
 {
 	rowselectornames.AddAt(n,nm);
 	rowselector.SetNumVariables(rowselectornames.Count());
 }
 
-void CMVTable::SetColSelector(int n,const string& nm)
+void CMVTable::SetColSelector(int n,const CMString& nm)
 {
 	colselectornames.AddAt(n,nm);
 	colselector.SetNumVariables(colselectornames.Count());
@@ -204,7 +204,7 @@ void CMVTable::SetColValue(int col,int selno,double value)
 	colselector.Add(col,selno,value);
 }
 
-void CMVTable::SetExpression(int row,int col,const string& str)
+void CMVTable::SetExpression(int row,int col,const CMString& str)
 {
 	if (col>=0 && col<ncols) {
 		if (row>=nrows) nrows = row+1;
@@ -231,7 +231,7 @@ double CMVTable::evaluate(CMTimeMachine* t,int,int)
 
 void CMVTable::read_body(wistream& s)
 {
-	string str,token,token2;
+	CMString str,token,token2;
 	int i=0,nrsel=0,ncsel=0,processed=0,nr=0,nc;
 
 	if ((token=GetAssociation(L"rowselector")).length()) {
@@ -290,14 +290,14 @@ void CMVTable::read_body(wistream& s)
 					if (*ptr2==L'{') bracketindex++;
 					else if (*ptr2==L'}') bracketindex--;
 				}
-				token = (string((const wchar_t*)ptr))(0, j - 1);
+				token = (CMString((const wchar_t*)ptr))(0, j - 1);
 			}
 			else {
 				while (*ptr2 > L' ') {
 					ptr2++;
 					j++;
 				}
-				token = (string((const wchar_t*)ptr))(0, j);
+				token = (CMString((const wchar_t*)ptr))(0, j);
 			}
 			ptr += j;
 			SetExpression(nr,nc++,token);

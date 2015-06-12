@@ -43,8 +43,8 @@ protected:
 	virtual void read_body(wistream& s);
 	virtual void write_body(wostream& s);
 public:
-	CMVSingleExpression(const string& aName, const wchar_t* aExp = 0) : CMVariable(aName), expression(aExp) {}
+	CMVSingleExpression(const CMString& aName, const wchar_t* aExp = 0) : CMVariable(aName), expression(aExp) {}
 	void SetExpression(const wchar_t* exp) { expression = exp; }
-	virtual string VariableType() {return GetEvalType();}
+	virtual CMString VariableType() {return GetEvalType();}
 	static const wchar_t* GetEvalType() {return L"CMVSingleExpression";}
 };

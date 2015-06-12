@@ -63,7 +63,7 @@ const wchar_t* CMVPeriodIterator::get_next()
 	return 0;
 }
 
-CMVPeriod::CMVPeriod(const string& aName) :
+CMVPeriod::CMVPeriod(const CMString& aName) :
 CMVariable(aName),
 array(0,32),
 periodstate(0),
@@ -159,7 +159,7 @@ double CMVPeriod::evaluate(CMTimeMachine* t,int,int)
 
 void CMVPeriod::read_body(wistream& s)
 {
-	string str,token,token2;
+	CMString str,token,token2;
 	str = GetAssociation(L"yearend");
 	int yearend = str.length() ? CMTime::Month(str.c_str()) : 12;
 	if (IsType(L"trace"))

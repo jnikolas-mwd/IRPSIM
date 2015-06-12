@@ -52,11 +52,11 @@ class _IRPCLASS CMCategory : public CMAllocationUnit
    static wchar_t* footer;
 	static class _IRPCLASS CMPSmallArray<CMCategory> categories;
 
-	class _IRPCLASS CMVSmallArray<string> member_names;
+	class _IRPCLASS CMVSmallArray<CMString> member_names;
 	class _IRPCLASS CMPSSmallArray<CMAllocationUnit> member_units;
 	
 	int default_allocation_mode,state;
-	string strPutLimit,strTakeLimit,strCutLimit;
+	CMString strPutLimit,strTakeLimit,strCutLimit;
 	CMVariableOrConstant vcPutLimit,vcTakeLimit,vcCutLimit;
 
    virtual wistream& read(wistream& s);
@@ -85,7 +85,7 @@ public:
 
 	int Fail() const {return (state&csFail);}
 
-   int  ContainsMember(const string& name);
+   int  ContainsMember(const CMString& name);
 
 	double Evaluate(double limit,int rule);
 	double CutBack(double limit,int rule,int ignorebalance,int nodetype);
@@ -113,5 +113,5 @@ public:
    static unsigned short CategoryCount() {return categories.Count();}
    static CMCategory* AddCategory(CMCategory* pCat) {categories.Add(pCat);return pCat;}
 	static CMCategory* GetCategory(unsigned short n) {return n<categories.Count() ? categories[n] : 0;}
-	static CMCategory* FindCategory(const string& aName);
+	static CMCategory* FindCategory(const CMString& aName);
 };

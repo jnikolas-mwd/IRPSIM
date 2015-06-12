@@ -51,7 +51,7 @@ void CMNode::ResetAggregateVariables()
 	for (unsigned short i=0;(name=CMVariableTypes::AggStringFromInt(i))!=0;i++) {
 		aggregates.AddAt(i,CMVariable::Find(name));
 		for (unsigned short j=0;j<nregions;j++)
-			aggregates.AddAt((j+1)*naggregates+i,CMVariable::Find(string(name) + L"." + CMRegions::GetRegionName(j)));
+			aggregates.AddAt((j+1)*naggregates+i,CMVariable::Find(CMString(name) + L"." + CMRegions::GetRegionName(j)));
 	}
 }
 
@@ -187,7 +187,7 @@ double CMNode::get_rank()
 void CMNode::set_association(CMVariableOrConstant& vc, const wchar_t* varstr)
 {
    if (vmain && varstr)
-		vc.Set(vmain->GetAssociation(string(varstr)));
+		vc.Set(vmain->GetAssociation(CMString(varstr)));
    else
    	vc.Set(0);
 }
@@ -532,7 +532,7 @@ void CMNode::DestroyNodes()
 	nodes.ResetAndDestroy(1);
 }
 
-CMNode* CMNode::AddNode(const string& name)
+CMNode* CMNode::AddNode(const CMString& name)
 {
 	if (name.is_null())
    	return 0;

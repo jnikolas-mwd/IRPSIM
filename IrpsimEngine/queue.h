@@ -24,7 +24,7 @@
 #include "irp.h"
 #include "cmtime.h"
 #include "cmdefs.h"
-#include "string.h"
+#include "cmstring.h"
 
 class _IRPCLASS CMValueQueue
 {

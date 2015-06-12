@@ -23,7 +23,7 @@
 //#include <fstream.h>
 //ofstream sdebug("cmerror.deb");
 
-CMVSmallArray<string> CMError::errors;
+CMVSmallArray<CMString> CMError::errors;
 int CMError::maxwarn=10;
 int CMError::maxerr=5;
 int CMError::warncount=0;
@@ -35,9 +35,9 @@ void CMError::Reset()
    errors.Reset(1);
 }
 
-void CMError::ReportError(const string& err) throw (CMException)
+void CMError::ReportError(const CMString& err) throw (CMException)
 {
-	errors.Add(string(L"Error: " + err));
+	errors.Add(CMString(L"Error: " + err));
 	const wchar_t* test = err.c_str();
    if (++errcount>=maxerr) {
    	errcount=0;
@@ -45,27 +45,27 @@ void CMError::ReportError(const string& err) throw (CMException)
    }
 }
 
-void CMError::ReportWarning(const string& err) throw (CMException)
+void CMError::ReportWarning(const CMString& err) throw (CMException)
 {
-	errors.Add(string(L"Warning: " + err));
+	errors.Add(CMString(L"Warning: " + err));
    if (++warncount>=maxwarn) {
    	warncount=0;
       throw (CMException(L"Too many warnings"));
    }
 }
 
-string CMError::LatestError()
+CMString CMError::LatestError()
 {
 	if (errors.Count()==0)
-   	return string();
+   	return CMString();
    return Error(errors.Count()-1);
 }
 
-string CMError::Error(unsigned short n)
+CMString CMError::Error(unsigned short n)
 {
 	if (n<errors.Count())
 		return errors[n];
-	return string();
+	return CMString();
 }
 
 

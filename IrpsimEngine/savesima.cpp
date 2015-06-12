@@ -31,7 +31,7 @@ CMSaveSimulation(s,a)
 {
 }
 
-string CMSaveSimulationAscii::get_aggregation_string()
+CMString CMSaveSimulationAscii::get_aggregation_string()
 {
 	wchar_t buffer[128];
    wchar_t tmbuffer[32];
@@ -44,7 +44,7 @@ string CMSaveSimulationAscii::get_aggregation_string()
 	else
      	swprintf_s(buffer, 128, L"T = %s",tmbuffer);
    CMTime::SetOutputFormat(oldformat);
-   return string(buffer);
+   return CMString(buffer);
 }
 
 void CMSaveSimulationAscii::output_header(int which)

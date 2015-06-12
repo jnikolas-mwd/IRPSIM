@@ -25,7 +25,7 @@
 #include <math.h>
 
 
-CMAllocationUnit::CMAllocationUnit(const string& aName,int id) : CMIrpObject(aName,id),
+CMAllocationUnit::CMAllocationUnit(const CMString& aName,int id) : CMIrpObject(aName,id),
 allocation_type(0),
 allocation_mode(Preserve),
 sort_value(CM_BIGDOUBLE),
@@ -126,9 +126,9 @@ void CMAllocationUnit::post_process(int reduceflag)
 		allocamount = 0;
 }
 
-string CMAllocationUnit::TranslateAllocationRule(int ruleid)
+CMString CMAllocationUnit::TranslateAllocationRule(int ruleid)
 {
-	string ret = L"preserve";
+	CMString ret = L"preserve";
    switch (ruleid) {
 		case ByRank: ret = L"byrank"; break;
    	case BalancePercent: ret = L"balancepercent"; break;
@@ -140,7 +140,7 @@ string CMAllocationUnit::TranslateAllocationRule(int ruleid)
    return ret;
 }
 
-int CMAllocationUnit::TranslateAllocationRule(const string& modename)
+int CMAllocationUnit::TranslateAllocationRule(const CMString& modename)
 {
 	if 	  (modename.contains(L"rank"))				return ByRank;
 	else if (modename.contains(L"percent"))			return BalancePercent;

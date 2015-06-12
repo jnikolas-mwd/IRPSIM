@@ -22,19 +22,19 @@
 
 #include "irp.h"
 #include "cmdefs.h"
-#include "string.h"
+#include "cmstring.h"
 
 class _IRPCLASS CMTokenizer
 {
-	const	string*  theString;
+	const	CMString*  theString;
 	const wchar_t*		place;
 public:
-	CMTokenizer(const string& s);	// Construct to lex a string
+	CMTokenizer(const CMString& s);	// Construct to lex a string
 
   // Advance to next token, delimited by s:
 	CMSubString operator()(const wchar_t* s);
 	CMSubString operator()(); // { return operator()(" \t\n"); }
-    void Reset(const string& s);
+    void Reset(const CMString& s);
 };
 
 #endif

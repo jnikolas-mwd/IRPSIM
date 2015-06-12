@@ -25,17 +25,17 @@
 #include "cmdefs.h"
 #include "smvarray.h"
 #include "smparray.h"
-#include "string.h"
+#include "cmstring.h"
 
 class _IRPCLASS CMScenario : public CMIrpObject
 {
 	class _IRPCLASS CMPSmallArray<CMOption> options;
-	class _IRPCLASS CMVSmallArray<string> varnames;
+	class _IRPCLASS CMVSmallArray<CMString> varnames;
 	//class _IRPCLASS CMVSmallArray<int>    flags;
 	int maxwidth;
 
 protected:
-	void AddEntry(const string& name, const string& value, int forceoption = 0);
+	void AddEntry(const CMString& name, const CMString& value, int forceoption = 0);
 	virtual wistream& read(wistream& is);
 	virtual wostream& write(wostream& os);
 
@@ -44,11 +44,11 @@ public:
 	//enum { SaveFlag = 0x01, WriteFlag = 0x02 };
 	CMScenario(int id=-1) : CMIrpObject(id),
 		options() , varnames(), maxwidth(0) {}
-	CMScenario(const string& aName,int id = -1) : CMIrpObject(aName,id),
+	CMScenario(const CMString& aName,int id = -1) : CMIrpObject(aName,id),
 		options() , varnames(), maxwidth(0) {}
 	~CMScenario();
 	void Use(CMOptions& op);
 	unsigned short Variables() {return varnames.Count();}
-	string VariableName(unsigned short n) {return varnames[n];}
+	CMString VariableName(unsigned short n) {return varnames[n];}
     //int Flags(unsigned short n) {return flags[n];}
 };

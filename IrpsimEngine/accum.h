@@ -26,6 +26,7 @@
 #include "cmdefs.h"
 #include "bgvarray.h"
 #include "smvarray.h"
+#include "cmstring.h"
 #include <fstream>
 
 	class accumulator
@@ -81,7 +82,7 @@
 		long	 periodlength; // length of period (e.g. # of months)
 		short	 state;
 		long	 count;
-		unsigned get_variable_index(const string& name);
+		unsigned get_variable_index(const CMString& name);
 		enum { failbit = 0x0001 };
 	public:
 		CMAccumulatorArray();
@@ -91,7 +92,7 @@
 
 		int   Fail() const { return (state & failbit); }
 		void  Reset();
-		void  AssignVariable(unsigned short var, const string& name, const string& type, int s)
+		void  AssignVariable(unsigned short var, const CMString& name, const CMString& type, int s)
 		{
 			if (vardesc) vardesc->AddAt(var, CMVariableDescriptor(name, type, s));
 		}
@@ -103,11 +104,11 @@
 		double Min(const CMTime& t, unsigned var) const;
 		double Max(const CMTime& t, unsigned var) const;
 
-		double Mean(const CMTime& t, const string& var) const	{ return Mean(t, VariableIndex(var)); }
-		double StdDev(const CMTime& t, const string& var) const { return StdDev(t, VariableIndex(var)); }
-		double Variance(const CMTime& t, const string& var)	const { return Variance(t, VariableIndex(var)); }
-		double Min(const CMTime& t, const string& var) const { return Min(t, VariableIndex(var)); }
-		double Max(const CMTime& t, const string& var) const { return Max(t, VariableIndex(var)); }
+		double Mean(const CMTime& t, const CMString& var) const	{ return Mean(t, VariableIndex(var)); }
+		double StdDev(const CMTime& t, const CMString& var) const { return StdDev(t, VariableIndex(var)); }
+		double Variance(const CMTime& t, const CMString& var)	const { return Variance(t, VariableIndex(var)); }
+		double Min(const CMTime& t, const CMString& var) const { return Min(t, VariableIndex(var)); }
+		double Max(const CMTime& t, const CMString& var) const { return Max(t, VariableIndex(var)); }
 
 		long Trials() const { return (nvars&&periodlength) ? count / (periodlength*nvars) : 0; }
 		unsigned Variables() const { return nvars; }
@@ -115,11 +116,11 @@
 		CMTime EndPeriod() const { return end; }
 		long TimeSteps() const { return periodlength; }
 		long GetPeriod(CMTime& b, CMTime& e, CMTIMEUNIT& units, int& length) const;
-		string GetVariableName(unsigned n) const;
-		string GetVariableType(unsigned n) const;
+		CMString GetVariableName(unsigned n) const;
+		CMString GetVariableType(unsigned n) const;
 		int    GetVariableState(unsigned n) const;
 		void   SetVariableState(unsigned n, int aState, BOOL action);
-		unsigned VariableIndex(const string& name) const;
+		unsigned VariableIndex(const CMString& name) const;
 		wostream& WriteBinary(wostream& s);
 		wistream& ReadBinary(wistream& s);
 

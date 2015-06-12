@@ -15,7 +15,7 @@
 #include "StdAfx.h"
 #include "assoc.h"
 
-void CMAssociations::AddAssociation(const string& aName,const string& val)
+void CMAssociations::AddAssociation(const CMString& aName,const CMString& val)
 {
 	unsigned short i=0;
 	for (;i<Count();i++) {
@@ -24,31 +24,31 @@ void CMAssociations::AddAssociation(const string& aName,const string& val)
          return;
       }
    }
-	Add(new stringValue<string>(aName,val) );
+	Add(new CMStringValue<CMString>(aName,val) );
 }
 
-string CMAssociations::GetName(unsigned short n)
+CMString CMAssociations::GetName(unsigned short n)
 {
 	if (n<Count())
-		return (string)(*At(n));
-   return string();
+		return (CMString)(*At(n));
+   return CMString();
 }
 
-string CMAssociations::GetValue(unsigned short n)
+CMString CMAssociations::GetValue(unsigned short n)
 {
 	if (n<Count())
 		return At(n)->Value();
-   return string();
+   return CMString();
 }
 
-string CMAssociations::GetValue(const string& aName)
+CMString CMAssociations::GetValue(const CMString& aName)
 {
 	int loc = GetAssociationIndex(aName);
    if (loc>=0) return At(loc)->Value();
-   return string();
+   return CMString();
 }
 
-int CMAssociations::GetAssociationIndex(const string& aName)
+int CMAssociations::GetAssociationIndex(const CMString& aName)
 {
 	for (unsigned short i=0;i<Count();i++)
 		if (*At(i) == aName)
@@ -56,17 +56,17 @@ int CMAssociations::GetAssociationIndex(const string& aName)
 	return -1;
 }
 
-int CMAssociations::GetAssociation(unsigned short n,string& s1,string& s2)
+int CMAssociations::GetAssociation(unsigned short n,CMString& s1,CMString& s2)
 {
 	if (n<Count()) {
-		s1 = (string)(*At(n));
+		s1 = (CMString)(*At(n));
 		s2 = At(n)->Value();
 		return 1;
 	}
 	return 0;
 }
 
-int CMAssociations::IsAssociation(string& s1,string& s2)
+int CMAssociations::IsAssociation(CMString& s1,CMString& s2)
 {
 	for (unsigned short i=0;i<Count();i++)
 		if (*At(i) == s1 && At(i)->Value() == s2)

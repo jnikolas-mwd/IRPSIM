@@ -46,8 +46,8 @@ class _IRPCLASS CMVTable : public CMVariable
 protected:
 	friend class CMVTableIterator;
 	class _IRPCLASS CMPBigArray<CMExpression> array;
-	class _IRPCLASS CMVSmallArray<string> rowselectornames;
-	class _IRPCLASS CMVSmallArray<string> colselectornames;
+	class _IRPCLASS CMVSmallArray<CMString> rowselectornames;
+	class _IRPCLASS CMVSmallArray<CMString> colselectornames;
 	class _IRPCLASS CMIndexSelector rowselector;
 	class _IRPCLASS CMIndexSelector colselector;
 	int nrows;
@@ -60,14 +60,14 @@ protected:
 	virtual void write_body(wostream& s);
    enum {containsPolynomials=0x0001};
 public:
-	CMVTable(const string& aName);
+	CMVTable(const CMString& aName);
 	~CMVTable();
-	void SetRowSelector(int n,const string& name);
-	void SetColSelector(int n,const string& name);
+	void SetRowSelector(int n,const CMString& name);
+	void SetColSelector(int n,const CMString& name);
 	void SetRowValue(int row,int selno,double value);
 	void SetColValue(int col,int selno,double value);
-	void SetExpression(int row,int col,const string& str);
+	void SetExpression(int row,int col,const CMString& str);
 	CMExpression& GetExpression(int row,int col) {return *array[(long)row*ncols+col];}
-	virtual string VariableType() {return GetEvalType();}
+	virtual CMString VariableType() {return GetEvalType();}
 	static const wchar_t* GetEvalType() {return L"CMVTable";}
 };

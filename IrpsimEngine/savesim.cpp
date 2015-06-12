@@ -110,9 +110,9 @@ void CMSaveSimulation::get_data_from_simulation()
    if (sim.GetOption(L"outputheader")==L"yes")
    	state |= rHeader;
 
-	string str = sim.GetOption(L"outputdelimiter");
+	CMString str = sim.GetOption(L"outputdelimiter");
 	if (str[0] == L's' || str[0] == L'S') {
-		outch = L' ';outlen = _wtoi(((string)str.substr(1)).c_str());
+		outch = L' ';outlen = _wtoi(((CMString)str.substr(1)).c_str());
 	}
 	else if (iswdigit(str[0])) {
 		outch = L'\0';outlen = _wtoi(str.c_str());
@@ -122,8 +122,8 @@ void CMSaveSimulation::get_data_from_simulation()
 	}
 
 	CMTokenizer next(sim.GetOption(L"outputperiod"));
-	string begstr(next(delims));
-	string endstr(next(delims));
+	CMString begstr(next(delims));
+	CMString endstr(next(delims));
 
 	accum->GetPeriod(outbeg,outend,outincunits,outincsteps);
 
@@ -220,7 +220,7 @@ CMSaveSimulation::~CMSaveSimulation()
    if (fout) delete fout;
 }
 
-void CMSaveSimulation::AddOutputVariable(const string& name)
+void CMSaveSimulation::AddOutputVariable(const CMString& name)
 {
    maxnamelength = cmmax(maxnamelength,(int)name.length());
 	unsigned n = array->VariableIndex(name);
@@ -290,7 +290,7 @@ CMTime CMSaveSimulation::get_realizations(const CMTime& tm,long trial)
 }
 */
 
-wofstream* CMSaveSimulation::open_file(const string& fname)
+wofstream* CMSaveSimulation::open_file(const CMString& fname)
 {
 	if (fout)
 	  	delete fout;
@@ -325,7 +325,7 @@ void CMSaveSimulation::output_realizations_record(const CMTime& t,long trialno,l
    output_record_end(row);
 }
 
-int CMSaveSimulation::Outcomes(const string& fname)
+int CMSaveSimulation::Outcomes(const CMString& fname)
 {
 	if (!open_file(fname))
    	return -1;
@@ -385,7 +385,7 @@ int CMSaveSimulation::Outcomes(const string& fname)
 	return 0;
 }
 
-int CMSaveSimulation::Summary(const string& fname)
+int CMSaveSimulation::Summary(const CMString& fname)
 {
 	unsigned i;
 	
@@ -434,7 +434,7 @@ int CMSaveSimulation::Summary(const string& fname)
    return 0;
 }
 
-int CMSaveSimulation::ReliabilitySeries(const string& fname)
+int CMSaveSimulation::ReliabilitySeries(const CMString& fname)
 {
 	unsigned i;
 
@@ -473,7 +473,7 @@ int CMSaveSimulation::ReliabilitySeries(const string& fname)
    return 0;
 }
 
-int CMSaveSimulation::ReliabilityDetail(const string& fname)
+int CMSaveSimulation::ReliabilityDetail(const CMString& fname)
 {
 	if (!open_file(fname))
    	return -1;

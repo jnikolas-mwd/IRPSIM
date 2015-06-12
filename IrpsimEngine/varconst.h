@@ -22,7 +22,7 @@
 
 #include "irp.h"
 #include "cmdefs.h"
-#include "string.h"
+#include "cmstring.h"
 
 class _IRPCLASS CMVariable;
 class _IRPCLASS CMTimeMachine;
@@ -40,9 +40,9 @@ class _IRPCLASS CMVariableOrConstant
 
 public:
 	CMVariableOrConstant(double val=0);
-	CMVariableOrConstant(const string& str);
+	CMVariableOrConstant(const CMString& str);
 	CMVariableOrConstant(const CMVariableOrConstant& vc);
-	void 	 Set(const string& str); // str may be a number or a variable name
+	void 	 Set(const CMString& str); // str may be a number or a variable name
 	void 	 Set(double val);
 	double GetValue(CMTimeMachine* t,double defaultvalue,int force_evaluation=0) const;
 	void   SetValue(CMTimeMachine* t,double amt);

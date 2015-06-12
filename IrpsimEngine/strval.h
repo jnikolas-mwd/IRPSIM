@@ -7,7 +7,7 @@
 // ==========================================================================  
 // DESCRIPTION:	
 // ==========================================================================
-// stringValue implements a string-value pair, with value of type TP
+// CMStringValue implements a string-value pair, with value of type TP
 // ==========================================================================
 //
 // ==========================================================================  
@@ -20,18 +20,18 @@
 #if !defined (__STRVAL_H)
 #define __STRVAL_H
 
-#include "string.h"
+#include "cmstring.h"
 
-template <class T> class stringValue : public string
+template <class T> class CMStringValue : public CMString
 {
 	T value;
 public:
-	stringValue() : string() , value() {}
-	stringValue(const string& str, const T& val) : string(str) , value(val) {}
-	stringValue(const wchar_t* str, const T& val) : string(str), value(val) {}
-	stringValue(const stringValue<T>& s) : string((const string)s) , value(s.value) {}
-	stringValue<T>& operator = (const stringValue<T>& s)
-		{string::operator = (s); value=s.value; return *this;}
+	CMStringValue() : CMString() , value() {}
+	CMStringValue(const CMString& str, const T& val) : CMString(str) , value(val) {}
+	CMStringValue(const wchar_t* str, const T& val) : CMString(str), value(val) {}
+	CMStringValue(const CMStringValue<T>& s) : CMString((const CMString)s) , value(s.value) {}
+	CMStringValue<T>& operator = (const CMStringValue<T>& s)
+		{CMString::operator = (s); value=s.value; return *this;}
 	T& Value() {return value;}
    void SetValue(const T& v) {value=v;}
 };

@@ -21,7 +21,7 @@
 #include "function.h"
 #include "advmath.h"
 #include "notify.h"
-#include "string.h"
+#include "cmstring.h"
 #include <ctype.h>
 #include <string.h>
 #include <math.h>
@@ -48,8 +48,8 @@ CMFunction::CMFunction(const wchar_t* str)
 
 const wchar_t* CMFunction::FindFunction(const wchar_t* str, int* np)
 {
-	string s(str);
-	int flag = string::set_case_sensitive(0);
+	CMString s(str);
+	int flag = CMString::set_case_sensitive(0);
 
 	int i;
 	for (i=0;funcstr[i];i++) {
@@ -64,20 +64,20 @@ const wchar_t* CMFunction::FindFunction(const wchar_t* str, int* np)
 
 	if (np) *np = funcstr[i] ? i : Const;
 
-	string::set_case_sensitive(flag);
+	CMString::set_case_sensitive(flag);
 	return funcstr[i];
 }
 
 void CMFunction::check_domain(double val,BOOL lower,double lowval,BOOL upper,double upval)
 {
 	if ( (lower==TRUE && val<lowval) || (upper==TRUE && val>upval) )
-		CMNotifier::Notify(CMNotifier::ERROR, string(L"function domain: ") + GetName());
+		CMNotifier::Notify(CMNotifier::ERROR, CMString(L"function domain: ") + GetName());
 }
 
 void CMFunction::check_singularity(double val,double sing)
 {
 	if (val==sing)
-		CMNotifier::Notify(CMNotifier::ERROR, string(L"singularity: ") + GetName());
+		CMNotifier::Notify(CMNotifier::ERROR, CMString(L"singularity: ") + GetName());
 }
 
 int CMFunction::NumParameters()
@@ -206,7 +206,7 @@ double CMFunction::evaluate(double* parms,int nparms)
 double CMFunction::eval_discrete(double* parms,int nparms)
 {
 	if (nparms%2) {
-		CMNotifier::Notify(CMNotifier::ERROR, string(L"must have an even number of arguments: ") + GetName());
+		CMNotifier::Notify(CMNotifier::ERROR, CMString(L"must have an even number of arguments: ") + GetName());
       return 0;
    }
 	int evaluated=0;
@@ -221,7 +221,7 @@ double CMFunction::eval_discrete(double* parms,int nparms)
 		}
 	}
 	if (cum != 1)
-		CMNotifier::Notify(CMNotifier::ERROR, string(L"must sum to 1: ") + GetName());
+		CMNotifier::Notify(CMNotifier::ERROR, CMString(L"must sum to 1: ") + GetName());
 	return ret;
 }
 
@@ -230,7 +230,7 @@ double CMFunction::eval_choose(double* parms,int nparms)
 {
 	int index = (int)parms[0];
    if (index<=0 || index>nparms-1) {
-	   CMNotifier::Notify(CMNotifier::ERROR, string(L"index out of range: ") + GetName());
+	   CMNotifier::Notify(CMNotifier::ERROR, CMString(L"index out of range: ") + GetName());
       return 0;
    }
    return parms[index];

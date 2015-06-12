@@ -22,7 +22,7 @@
 
 #include "irp.h"
 #include "irpobject.h"
-#include "string.h"
+#include "cmstring.h"
 
 class _IRPCLASS CMAllocationUnit : public CMIrpObject
 {
@@ -57,7 +57,7 @@ public:
 			EvaluateOperation};
 
 	CMAllocationUnit(int id=-1);
-	CMAllocationUnit(const string& aName,int id=-1);
+	CMAllocationUnit(const CMString& aName,int id=-1);
 	int GetType() {return allocation_type;}
 
 	virtual double Capacity() = 0;
@@ -75,7 +75,7 @@ public:
 	virtual void Gain() = 0;
 	virtual void Loss() = 0;
 
-	static int TranslateAllocationRule(const string& rulestr);
-	static string TranslateAllocationRule(int ruleid);
+	static int TranslateAllocationRule(const CMString& rulestr);
+	static CMString TranslateAllocationRule(int ruleid);
 };
 

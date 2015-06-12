@@ -61,8 +61,8 @@ currentscenario(0),
 errorcode(0),
 vartypes()
 {
-	casesensitiveflag = string::set_case_sensitive(0);
-	skipwhitespaceflag = string::skip_whitespace(1);
+	casesensitiveflag = CMString::set_case_sensitive(0);
+	skipwhitespaceflag = CMString::skip_whitespace(1);
     variables = new CMVariableCollection(1);
 	oldvariables =	CMVariable::SetCollectionContext(variables);
 }
@@ -72,8 +72,8 @@ CMIrpApplication::~CMIrpApplication()
 	ResetApplication();
     CMVariable::SetCollectionContext(oldvariables);
     delete variables;
-	string::set_case_sensitive(casesensitiveflag);
-	string::skip_whitespace(skipwhitespaceflag);
+	CMString::set_case_sensitive(casesensitiveflag);
+	CMString::skip_whitespace(skipwhitespaceflag);
 }
 
 unsigned CMIrpApplication::SimulationsCount()
@@ -81,12 +81,12 @@ unsigned CMIrpApplication::SimulationsCount()
 	return simulations.Count();
 }
 
-void CMIrpApplication::OpenProject(const string& name)
+void CMIrpApplication::OpenProject(const CMString& name)
 {
 	ResetApplication();
 	CMVariable::SetCollectionContext(variables);
 //	project_file = getfullpathname(name.c_str());
-	string strName(name);
+	CMString strName(name);
 	int varsread = 0;
 	m_strProjectFile = name;
 	CMNotifier::Notify(CMNotifier::LOG, L"Opening Project: " + m_strProjectFile);
@@ -97,7 +97,7 @@ void CMIrpApplication::OpenProject(const string& name)
 }
 
 /*
-int CMIrpApplication::IsApplicationFile(const string& filename)
+int CMIrpApplication::IsApplicationFile(const CMString& filename)
 {
 	unsigned i;
 
@@ -119,12 +119,12 @@ int CMIrpApplication::IsApplicationFile(const string& filename)
 
 struct _thread_data {
 	CMIrpApplication* pApp;
-	string* pFileNames;
+	CMString* pFileNames;
 	int nFiles;
 	//DWORD dwThreadId;
 };
 
-//void CMIrpApplication::AddFiles(string *pNames,int nFiles)
+//void CMIrpApplication::AddFiles(CMString *pNames,int nFiles)
 //{
 	//int varsread = 0;
 	//read_file(pNames[0], varsread);
@@ -135,7 +135,7 @@ struct _thread_data {
 		return;
 	td.pApp = this;
 	td.nFiles = nFiles;
-	td.pFileNames = new string[nFiles];
+	td.pFileNames = new CMString[nFiles];
 	for (int i=0;i<nFiles;i++)
 		td.pFileNames[i] = pNames[i];
 	CreateThread(NULL,0L,add_file_proc,&td,0L,&td.dwThreadId);
@@ -143,17 +143,17 @@ struct _thread_data {
 //}
 
 /*
-void CMIrpApplication::DeleteFiles(string *pNames,int nFiles)
+void CMIrpApplication::DeleteFiles(CMString *pNames,int nFiles)
 {
-	string strProjFile(GetProjectFile());
+	CMString strProjFile(GetProjectFile());
 	if (strProjFile.is_null())
 		return;
 	int nFilesDeleted = 0;
 
 	for (int i=0;i<nFiles;i++) {
 		switch (IsApplicationFile(pNames[i])) {
-			case FILE_DEFINITION: loadedfiles.Detach((const string&)pNames[i]); nFilesDeleted++; break;
-			case FILE_ATTACHED:   attachedfiles.Detach((const string&)pNames[i]); nFilesDeleted++; break;
+			case FILE_DEFINITION: loadedfiles.Detach((const CMString&)pNames[i]); nFilesDeleted++; break;
+			case FILE_ATTACHED:   attachedfiles.Detach((const CMString&)pNames[i]); nFilesDeleted++; break;
 		}
 	}
 	if (nFilesDeleted) {
@@ -192,14 +192,14 @@ DWORD WINAPI CMIrpApplication::add_file_proc(LPVOID lpParameter)
 }
 */
 
-int CMIrpApplication::read_file(const string& name,int &varsread)
+int CMIrpApplication::read_file(const CMString& name,int &varsread)
 {
 	static const wchar_t* delims = L"# \t\r\n";
-	string messageheader = L"Reading ";
-	string errorheader = L"problem reading file ";
+	CMString messageheader = L"Reading ";
+	CMString errorheader = L"problem reading file ";
 	wifstream* stack[128];
 	int current=0,currfile,oldfile;
-	string currpath = name;
+	CMString currpath = name;
 
 	stack[0] = new wifstream(name.c_str(),ios::in|IOS_BINARY);
 	wifstream* s = stack[0];
@@ -216,15 +216,15 @@ int CMIrpApplication::read_file(const string& name,int &varsread)
     CMTimeMachine tm(CM_MONTH,1);
 	int err = 0;
 	while (s && !err) {
-		string line;
+		CMString line;
 		long index = (long)s->tellg();
 		line.read_line(*s);
 		line = stripends(line);
 		if (!line.is_null() && line[0]==L'#') {
 			CMTokenizer next(line);
-			string token = next(delims);
+			CMString token = next(delims);
 			if (token == L"include") {
-				string fname = stripends(string(line.c_str() + 8));
+				CMString fname = stripends(CMString(line.c_str() + 8));
 				currpath = getabsolutepath(name.c_str(), fname.c_str());
 
 				s = stack[++current] = new wifstream(currpath.c_str(),ios::in|IOS_BINARY);
@@ -240,14 +240,14 @@ int CMIrpApplication::read_file(const string& name,int &varsread)
 			}
 			/*
 			else if (token == L"attach") {
-				string fname = next(delims);
+				CMString fname = next(delims);
 				add_file_to_list(fname,FILE_ATTACHED);
 				CMNotifier::Notify(CMNotifier::INFO, messageheader + fname, true);
 			}
 			*/
 			else if (token == L"define") {
-				string s1 = next(delims);
-				string s2 = next(delims);
+				CMString s1 = next(delims);
+				CMString s2 = next(delims);
 				CMDefinitions::Add(s1,s2,currfile);
 			}
 			else if (token==L"options") {
@@ -327,7 +327,7 @@ void CMIrpApplication::update_variable_links()
 {
 	CMVariable* v;
 	wchar_t buffer[128];
-   string region,vtype,vname;
+   CMString region,vtype,vname;
 	const wchar_t* aggname;
 
 	CMNotifier::Notify(CMNotifier::LOG, L"Updating variable types");
@@ -370,7 +370,7 @@ void CMIrpApplication::update_variable_links()
 
 	for (int i=0;(aggname=CMVariableTypes::AggStringFromInt(i))!=0;i++) {
 		for (unsigned short j=0;j<CMRegions::RegionCount();j++) {
-			CMVariable* v  = new CMVariable((string)aggname + L"." + CMRegions::GetRegionName(j),CMVariable::vsAggregate | CMVariable::vsRegional);
+			CMVariable* v  = new CMVariable((CMString)aggname + L"." + CMRegions::GetRegionName(j),CMVariable::vsAggregate | CMVariable::vsRegional);
 			v->SetType(i-1000);
 			if (CMVariableTypes::IsAggSum(i)) v->SetState(CMVariable::vsSum,TRUE);
 			variables->Add(v);
@@ -399,10 +399,10 @@ void CMIrpApplication::update_variable_links()
 		while (ni && ((vname=ni->GetNext())!=0)) {
 			if (!CMVariable::Find(vname) && !CMDefinitions::IsDefined(vname)) {
 				if (first)
-					CMNotifier::Notify(CMNotifier::LOG, string(L"\r\n") + v->GetName() + L"\r\n missing:");
+					CMNotifier::Notify(CMNotifier::LOG, CMString(L"\r\n") + v->GetName() + L"\r\n missing:");
 				first=0;
 				CMNotifier::Notify(CMNotifier::LOG, vname);
-				CMNotifier::Notify(CMNotifier::ERROR, L"Missing variable or definition " + string(vname) + L" in definition of " + v->GetName());
+				CMNotifier::Notify(CMNotifier::ERROR, L"Missing variable or definition " + CMString(vname) + L" in definition of " + v->GetName());
 			}
 		}
 	}
@@ -411,10 +411,10 @@ void CMIrpApplication::update_variable_links()
 }
 
 /*
-string CMIrpApplication::GetProjectName()
+CMString CMIrpApplication::GetProjectName()
 {
 	size_t index;
-	string ret;
+	CMString ret;
 	if (loadedfiles.Count())
 		ret = strippath(loadedfiles[0]);
 	if ((index=ret.find(L'.')) != CM_NPOS) ret.remove(index);
@@ -422,18 +422,18 @@ string CMIrpApplication::GetProjectName()
 	return ret;
 }
 
-string CMIrpApplication::GetProjectFile() 
+CMString CMIrpApplication::GetProjectFile() 
 {
-	string ret;
+	CMString ret;
 	if (loadedfiles.Count())
 		ret = strippath(loadedfiles[0]);
 	return ret;
 }
 */
 
-string CMIrpApplication::GetObjectFileName(CMIrpObject* pObject)
+CMString CMIrpApplication::GetObjectFileName(CMIrpObject* pObject)
 {
-	string ret;
+	CMString ret;
 	if (pObject) ret = LoadedFile(pObject->GetApplicationId());
 	return ret;
 }
@@ -447,7 +447,7 @@ void CMIrpApplication::SetOptions(const CMOptions& op)
 */
 
 /*
-CMScenario* CMIrpApplication::AddThisScenario(const string& name)
+CMScenario* CMIrpApplication::AddThisScenario(const CMString& name)
 {
 	CMScenario* sce = NULL;
 	try {
@@ -460,7 +460,7 @@ CMScenario* CMIrpApplication::AddThisScenario(const string& name)
 	CMVariable* v;
 	while ((v=next())!=0) {
 		if (v->GetState(CMVariable::vsSelected)) {
-			string value;
+			CMString value;
 			if (v->GetState(CMVariable::vsSaveOutcomes)) value += L"save";
 			if (v->GetState(CMVariable::vsOutput)) value += L"write";
 			sce->AddEntry(v->GetName(),value);
@@ -476,7 +476,7 @@ CMScenario* CMIrpApplication::AddThisScenario(const string& name)
 }
 */
 
-CMScenario* CMIrpApplication::UseScenario(const string& name)
+CMScenario* CMIrpApplication::UseScenario(const CMString& name)
 {
    try {
 
@@ -491,7 +491,7 @@ CMScenario* CMIrpApplication::UseScenario(const string& name)
 		scenarios[n]->Use(options);
 		options.SetOption(L"simulationname",scenarios[n]->GetName());
 		for (unsigned i=0;i<scenarios[n]->Variables();i++) {
-      	string varname = scenarios[n]->VariableName(i);
+      	CMString varname = scenarios[n]->VariableName(i);
 			outputvars.Add(varname);
          for (unsigned j=0;j<simulations.Count();j++) {
 				CMSimulationArray* array = simulations[j]->SimArray();
@@ -525,7 +525,7 @@ void CMIrpApplication::AddScenario(CMScenario* sce)
 }
 */
 
-CMScript* CMIrpApplication::FindScript(const string& name)
+CMScript* CMIrpApplication::FindScript(const CMString& name)
 {
 	for (unsigned short i=0;i<scripts.Count();i++)
    	if (name == scripts[i]->GetName())
@@ -533,7 +533,7 @@ CMScript* CMIrpApplication::FindScript(const string& name)
    return 0;
 }
 
-CMScenario* CMIrpApplication::FindScenario(const string& name)
+CMScenario* CMIrpApplication::FindScenario(const CMString& name)
 {
 	for (unsigned short i=0;i<scenarios.Count();i++)
    	if (name == scenarios[i]->GetName())
@@ -541,12 +541,12 @@ CMScenario* CMIrpApplication::FindScenario(const string& name)
    return 0;
 }
 
-CMCategory* CMIrpApplication::FindCategory(const string& name)
+CMCategory* CMIrpApplication::FindCategory(const CMString& name)
 {
 	return CMCategory::FindCategory(name);	
 }
 
-CMIrpObject* CMIrpApplication::FindIrpObject(const string& name)
+CMIrpObject* CMIrpApplication::FindIrpObject(const CMString& name)
 {
 	CMIrpObject* pi = CMVariable::Find(name);	if (pi) return pi;
 	
@@ -560,7 +560,7 @@ CMIrpObject* CMIrpApplication::FindIrpObject(const string& name)
 }
 
 
-CMScript* CMIrpApplication::UseScript(const string& name)
+CMScript* CMIrpApplication::UseScript(const CMString& name)
 {
 	return (currentscript = FindScript(name));
 }
@@ -578,14 +578,14 @@ void CMIrpApplication::AddScript(CMScript* scr)
 */
 
 /*
-int CMIrpApplication::DestroyVariable(const string& vname)
+int CMIrpApplication::DestroyVariable(const CMString& vname)
 {
 	return variables ? variables->DestroyVariable(vname,0) : 0;
 }
 */
 
 /*
-CMVariable* CMIrpApplication::AddVariable(const string& vdef)
+CMVariable* CMIrpApplication::AddVariable(const CMString& vdef)
 {
 	return variables ? variables->AddVariable(vdef) : 0;
 }
@@ -678,7 +678,7 @@ CMSimulation* CMIrpApplication::CreateSimulation()  //const wchar_t* pFileName)
 			newsim = new CMSimulation(pFileName,0,this);
 			if (newsim->Fail()) {
 	  			delete newsim;
-				LogMessage(string(pFileName) + L" not a valid simulation file");
+				LogMessage(CMString(pFileName) + L" not a valid simulation file");
 				newsim=NULL;
 			}
 		}
@@ -700,7 +700,7 @@ void CMIrpApplication::DeleteSimulation(CMSimulation* pSim,int save)
 	try {
 		for (unsigned i=0;i<simulations.Count();i++) {
 			if (pSim==simulations[i]) {
-				string fname = pSim->GetFileName();
+				CMString fname = pSim->GetFileName();
 				//if (save) pSim->Save();
 				simulations.DetachAt(i,1);
 				/*
@@ -743,7 +743,7 @@ BOOL CMIrpApplication::PauseSimulation(CMSimulation* pSim,BOOL bAction)
 }
 
 /*
-int CMIrpApplication::WriteOptions(const string& filename)
+int CMIrpApplication::WriteOptions(const CMString& filename)
 {
 	wofstream of(filename.c_str(),IOS_BINARY);
 	if (of.fail())	return -1;
@@ -751,7 +751,7 @@ int CMIrpApplication::WriteOptions(const string& filename)
 	return 0;
 }
 
-int CMIrpApplication::WriteScenarios(const string& filename)
+int CMIrpApplication::WriteScenarios(const CMString& filename)
 {
 	wofstream of(filename.c_str(),IOS_BINARY);
 	if (of.fail())	return -1;
@@ -760,7 +760,7 @@ int CMIrpApplication::WriteScenarios(const string& filename)
 	return 0;
 }
 
-int CMIrpApplication::WriteScripts(const string& filename)
+int CMIrpApplication::WriteScripts(const CMString& filename)
 {
 	unsigned short i;
 
@@ -773,7 +773,7 @@ int CMIrpApplication::WriteScripts(const string& filename)
 	return 0;
 }
 
-int CMIrpApplication::WriteVariableDefs(const string& filename)
+int CMIrpApplication::WriteVariableDefs(const CMString& filename)
 {
 	wofstream fs(filename.c_str(),IOS_BINARY);
 	if (fs.fail())
@@ -781,7 +781,7 @@ int CMIrpApplication::WriteVariableDefs(const string& filename)
 
 	CMVariable::SetCollectionContext(variables);
 
-	string messageheader(L"Writing ");
+	CMString messageheader(L"Writing ");
 	CMPSSmallArray<CMVariable> vars;
 	CMVariableIterator next;
 	CMVariable* v;
@@ -798,7 +798,7 @@ int CMIrpApplication::WriteVariableDefs(const string& filename)
 }
 */
 
-int CMIrpApplication::WriteOutcomes(const string& filename,CMSimulation* sim)
+int CMIrpApplication::WriteOutcomes(const CMString& filename,CMSimulation* sim)
 {
 	if (!sim) return -1;
 	CMSaveSimulationAscii report(*sim,this);
@@ -812,7 +812,7 @@ int CMIrpApplication::WriteOutcomes(const string& filename,CMSimulation* sim)
    return report.Outcomes(filename);
 }
 
-int CMIrpApplication::WriteSummary(const string& filename,CMSimulation* sim)
+int CMIrpApplication::WriteSummary(const CMString& filename,CMSimulation* sim)
 {
 	if (!sim) return -1;
 	CMSaveSimulationAscii report(*sim,this);
@@ -826,7 +826,7 @@ int CMIrpApplication::WriteSummary(const string& filename,CMSimulation* sim)
    return report.Summary(filename);
 }
 
-int CMIrpApplication::add_file_to_list(const string& path)
+int CMIrpApplication::add_file_to_list(const CMString& path)
 {
 	int nRet = -1;
 	loadedfiles.Add(path);
@@ -835,7 +835,7 @@ int CMIrpApplication::add_file_to_list(const string& path)
 }
 
 /*
-	string strpath = getfullpathname(name.c_str());
+	CMString strpath = getfullpathname(name.c_str());
 
 	if (!strpath.length())
 		return -1;

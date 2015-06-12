@@ -71,7 +71,7 @@ int CMCategory::Initialize()
 	vcCutLimit.Set(strCutLimit);
 	for (unsigned short i=0;i<member_names.Count();i++) {
 		if (GetName() == member_names[i]) {
-			string errstring(GetName());
+			CMString errstring(GetName());
 			CMNotifier::Notify(CMNotifier::ERROR, errstring + L" contains itself as a category");
 			member_units.Add(NULL);
 		}
@@ -316,20 +316,20 @@ wistream& CMCategory::read(wistream& s)
 {
     const wchar_t* delims = L" \t\r\n";
 	reset();
-	string line;
+	CMString line;
 	while (!s.eof()) {
 		line.read_line(s);
    	line = stripends(line);
 		if (line.is_null())
       	continue;
 		else if (line(0,wcslen(header)) == header) {
-      	name = stripends(string(line.c_str()+wcslen(header)));
+      	name = stripends(CMString(line.c_str()+wcslen(header)));
          continue;
       }
 		else if (line(0,wcslen(footer)) == footer)
    		break;
 		CMTokenizer next(line);
-      string token = next(delims);
+      CMString token = next(delims);
 		if (token[0]==L'#') {
       	if (token(0,8)==L"#allocat")
             default_allocation_mode = CMAllocationUnit::TranslateAllocationRule(next(delims));
@@ -360,7 +360,7 @@ wostream& CMCategory::write(wostream& s)
    return s;
 }
 
-CMCategory* CMCategory::FindCategory(const string& aName)
+CMCategory* CMCategory::FindCategory(const CMString& aName)
 {
 	for (unsigned short i=0;i<categories.Count();i++)
    	if (aName == categories[i]->GetName())

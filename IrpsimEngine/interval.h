@@ -22,7 +22,7 @@
 #include "irpobject.h"
 #include "timemach.h"
 
-#include "string.h"
+#include "cmstring.h"
 #include "smparray.h"
 #include <iostream>
 using namespace std;
@@ -44,7 +44,7 @@ class _IRPCLASS CMInterval : public CMIrpObject
 	virtual int is_equal_to(const CMIrpObject& o2) const;
 	virtual const wchar_t* IsA();
 public:
-	CMInterval(const string& def);
+	CMInterval(const CMString& def);
 	CMInterval(CMTimeMachine* t);
 	CMInterval(const CMInterval& in) {operator = (in);}
 	void Initialize(CMTimeMachine* t);
@@ -53,8 +53,8 @@ public:
    CMInterval& operator = (const CMInterval& in);
 
    static void Reset();
-   static CMInterval* AddInterval(const string& def);
-   static CMInterval* Find(const string& aname);
+   static CMInterval* AddInterval(const CMString& def);
+   static CMInterval* Find(const CMString& aname);
 	static CMInterval* GetInterval(unsigned short n);
 	static unsigned short NumIntervals();
 	static void SetApplicationIdAll(int id);

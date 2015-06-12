@@ -25,7 +25,7 @@
 
 CMPSmallArray<CMDefinition> CMDefinitions::definition_array;
 
-CMDefinition* CMDefinitions::Find(const string& n,unsigned short* loc)
+CMDefinition* CMDefinitions::Find(const CMString& n,unsigned short* loc)
 {
 	if (loc) *loc=0;
 
@@ -41,7 +41,7 @@ CMDefinition* CMDefinitions::Find(const string& n,unsigned short* loc)
 	return 0;
 }
 
-double CMDefinitions::GetDefinition(const string& n)
+double CMDefinitions::GetDefinition(const CMString& n)
 {
 	return IsDefined(n) ? GetValue(n) : _wtof(n.c_str());
 }

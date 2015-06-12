@@ -31,19 +31,19 @@
 using namespace std;
 
 class _IRPCLASS CMOption : public CMIrpObject {
-//	string name;
-	string value;
+//	CMString name;
+	CMString value;
 public:
 	CMOption() : CMIrpObject() , value(L"") {}
-	CMOption(const string& n, const string& v, int app_id) : CMIrpObject(n, app_id) { SetValue(v); }
+	CMOption(const CMString& n, const CMString& v, int app_id) : CMIrpObject(n, app_id) { SetValue(v); }
 	CMOption(const CMOption& o) : value(o.value) {this->name = o.name; this->app_id = o.app_id; }
 	CMOption& operator = (const CMOption& o) { name = o.name; value = o.value; app_id = o.app_id; return *this; }
 //	int operator == (const CMOption& o) {return name==o.name;}
 //	int operator < (const CMOption& o) {return name<o.name;}
-//	string& GetName() {return name;}
-	const string& GetValue() const {return value;}
-	void SetValue(const string& v);
-	void SetValueAndAppId(const string& v, int id) { SetValue(v); app_id = id; }
+//	CMString& GetName() {return name;}
+	const CMString& GetValue() const {return value;}
+	void SetValue(const CMString& v);
+	void SetValueAndAppId(const CMString& v, int id) { SetValue(v); app_id = id; }
 
 //	wostream& WriteBinary(wostream& s);
 //	wistream& ReadBinary(wistream& s);
@@ -79,16 +79,16 @@ public:
 	
 	void   SetDefaults();
 
-	string GetOption(const string& option);
-	const  wchar_t* GetOptionString(const string& option);
-	double GetOptionDouble(const string& option);
-	short	 GetOptionInt(const string& option);
-	long	 GetOptionLong(const string& option);
+	CMString GetOption(const CMString& option);
+	const  wchar_t* GetOptionString(const CMString& option);
+	double GetOptionDouble(const CMString& option);
+	short	 GetOptionInt(const CMString& option);
+	long	 GetOptionLong(const CMString& option);
 
-	CMOption* SetOption(const string& line, int app_id);
-	CMOption* SetOption(const string& name, const string& value, int app_id);
-	CMOption* SetOption(const string& name, double option, int app_id);
-	CMOption* SetOption(const string& name, const string& value) { return SetOption(name, value, -1); }
+	CMOption* SetOption(const CMString& line, int app_id);
+	CMOption* SetOption(const CMString& name, const CMString& value, int app_id);
+	CMOption* SetOption(const CMString& name, double option, int app_id);
+	CMOption* SetOption(const CMString& name, const CMString& value) { return SetOption(name, value, -1); }
 	CMOption* SetOption(const CMOption& op) { return SetOption(op.GetName(), op.GetValue(), op.GetApplicationId()); }
 
 	unsigned  Count() const {return options.Count();}

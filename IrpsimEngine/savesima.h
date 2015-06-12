@@ -27,7 +27,7 @@
 class _IRPCLASS CMSaveSimulationAscii : public CMSaveSimulation
 {
 private:
-	string get_aggregation_string();
+	CMString get_aggregation_string();
 
 	void output_header(int which);
 

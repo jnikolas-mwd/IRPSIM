@@ -58,10 +58,10 @@ protected:
 	virtual void read_body(wistream& s);
 	virtual void write_body(wostream& s);
 public:
-	CMVPeriod(const string& aName);
+	CMVPeriod(const CMString& aName);
 	~CMVPeriod();
 	void SetExpression(CMTime& t, const wchar_t* str);
-	virtual string VariableType() {return GetEvalType();}
+	virtual CMString VariableType() {return GetEvalType();}
 	static const wchar_t* GetEvalType() { return L"CMVPeriod"; }
 //	CMExpression& GetExpression(CMTime& t);
 };

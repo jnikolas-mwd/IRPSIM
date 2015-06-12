@@ -75,7 +75,7 @@ void CMVariableCollection::destroy_variables(ULONG aState,BOOL ontrue,int force)
 {
 	CMPHashDictionaryIterator<CMVariable> iter(this);
 	CMVariable* v;
-	CMVSmallArray<string> varnames;
+	CMVSmallArray<CMString> varnames;
 	while ((v=iter())!=0) {
    	BOOL test = FALSE;
       ULONG vstate = v->GetState();
@@ -90,7 +90,7 @@ void CMVariableCollection::destroy_variables(ULONG aState,BOOL ontrue,int force)
    	Detach(varnames[i],1);
 }
 
-int CMVariableCollection::DestroyVariable(const string& vname,BOOL bForce,BOOL bUpdate)
+int CMVariableCollection::DestroyVariable(const CMString& vname,BOOL bForce,BOOL bUpdate)
 {
 	CMVariable* v = Find(vname);
 	if (v) {
@@ -104,7 +104,7 @@ int CMVariableCollection::DestroyVariable(const string& vname,BOOL bForce,BOOL b
 }
 
 /*
-CMVariable* CMVariableCollection::AddVariable(const string& vdef)
+CMVariable* CMVariableCollection::AddVariable(const CMString& vdef)
 {
 	wstrstream s((wchar_t*)vdef.c_str());
 	CMVariable* v;
@@ -148,7 +148,7 @@ void CMVariableCollection::UpdateVariableTypes()
 {
 	CMPHashDictionaryIterator<CMVariable> iter(this);
 	CMVariable* v;
-	string vtype,vname;
+	CMString vtype,vname;
 	while ((v=iter())!=0) {
 		/* loops through all variable associations (e.g. #put put_variable), determines
       	whether the association refers to a variable type, and creates a new variable
@@ -162,7 +162,7 @@ void CMVariableCollection::UpdateVariableTypes()
       }
 		for (int i=0;v->GetAssociation(i,vtype,vname);i++) {
 			CMTokenizer next(vname);
-         string token;
+         CMString token;
          while (!(token=stripends(next(L",;:{}()[]"))).is_null()) {
 				size_t space_location = token.find(L' ');
 				if (space_location != CM_NPOS) token = token.substr(0,space_location);
@@ -182,7 +182,7 @@ void CMVariableCollection::UpdateVariableTypes()
 
 CMVariable* CMVariableCollection::create_monitor_variable(CMVariable* v, const wchar_t* suffix, int typeno)
 {
-   string monitorname = v->GetName() + suffix;
+   CMString monitorname = v->GetName() + suffix;
 	CMVariable* vfound = Find(monitorname);
    if (!vfound) Add(vfound=new CMVariable(monitorname,CMVariable::vsMonitor|CMVariable::vsDontEdit));
    vfound->SetType(typeno);

@@ -115,16 +115,16 @@ int isalgop(const wchar_t* str)
 int contains(const wchar_t* str, const wchar_t**list, int n, int case_sen)
 {
 	int ret = -1;
-	int oldflag = string::set_case_sensitive(case_sen);
-	string test(str);
+	int oldflag = CMString::set_case_sensitive(case_sen);
+	CMString test(str);
 	for (int i=0;i<n && list[i] && ret<0;i++)
 		if (test==list[i])
 			ret = i;
-	string::set_case_sensitive(oldflag);
+	CMString::set_case_sensitive(oldflag);
 	return ret;
 }
 
-int _IRPFUNC writestringbinary(const string& s,wostream& os)
+int _IRPFUNC writestringbinary(const CMString& s,wostream& os)
 {
 	size_t len = s.length();
 	os.write((wchar_t*)&len, sizeof(size_t));
@@ -132,7 +132,7 @@ int _IRPFUNC writestringbinary(const string& s,wostream& os)
 	return len + sizeof(size_t);
 }
 
-int _IRPFUNC readstringbinary(string& s,wistream& is)
+int _IRPFUNC readstringbinary(CMString& s,wistream& is)
 {
 	wchar_t buffer[256];
 	size_t len = 0;
@@ -148,7 +148,7 @@ int _IRPFUNC readstringbinary(string& s,wistream& is)
 }
 
 
-string _IRPFUNC readstringbinary(wistream& is)
+CMString _IRPFUNC readstringbinary(wistream& is)
 {
 	wchar_t buffer[256];
 	size_t len = 0;
@@ -159,18 +159,18 @@ string _IRPFUNC readstringbinary(wistream& is)
 	else
    		len=0;
 	buffer[len]=0;
-	return string(buffer);
+	return CMString(buffer);
 }
 
-int _IRPFUNC stringbinarylength(const string& s)
+int _IRPFUNC stringbinarylength(const CMString& s)
 {
 	return sizeof(size_t)+s.length();
 }
 
 //***TODO: Fix stripends so that it calls iswhitespace instead of 
-string stripends(const string& s)
+CMString stripends(const CMString& s)
 {
-	string ret;
+	CMString ret;
    unsigned i,j;
 	if (!s.length())
 		return ret;
@@ -188,32 +188,32 @@ int sign(double val)
 	return 0;
 }
 
-string getfileinfo(const string& file)
+CMString getfileinfo(const CMString& file)
 {
-	return string();
+	return CMString();
 }
 
-string strippath(const string& file)
+CMString strippath(const CMString& file)
 {
-	string ret = file;
+	CMString ret = file;
 	size_t index;
 	while ((index=ret.find(L"/\\"))!=CM_NPOS)	ret.remove(0,index+1);
 	return ret;
 }
 
-string extractpath(const string& file)
+CMString extractpath(const CMString& file)
 {
 	size_t last = file.last(L'\\');
    if (last == CM_NPOS) last = file.last(L'/');
 	if (last==CM_NPOS)
-   	return string(L".\\");
-   return string(file.substr(0,last+1));
+   	return CMString(L".\\");
+   return CMString(file.substr(0,last+1));
 }
 
 #if defined (WIN32)
 //#include <windows.h>
 /*
-string createtempfile(const wchar_t* prefix, const wchar_t* path)
+CMString createtempfile(const wchar_t* prefix, const wchar_t* path)
 {
 	wchar_t buffer[256];
 	const wchar_t* ptr = path;
@@ -222,28 +222,28 @@ string createtempfile(const wchar_t* prefix, const wchar_t* path)
       ptr = buffer;
    }
 	GetTempFileName((LPWSTR)ptr, (LPWSTR)prefix, 0, (LPWSTR)buffer);
-	return string(buffer);
+	return CMString(buffer);
 }
 */
 
-int removefile(const string& filename)
+int removefile(const CMString& filename)
 {
 	return 1;
 	//return DeleteFile((LPWSTR)filename.c_str());
 }
 
 /*
-string getfullpathname(const wchar_t* name)
+CMString getfullpathname(const wchar_t* name)
 {
 	wchar_t buffer[256];
 	LPTSTR pFilePart;
 	int nRet=-1;
-	string strRet;
+	CMString strRet;
 
 	DWORD dwRslt = GetFullPathName((LPWSTR)name, 256, (LPWSTR)buffer, &pFilePart);
 
 	if (!dwRslt) {
-		string err(L"Unable to get path of ");
+		CMString err(L"Unable to get path of ");
 		err += name;
 		CMError::ReportError(err);
 	}
@@ -254,13 +254,13 @@ string getfullpathname(const wchar_t* name)
 }
 */
 
-string getrelativepath(const wchar_t* master, const wchar_t* slave)
+CMString getrelativepath(const wchar_t* master, const wchar_t* slave)
 {
 	int i;
 	for (i=0;master[i] && slave[i] && (towupper(master[i])==towupper(slave[i]));i++);
 	// if the files are on different drives, return full slave path
 	if (wcsrchr(slave+i,':'))
-		return string(slave);
+		return CMString(slave);
 	// retreat until we are at a directory break
 	for (;i>0 && !(slave[i-1]=='\\' || slave[i-1]=='/');i--);
 	int nDescents=0;
@@ -269,7 +269,7 @@ string getrelativepath(const wchar_t* master, const wchar_t* slave)
 		nDescents++;
 		ptr+=1;
 	}
-	string path;
+	CMString path;
 	if (!nDescents)
 		path = L".\\";
 	else for (;nDescents>0;nDescents--)
@@ -281,10 +281,10 @@ string getrelativepath(const wchar_t* master, const wchar_t* slave)
 
 #define is_directory_char(x)   ((x)==L'\\' || (x)==L'/')
 
-string getabsolutepath(const wchar_t* master, const wchar_t* slave)
+CMString getabsolutepath(const wchar_t* master, const wchar_t* slave)
 {
 	if (wcschr(slave, L':') || slave[0]==L'\\' || slave[0]==L'/')
-		return string(slave);
+		return CMString(slave);
 
 	const wchar_t* mptr = master + wcslen(master) - 1;
 	const wchar_t* sptr = slave;
@@ -305,7 +305,7 @@ string getabsolutepath(const wchar_t* master, const wchar_t* slave)
 
 	size_t index = (mptr - master);
 
-	string ret = (string(master,index+1) + sptr);
+	CMString ret = (CMString(master,index+1) + sptr);
 	
 	return ret;
 }
@@ -314,29 +314,29 @@ string getabsolutepath(const wchar_t* master, const wchar_t* slave)
 #include <dir.h>
 #include <io.h>
 
-string createtempfile(const wchar_t* prefix,const wchar_t* path)
+CMString createtempfile(const wchar_t* prefix,const wchar_t* path)
 {
 	wchar_t buffer[256];
    wcscpy(buffer,path ? path : L".\\");
    wcscat(buffer,prefix);
    wcscat(buffer,L"XX");
-  return string(mktemp(buffer));
+  return CMString(mktemp(buffer));
 }
 
-int removefile(const string& filename)
+int removefile(const CMString& filename)
 {
    return unlink(filename.c_str()) ? 0 : 1;
 }
 
 	
-string getfullpathname(const wchar_t* name)
+CMString getfullpathname(const wchar_t* name)
 {
-	return string(name);
+	return CMString(name);
 }
 
-string getrelativepath(const wchar_t* master,const wchar_t* slave)
+CMString getrelativepath(const wchar_t* master,const wchar_t* slave)
 {
-	return string(slave);
+	return CMString(slave);
 }
 
 #endif

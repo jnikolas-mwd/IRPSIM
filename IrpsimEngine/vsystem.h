@@ -30,7 +30,7 @@ public:
 	enum {First,PutPotential=First,TakePotential,TransferPotential,Trial,
          Last=Trial};
 	CMVSystem(int aType);
-	virtual string VariableType() {return GetEvalType();}
+	virtual CMString VariableType() {return GetEvalType();}
 	static const wchar_t* GetEvalType() { return L"CMVSystem"; }
 };
 

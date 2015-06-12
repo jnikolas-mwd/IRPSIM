@@ -31,12 +31,12 @@ CMUnits::CMUnits() : _units(),_xlatToLocalValue(1),_type(User)
 {
 }
 
-CMUnits::CMUnits(const string& def) : _units()
+CMUnits::CMUnits(const CMString& def) : _units()
 {
 	Set(def);
 }
 
-void CMUnits::Set(const string& def)
+void CMUnits::Set(const CMString& def)
 {
 	_units.resize(0);
 	_xlatToLocalValue=1;
@@ -48,11 +48,11 @@ void CMUnits::Set(const string& def)
 
 	_units.resize(0);
 	_units = def;
-	_units = _units.strip(string::Both);
+	_units = _units.strip(CMString::Both);
 
 	CMTokenizer next(_units);
-	string unitstr = next(L"Pp");
-	string precstr = next(L"Pp");
+	CMString unitstr = next(L"Pp");
+	CMString precstr = next(L"Pp");
 
 	_prec = _wtoi(precstr.c_str());
 	if (_prec<0) _prec=-_prec;
@@ -67,8 +67,8 @@ void CMUnits::Set(const string& def)
 
 	next.Reset(unitstr);
 
-	string prefix  = next(L" \tXx");
-	string multstr = next(L" \tXx");
+	CMString prefix  = next(L" \tXx");
+	CMString multstr = next(L" \tXx");
 
 	switch (contains(prefix.c_str(),list)) {
 		case af: _type = AcreFeet; break;
@@ -124,7 +124,7 @@ wostream& operator << (wostream& s, CMUnits& u)
 
 wistream& operator >> (wistream& s, CMUnits& u)
 {
-	string line;
+	CMString line;
 	line.read_line(s);
 	u.Set(line);
 	return s;

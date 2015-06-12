@@ -42,12 +42,12 @@ percentagevarname()
 {
 }
 
-CMReliabilityTarget::CMReliabilityTarget(const string& def)
+CMReliabilityTarget::CMReliabilityTarget(const CMString& def)
 {
 	Set(def);
 }
 
-void CMReliabilityTarget::Set(const string& def)
+void CMReliabilityTarget::Set(const CMString& def)
 {
 	static const wchar_t* delims = L" (),%\t\r\n";
 
@@ -57,7 +57,7 @@ void CMReliabilityTarget::Set(const string& def)
 	shortagevarname = percentagevarname = L"";
 
 	CMTokenizer next(def);
-	string token = next(delims);
+	CMString token = next(delims);
 	if (token[0] == L'-') {
 		state |= changeSignShortage;
 		token = token.substr(1,token.length()-1);
@@ -99,7 +99,7 @@ int CMReliabilityTarget::SameCurveAs(const CMReliabilityTarget& t)
 			  state==t.state);
 }
 
-string CMReliabilityTarget::GetString()
+CMString CMReliabilityTarget::GetString()
 {
 	wchar_t buffer[256];
 	const wchar_t* signstr1 = (state&changeSignShortage) ? L"-" : L"";
@@ -111,7 +111,7 @@ string CMReliabilityTarget::GetString()
 	else
 		swprintf_s(buffer, 256, L"(%s%s %g %g%%)",signstr1,shortagevarname.c_str(),shortage_target,percent_target);
 
-	return string(buffer);
+	return CMString(buffer);
 }
 
 int CMReliabilityTarget::Process(CMTimeMachine* t)
@@ -164,21 +164,21 @@ int CMReliabilityTarget::BinarySize()
 }
 
 /*
-CMReliabilityTarget::CMReliabilityTarget(const string& def)
+CMReliabilityTarget::CMReliabilityTarget(const CMString& def)
 {
 	CMTokenizer next(def);
-	string shortagetoken = next("(,");
-	string pcttoken = next(",)");
+	CMString shortagetoken = next("(,");
+	CMString pcttoken = next(",)");
 	Set(shortagetoken,pcttoken);
 }
 
-void CMReliabilityTarget::Set(const string& stoken,const string& ptoken)
+void CMReliabilityTarget::Set(const CMString& stoken,const CMString& ptoken)
 {
 	unsigned int index;
-	string s(stoken);
-   string p(ptoken);
+	CMString s(stoken);
+   CMString p(ptoken);
 
-	string pctstring("%");
+	CMString pctstring("%");
 
 	state = 0;
 	shortage = targetpct = 0;
@@ -201,11 +201,11 @@ void CMReliabilityTarget::Set(const string& stoken,const string& ptoken)
 	targetpct = atof(p.c_str());
 }
 
-string CMReliabilityTarget::GetString()
+CMString CMReliabilityTarget::GetString()
 {
 	char buffer[64];
 	sprintf(buffer,"(%.1f%s,%.1f%)",shortage,(state&rsPct)?"%":"",targetpct);
-	return string(buffer);
+	return CMString(buffer);
 }
 
 */
@@ -221,7 +221,7 @@ state(0)
 {
 }
 
-CMReliability::CMReliability(const CMTimeMachine& t,const string& def) :
+CMReliability::CMReliability(const CMTimeMachine& t,const CMString& def) :
 beg(t[0].Begin()),
 end(t[0].End()),
 incunits(t.IncUnits()),
@@ -235,7 +235,7 @@ state(0)
 	const wchar_t* delims = L")>}";
 
 	CMTokenizer next(def);
-	string token;
+	CMString token;
 
 	while (!(token = next(delims)).is_null())
 		targets.Add(new CMReliabilityTarget(token));

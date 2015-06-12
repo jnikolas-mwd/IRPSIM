@@ -154,9 +154,9 @@ CMTimeMachine& CMTimeMachine::operator = (const CMTimeMachine& t)
 	return *this;
 }
 
-string CMTimeMachine::CycleAsString(unsigned n) const
+CMString CMTimeMachine::CycleAsString(unsigned n) const
 {
-	string ret;
+	CMString ret;
 	wchar_t buffer[64];
    static wchar_t *unitstr[] = { L"seconds", L"minutes", L"hours", L"days", L"weeks", L"months", L"years" };
    const wchar_t* unitptr = unitstr[6];

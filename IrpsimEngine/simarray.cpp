@@ -228,7 +228,7 @@ void CMSimulationArray::SetSaveSize(long ss)
 		state |= failbit;
 }
 
-unsigned CMSimulationArray::VariableIndex(const string& name) const
+unsigned CMSimulationArray::VariableIndex(const CMString& name) const
 {
 	for (unsigned i=0;i<vardesc->Count();i++)
 		if (vardesc->At(i)==name)
@@ -236,18 +236,18 @@ unsigned CMSimulationArray::VariableIndex(const string& name) const
 	return nvars;
 }
 
-string CMSimulationArray::GetVariableName(unsigned n) const
+CMString CMSimulationArray::GetVariableName(unsigned n) const
 {
 	if (n<vardesc->Count())
 	   return vardesc->At(n).Name();
-	return string();
+	return CMString();
 }
 
-string CMSimulationArray::GetVariableType(unsigned n) const
+CMString CMSimulationArray::GetVariableType(unsigned n) const
 {
 	if (n<vardesc->Count())
 	   return vardesc->At(n).Type();
-	return string();
+	return CMString();
 }
 
 int CMSimulationArray::GetVariableState(unsigned n) const
@@ -339,7 +339,7 @@ float CMSimulationArray::Sum(const CMTime& time,unsigned var,long trial,int time
 }
 */
 
-float CMSimulationArray::Aggregate(const CMTime& time,const string& var,long trial,int resolution)
+float CMSimulationArray::Aggregate(const CMTime& time,const CMString& var,long trial,int resolution)
 {
 	unsigned index = VariableIndex(var);
    float ret;

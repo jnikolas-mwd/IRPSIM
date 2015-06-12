@@ -22,7 +22,7 @@
 
 #include "irp.h"
 #include "cmdefs.h"
-#include "string.h"
+#include "cmstring.h"
 #include <iostream>
 
 using namespace std;
@@ -67,7 +67,7 @@ class _IRPCLASS CMTime
 	static const wchar_t* dayname[7];
 	static short output_format;
 	static long seconds_in_increment(CMTIMEUNIT units,short length);
-	void set_to_string(const string& str);
+	void set_to_string(const CMString& str);
 public:
 	enum {formatFull=1,formatDate,YYYYMMDDHHMMSS,YYYYMMDDHHMM,
 			YYYYMMDDHH,YYYYMMDD,YYYYMM,YYYY,MM};
@@ -76,14 +76,14 @@ public:
 	CMTime();
 	CMTime(int y, int m=1, int d=1, int hrs=0, int mns=0, int secs=0);
 	CMTime(const CMTime& t);
-	CMTime(const string& str) {set_to_string(str);}
-	CMTime(const wchar_t* str)   { set_to_string(string(str ? str : L"")); }
+	CMTime(const CMString& str) {set_to_string(str);}
+	CMTime(const wchar_t* str)   { set_to_string(CMString(str ? str : L"")); }
 	~CMTime() {};
 
 	void SetTime(int y, int m=-1, int d=-1, int hrs=-1, int mns=-1, int secs=-1);
 
 	wchar_t*  GetString(wchar_t* buffer, size_t sz) const;
-	string GetString() const { wchar_t buffer[128]; return string(GetString(buffer, 128)); }
+	CMString GetString() const { wchar_t buffer[128]; return CMString(GetString(buffer, 128)); }
 	wostream& Write(wostream& os,int binary=0) const;
 	wistream& Read(wistream& os,int binary=0);
 
@@ -108,8 +108,8 @@ public:
 	CMTime& inc(long n,CMTIMEUNIT units);
 
 	CMTime& operator = (const CMTime& t);
-	CMTime& operator = (const string& str) {set_to_string(str);return *this;}
-	CMTime& operator = (const wchar_t* str) { set_to_string(string(str)); return *this; }
+	CMTime& operator = (const CMString& str) {set_to_string(str);return *this;}
+	CMTime& operator = (const wchar_t* str) { set_to_string(CMString(str)); return *this; }
 	CMTime& operator = (ULONG n) {julnum = n;return *this;}
 
 	operator ULONG () const {return julnum;}
@@ -140,8 +140,8 @@ public:
 	static double MidMonthDay(int m,int y);
 	static int DaysInYear(unsigned year);
 	static long Diff(const CMTime& t1,const CMTime& t2,CMTIMEUNIT units,int length);
-	static CMTime GetStartPoint(const string& s,CMTIMEUNIT units);
-	static CMTime GetEndPoint(const string& s,CMTIMEUNIT units);
+	static CMTime GetStartPoint(const CMString& s,CMTIMEUNIT units);
+	static CMTime GetEndPoint(const CMString& s,CMTIMEUNIT units);
 	static long GetInterval(const wchar_t* b, const wchar_t* e, CMTIMEUNIT incunits, int inclength, int lastmonth, CMTime& beg, CMTime& end);
 
 	static ULONG PresentDate();
@@ -152,8 +152,8 @@ public:
 	// Gets resolution implied by input format -- e.g. 1996==CM_YEAR
    // 19960201==CM_DAY, etc.
 	static CMTIMEUNIT GetResolution(const wchar_t* str);
-   static CMTIMEUNIT StringToTimeUnit(const string& str);
-   static string   TimeUnitToString(CMTIMEUNIT units);
+   static CMTIMEUNIT StringToTimeUnit(const CMString& str);
+   static CMString   TimeUnitToString(CMTIMEUNIT units);
 
 	static const short BinarySize() {return 2*(short)sizeof(long);}
 };

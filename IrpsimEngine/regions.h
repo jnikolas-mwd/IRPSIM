@@ -24,15 +24,15 @@
 #include "irp.h"
 
 #include "smvarray.h"
-#include "string.h"
+#include "cmstring.h"
 
 class _IRPCLASS CMRegions
 {
-	static class _IRPCLASS CMVSmallArray<string> regions;
+	static class _IRPCLASS CMVSmallArray<CMString> regions;
 public:
 	static void Reset() {regions.Reset(1);}
-	static int GetRegionId(const string& name);
-	static string GetRegionName(int id);
+	static int GetRegionId(const CMString& name);
+	static CMString GetRegionName(int id);
     static unsigned RegionCount() {return regions.Count();}
 };
 

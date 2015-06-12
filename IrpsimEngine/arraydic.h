@@ -19,7 +19,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #pragma once
 
-#include "string.h"
+#include "cmstring.h"
 #include "cmdefs.h"
 
 template <class TP> class CMArrayDictionary
@@ -41,11 +41,11 @@ public:
 	void Reset(int freemem=0);
 	void ResetAndDestroy(int freemem=0);
 	int Add(TP* val);
-	void Detach(const string& val,int destroy=0);
+	void Detach(const CMString& val,int destroy=0);
 	unsigned short Count() const;
 	TP* At(unsigned short n) const;
 	TP* operator [] (unsigned short n) const;
-	TP* Find(const string& val,unsigned short* loc=0);
+	TP* Find(const CMString& val,unsigned short* loc=0);
 	void Sort();
 };
 
