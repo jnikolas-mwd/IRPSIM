@@ -22,8 +22,7 @@ namespace IRPSIM.ViewModels
     class MainViewModel : ViewModelBase
     {
         //*** TODO: Abstract out as an IFilesViewModel interface injected as a dependency through MainViewModel constructor
-        private FilesViewModel filesViewModel;
-         
+          
         private CMNotifierDelegate _notifierDelegate;
 
         private BackgroundWorker backgroundWorkerOpenProject = new BackgroundWorker();
@@ -46,16 +45,20 @@ namespace IRPSIM.ViewModels
 
         private CMWrappedIrpApplication irpApp = new CMWrappedIrpApplication();
         private CMWrappedNotifier _notifier;
+        private IrpObjectViewModel _objectViewModel = null;
+        private IrpFileViewModel _fileViewModel = null;
 
         public MainViewModel()
         {
             _getFileNameService = new OpenFileDialogService();
-            filesViewModel = new FilesViewModel(_getFileNameService);
+            _displayCollectionViewModel = new DisplayCollectionViewModel(_getFileNameService);
 
             _notifierDelegate = new CMNotifierDelegate(_notify);
             _notifier = new CMWrappedNotifier(_notifierDelegate);
     
             Errors = new ObservableCollection<ErrorViewModel>();
+            _objectViewModel = new IrpObjectViewModel(irpApp);
+            _fileViewModel = new IrpFileViewModel(irpApp);
 
             backgroundWorkerOpenProject.DoWork += backgroundWorkerOpenProject_DoWork;
             backgroundWorkerOpenProject.RunWorkerCompleted += backgroundWorkerOpenProject_RunWorkerCompleted;
@@ -66,23 +69,10 @@ namespace IRPSIM.ViewModels
 
         #region Properties
 
-        public FilesViewModel FilesViewModel
+        private DisplayCollectionViewModel _displayCollectionViewModel;
+        public DisplayCollectionViewModel DisplayCollectionViewModel
         {
-            get { return filesViewModel; }
-        }
-
-        private object _selectedObject;
-        public object SelectedObject
-        {
-            get { return _selectedObject; }
-            set
-            {
-                _selectedObject = value;
-                CMWrappedIrpObject obj = value as CMWrappedIrpObject;
-                if (obj != null)
-                    Debug.WriteLine(obj.FileIndex);
-                RaisePropertyChanged("SelectedObject");
-            }
+            get { return _displayCollectionViewModel; }
         }
 
         public object TestSel
@@ -94,17 +84,9 @@ namespace IRPSIM.ViewModels
             }
         }
 
-        public ObservableCollection<CMWrappedVariable> Variables { get { return irpApp.Variables; } }
+        public IrpObjectViewModel Objects { get { return _objectViewModel; } }
 
-        public ObservableCollection<CMLoadedFile> LoadedFiles { get { return irpApp.LoadedFiles; } }
-
-        public ObservableCollection<CMWrappedIrpObject> Definitions { get { return irpApp.Definitions; } }
-
-        public ObservableCollection<CMWrappedIrpObject> Scenarios { get { return irpApp.Scenarios; } }
-
-        public ObservableCollection<CMWrappedIrpObject> Scripts { get { return irpApp.Scripts; } }
-
-        public ObservableCollection<CMWrappedIrpObject> Categories { get { return irpApp.Categories; } }
+        public IrpFileViewModel Files { get { return _fileViewModel; } }
 
         public ObservableCollection<ErrorViewModel> Errors { get; set; }
 
@@ -112,36 +94,21 @@ namespace IRPSIM.ViewModels
         public string Log
         {
             get { return _log; }
-            set
-            {
-                _log = value;
-                RaisePropertyChanged("Log");
-            }
-        }
-
+            set { Set("Log", ref _log, value); }
+        }        
+        
         private int _progress;
         public int Progress
         {
             get { return _progress; }
-            set
-            {
-                _progress = value;
-                RaisePropertyChanged("Progress");
-            }
+            set { Set("Progress", ref _progress, value);}
         }
 
         private Boolean _haserrors = false;
         public Boolean HasErrors
         {
             get { return _haserrors; }
-            set
-            {
-                if (value != _haserrors)
-                {
-                    _haserrors = value;
-                    RaisePropertyChanged("HasErrors");
-                }
-            }
+            set { Set("HasErrors", ref _haserrors, value);}
         }
 
         public string ProjectTitle
@@ -153,14 +120,7 @@ namespace IRPSIM.ViewModels
         public bool IsSimulationRunning
         {
             get { return _isSimulationRunning; }
-            set
-            {
-                if (value != _isSimulationRunning)
-                {
-                    _isSimulationRunning = value;
-                    RaisePropertyChanged("IsSimulationRunning");
-                }
-            }
+            set { Set("IsSimulationRunning", ref _isSimulationRunning, value);}
         }
 
         bool _canRunSimulation = false;
@@ -169,12 +129,8 @@ namespace IRPSIM.ViewModels
             get { return _canRunSimulation; }
             set
             {
-                if (value != _canRunSimulation)
-                {
-                    _canRunSimulation = value;
-                    RaisePropertyChanged("CanRunSimulation");
+                if (Set("CanRunSimulation", ref _canRunSimulation, value))
                     RunSimulationCommand.RaiseCanExecuteChanged();
-                }
             }
         }
         
@@ -184,12 +140,8 @@ namespace IRPSIM.ViewModels
             get { return _canOpenProject; }
             set
             {
-                if (value != _canOpenProject)
-                {
-                    _canOpenProject = value;
-                    RaisePropertyChanged("CanOpenProject");
+                if (Set("CanOpenProject", ref _canOpenProject, value))
                     ProjectOpenCommand.RaiseCanExecuteChanged();
-                }
             }
         }
  
@@ -197,28 +149,6 @@ namespace IRPSIM.ViewModels
 
         #region Commands
 
-        RelayCommand<object> _testCommand;
-        public RelayCommand<object> TestCommand
-        {
-            get
-            {
-                if (_testCommand == null)
-                    _testCommand = new RelayCommand<object>(testDelegate);
-                return _testCommand;
-            }
-        }
-
-        RelayCommand<object> _testCommand2;
-        public RelayCommand<object> TestCommand2
-        {
-            get
-            {
-                if (_testCommand2 == null)
-                    _testCommand2 = new RelayCommand<object>(testDelegate2);
-                return _testCommand2;
-            }
-        }
-        
         RelayCommand _projectOpenCommand;
         public RelayCommand ProjectOpenCommand
         {
@@ -265,25 +195,6 @@ namespace IRPSIM.ViewModels
         #endregion
 
         #region Command Delegates
-
-        private void testDelegate(object param)
-        {
-            CMWrappedIrpObject obj = param as CMWrappedIrpObject;
-            if (obj != null)
-                obj.Selected = !obj.Selected;
-        }
-
-        private void testDelegate2(object param)
-        {
-            CMWrappedIrpObject obj = SelectedObject as CMWrappedIrpObject;
-            if (obj == null)
-                return;
-
-            KeyEventArgs a = param as KeyEventArgs;
-
-            if (a.Key == Key.Space)
-                obj.Selected = !obj.Selected;
-        }
 
         private void openProjectDelegate()
         {
@@ -336,6 +247,7 @@ namespace IRPSIM.ViewModels
             _threadsafeerrors.Clear();
             Errors.Clear();
 
+            HasErrors = false;
             IsSimulationRunning = true;
 
             backgroundWorkerRunSimulation.RunWorkerAsync();
@@ -397,9 +309,7 @@ namespace IRPSIM.ViewModels
 
         private void backgroundWorkerRunSimulation_DoWork(object sender, DoWorkEventArgs e)
         {
-            irpApp.UseScenario("test");
-            irpApp.UseScript("basemix-cra-ondemand");
-            irpApp.RunSimulation();
+             irpApp.RunSimulation();
         }
 
         private void backgroundWorkerRunSimulation_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)

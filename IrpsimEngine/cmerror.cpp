@@ -35,6 +35,7 @@ void CMError::Reset()
    errors.Reset(1);
 }
 
+/*
 void CMError::ReportError(const CMString& err) throw (CMException)
 {
 	errors.Add(CMString(L"Error: " + err));
@@ -53,6 +54,7 @@ void CMError::ReportWarning(const CMString& err) throw (CMException)
       throw (CMException(L"Too many warnings"));
    }
 }
+*/
 
 CMString CMError::LatestError()
 {

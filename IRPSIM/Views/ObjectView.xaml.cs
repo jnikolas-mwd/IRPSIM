@@ -14,12 +14,14 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using IRPSIM.ViewModels;
 using System.Diagnostics;
+using IrpsimEngineWrapper;
 
 namespace IRPSIM.Views
 {
     /// <summary>
     /// Interaction logic for ObjectView.xaml
     /// </summary>
+    /// 
     public partial class ObjectView : UserControl
     {
         public ObjectView()
@@ -29,44 +31,19 @@ namespace IRPSIM.Views
 
         private void TreeView_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
-            SelectedObjectHelper.Content = e.NewValue;
+             SelectedObjectHelper.Content = e.NewValue;
         }
 
-        private void Supply_Filter(object sender, FilterEventArgs e)
+        private void TreeView_KeyDown(object sender, KeyEventArgs e)
         {
-            e.Accepted = ((MainViewModel)DataContext).IrpObjectType(e.Item) == "Supply";
-        }
-        private void Demand_Filter(object sender, FilterEventArgs e)
-        {
-            e.Accepted = ((MainViewModel)DataContext).IrpObjectType(e.Item) == "Demand";
-        }
-        private void Storage_Filter(object sender, FilterEventArgs e)
-        {
-            e.Accepted = ((MainViewModel)DataContext).IrpObjectType(e.Item) == "Storage";
-        }
-        private void Cost_Filter(object sender, FilterEventArgs e)
-        {
-            e.Accepted = ((MainViewModel)DataContext).IrpObjectType(e.Item) == "Cost";
-        }
-        private void Variable_Filter(object sender, FilterEventArgs e)
-        {
-            e.Accepted = ((MainViewModel)DataContext).IrpObjectType(e.Item) == "UserVariable";
-        }
-        private void Scenario_Filter(object sender, FilterEventArgs e)
-        {
-            e.Accepted = ((MainViewModel)DataContext).IrpObjectType(e.Item) == "Scenario";
-        }
-        private void Script_Filter(object sender, FilterEventArgs e)
-        {
-            e.Accepted = ((MainViewModel)DataContext).IrpObjectType(e.Item) == "Script";
-        }
-        private void Category_Filter(object sender, FilterEventArgs e)
-        {
-            e.Accepted = ((MainViewModel)DataContext).IrpObjectType(e.Item) == "Category";
-        }
-        private void Definition_Filter(object sender, FilterEventArgs e)
-        {
-            e.Accepted = ((MainViewModel)DataContext).IrpObjectType(e.Item) == "Definition";
+            if (e.Key == Key.Space)
+            {
+                IrpObjectViewModel vm = DataContext as IrpObjectViewModel;
+                if (vm != null)
+                {
+                    vm.ChooseIrpObjectCommand.Execute(null);
+                }
+            }
         }
     }
 }

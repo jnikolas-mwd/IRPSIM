@@ -19,13 +19,31 @@
 #include "strval.h"
 #include "smparray.h"
 
-typedef class _IRPCLASS CMStringValue<CMString> CMSTRINGVALUESTRING;
-typedef class _IRPCLASS CMPSmallArray<CMSTRINGVALUESTRING> CMPSMALLSTRINGVALUESTRINGARRAY;
+//typedef class _IRPCLASS CMStringValue<CMString> CMSTRINGVALUESTRING;
+//typedef class _IRPCLASS CMPSmallArray<CMSTRINGVALUESTRING> CMPSMALLSTRINGVALUESTRINGARRAY;
 
-class _IRPCLASS	CMAssociations : public CMPSMALLSTRINGVALUESTRINGARRAY
+class _IRPCLASS	CMAssociations
 {
+	class NameValue {
+	public:
+		CMString name;
+		CMString value;
+
+		NameValue(const CMString& n, const CMString& v) { name = n; value = v; }
+	};
+
+	CMPSmallArray<NameValue> *_associations;
+//	CMPSMALLSTRINGVALUESTRINGARRAY* _associations;
 public:
-	CMAssociations(unsigned short sz=0,unsigned short d=16) : CMPSmallArray< CMStringValue<CMString> > (sz,d) {}
+	CMAssociations(unsigned short sz = 0, unsigned short d = 16)  {
+		//_associations = new CMPSmallArray< CMStringValue<CMString> >(sz, d);
+		_associations = new CMPSmallArray<NameValue>(sz, d);
+	}
+	~CMAssociations() { _associations->ResetAndDestroy(1); delete _associations; }
+
+	int Count() { return _associations->Count(); }
+	void ResetAndDestroy() { _associations->ResetAndDestroy(1); }
+
 	void   AddAssociation(const CMString& aName,const CMString& val);
 	CMString GetName(unsigned short n);
 	CMString GetValue(unsigned short n);

@@ -35,35 +35,40 @@
 	using namespace std;
 #endif
 
-//#include <fstream.h>
-//static ofstream sdebug("varcol.deb");
+//#include <fstream>
+//static wofstream sdebug("debug_varcol.txt");
 
-CMVariableIterator::CMVariableIterator() : iter(CMVariable::variables)
+CMVariableIterator::CMVariableIterator() : CMVariableIterator(CMVariable::variables)
 {
 }
 
-CMVariableIterator::CMVariableIterator(CMVariableCollection* v) : iter(v)
+CMVariableIterator::CMVariableIterator(const CMVariableCollection* vc) : iter(&vc->variables)
 {
 }
 
 CMVariableCollection::CMVariableCollection(int create_system_variables) :
-CMPHashDictionary<CMVariable>(),
+//CMPHashDictionary<CMVariable>(),
 state(create_system_variables ? sCreateSystemVariables : 0)
 {
 	int i;
 	if (create_system_variables) {
 		for (i=CMVTime::First;i<=CMVTime::Last;i++)
-			Add(new CMVTime(i));
+			variables.Add(new CMVTime(i));
 		for (i=CMVSystem::First;i<=CMVSystem::Last;i++)
-			Add(new CMVSystem(i));
+			variables.Add(new CMVSystem(i));
 		const wchar_t* name;
 		for (i=0;(name=CMVariableTypes::AggStringFromInt(i))!=0;i++) {
 			CMVariable* v = new CMVariable(name,CMVariable::vsAggregate|CMVariable::vsDontDestroy|CMVariable::vsDontEdit);
 			v->SetType(i-1000);
 			if (CMVariableTypes::IsAggSum(i)) v->SetState(CMVariable::vsSum,TRUE);
-      	Add(v);
+      			variables.Add(v);
 	   }
    }
+}
+
+CMVariableCollection::~CMVariableCollection()
+{
+	variables.Reset(1);
 }
 
 void CMVariableCollection::ResetCollection()
@@ -73,7 +78,7 @@ void CMVariableCollection::ResetCollection()
 
 void CMVariableCollection::destroy_variables(ULONG aState,BOOL ontrue,int force)
 {
-	CMPHashDictionaryIterator<CMVariable> iter(this);
+	CMPHashDictionaryIterator<CMVariable> iter(&variables);
 	CMVariable* v;
 	CMVSmallArray<CMString> varnames;
 	while ((v=iter())!=0) {
@@ -86,16 +91,16 @@ void CMVariableCollection::destroy_variables(ULONG aState,BOOL ontrue,int force)
 		if (test==TRUE)
 			varnames.Add(v->GetName());
    }
-	for (unsigned short i=0;i<varnames.Count();i++)
-   	Detach(varnames[i],1);
+	for (unsigned short i = 0; i < varnames.Count(); i++)
+		variables.Detach(varnames[i], 1);
 }
 
 int CMVariableCollection::DestroyVariable(const CMString& vname,BOOL bForce,BOOL bUpdate)
 {
-	CMVariable* v = Find(vname);
+	CMVariable* v = variables.Find(vname);
 	if (v) {
 		if (bForce || !(v->GetState() & CMVariable::vsInUse)) {
-			Detach(vname,1);
+			variables.Detach(vname, 1);
 	   	if (bUpdate) UpdateVariableLinks();
          return 1;
       }
@@ -127,7 +132,7 @@ CMVariable* CMVariableCollection::AddVariable(const CMString& vdef)
 void CMVariableCollection::UpdateLinkStatus()
 {
 	SetStateAll(CMVariable::vsLinked,FALSE);
-	CMPHashDictionaryIterator<CMVariable> iter(this);
+	CMPHashDictionaryIterator<CMVariable> iter(&variables);
 	CMVariable* v;
 	while ((v=iter())!=0)
    	if (v->GetState(CMVariable::vsSelected))
@@ -138,7 +143,7 @@ void CMVariableCollection::UpdateLinkStatus()
 void CMVariableCollection::UpdateVariableLinks()
 {
 	SetStateAll(CMVariable::vsLinksUpdated,FALSE);
-	CMPHashDictionaryIterator<CMVariable> iter(this);
+	CMPHashDictionaryIterator<CMVariable> iter(&variables);
 	CMVariable* v;
 	while ((v=iter())!=0)
 		v->UpdateVariableLinks();
@@ -146,7 +151,7 @@ void CMVariableCollection::UpdateVariableLinks()
 
 void CMVariableCollection::UpdateVariableTypes()
 {
-	CMPHashDictionaryIterator<CMVariable> iter(this);
+	CMPHashDictionaryIterator<CMVariable> iter(&variables);
 	CMVariable* v;
 	CMString vtype,vname;
 	while ((v=iter())!=0) {
@@ -167,9 +172,9 @@ void CMVariableCollection::UpdateVariableTypes()
 				size_t space_location = token.find(L' ');
 				if (space_location != CM_NPOS) token = token.substr(0,space_location);
 				if (!isnumber(token.c_str()) && CMVariableTypes::VarIntFromString(vtype.c_str(),1)>=0) {
-	         	CMVariable* vfound = Find(token);
+	         	CMVariable* vfound = variables.Find(token);
 					if (!vfound && (state&sCreateSystemVariables)) {
-						Add(vfound=new CMVariable(token,CMVariable::vsAutoCreated));
+						variables.Add(vfound=new CMVariable(token,CMVariable::vsAutoCreated));
 					CMNotifier::Notify(CMNotifier::WARNING, token + L" was automatically created");
                }
 					vfound->SetType(vtype);
@@ -183,8 +188,8 @@ void CMVariableCollection::UpdateVariableTypes()
 CMVariable* CMVariableCollection::create_monitor_variable(CMVariable* v, const wchar_t* suffix, int typeno)
 {
    CMString monitorname = v->GetName() + suffix;
-	CMVariable* vfound = Find(monitorname);
-   if (!vfound) Add(vfound=new CMVariable(monitorname,CMVariable::vsMonitor|CMVariable::vsDontEdit));
+	CMVariable* vfound = variables.Find(monitorname);
+   if (!vfound) variables.Add(vfound=new CMVariable(monitorname,CMVariable::vsMonitor|CMVariable::vsDontEdit));
    vfound->SetType(typeno);
    return vfound;
 }
@@ -241,7 +246,7 @@ void CMVariableCollection::create_storage_monitors(CMVariable* v)
 
 void CMVariableCollection::SetStateAll(ULONG aState,BOOL action)
 {
-	CMPHashDictionaryIterator<CMVariable> iter(this);
+	CMPHashDictionaryIterator<CMVariable> iter(&variables);
 	CMVariable* v;
 	while ((v=iter())!=0)
 		v->SetState(aState,action);

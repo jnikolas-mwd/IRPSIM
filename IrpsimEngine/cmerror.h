@@ -39,8 +39,8 @@ class _IRPCLASS CMError {
    static int maxerr;
 	static int errcount;
 public:
-	static void ReportError(const CMString& err) throw (CMException);
-	static void ReportWarning(const CMString& err) throw (CMException);
+	//static void ReportError(const CMString& err) throw (CMException);
+	//static void ReportWarning(const CMString& err) throw (CMException);
 	static void Reset();
 	static unsigned short Errors() {return errors.Count();}
 	static CMString Error(unsigned short n);

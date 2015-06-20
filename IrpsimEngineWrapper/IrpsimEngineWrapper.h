@@ -9,8 +9,12 @@
 #include <defines.h>
 #include <msclr\marshal_cppstd.h>
 
+#include <fstream>
+static wofstream sdebug("debug_wrapper.txt");
+
 using namespace System;
 using namespace System::Collections;
+using namespace System::Collections::Generic;
 using namespace System::ComponentModel;
 using namespace msclr::interop;
 using namespace System::Runtime::InteropServices;
@@ -65,6 +69,7 @@ namespace IrpsimEngineWrapper
 	protected:
 		CMIrpObject* obj;
 		bool _selected;
+		bool _chosen;
 	public:
 		virtual event PropertyChangedEventHandler^ PropertyChanged;
 		
@@ -93,8 +98,21 @@ namespace IrpsimEngineWrapper
 		{
 			bool get() { return _selected; }
 			void set(bool value) {
-				_selected = value;
-				OnPropertyChanged(L"Selected");
+				if (_selected != value) {
+					_selected = value;
+					OnPropertyChanged(L"Selected");
+				}
+			}
+		}
+
+		property bool Chosen
+		{
+			bool get() { return _chosen; }
+			void set(bool value) {
+				if (_chosen != value) {
+					_chosen = value;
+					OnPropertyChanged(L"Chosen");
+				}
 			}
 		}
 
@@ -109,11 +127,17 @@ namespace IrpsimEngineWrapper
 		}
 
 		virtual String^ ToString() override { return Name; }
+
+		property CMIrpObject* UnmanagedObject
+		{
+			CMIrpObject* get() { return obj; }
+		}
 	};
 	
 	public ref class CMWrappedVariable : public CMWrappedIrpObject {
 	private:
-		IrpNodeType _ntype;
+		IrpNodeType _ntype = IrpNodeType::None;
+		Collection<CMWrappedVariable^>^ _associatedVariables = gcnew Collection<CMWrappedVariable^>();
 	public:
 		CMWrappedVariable(CMVariable* v) : CMWrappedIrpObject(v)
 		{
@@ -121,6 +145,11 @@ namespace IrpsimEngineWrapper
 			else if (v->IsType(L"Supply")) _ntype = IrpNodeType::Supply;
 			else if (v->IsType(L"Storage")) _ntype = IrpNodeType::Storage;
 			else if (v->IsType(L"Cost")) _ntype = IrpNodeType::Cost;
+		}
+
+		property Collection<CMWrappedVariable^>^ AssociatedVariables
+		{
+			Collection<CMWrappedVariable^>^ get() { return _associatedVariables; }
 		}
 
 		property String^ EType
@@ -136,6 +165,27 @@ namespace IrpsimEngineWrapper
 		{
 			IrpNodeType get() { return _ntype; }
 		}
+
+		property BOOL IsNode
+		{
+			BOOL get() { return NType != IrpNodeType::None; }
+		}
+
+		property BOOL IsAggregate
+		{
+			BOOL get() { return ((CMVariable*)UnmanagedObject)->IsAggregate(); }
+		}
+
+		property BOOL IsRegional
+		{
+			BOOL get() { return ((CMVariable*)UnmanagedObject)->IsRegional(); }
+		}
+
+		void AddAssociatedVariable(CMWrappedVariable^ v)
+		{
+			//sdebug << "Adding associated variable to " << UnmanagedObject->GetName() << " " << v->UnmanagedObject->GetName() << endl;
+			_associatedVariables->Add(v);
+		}
 	};
 
 	public ref class CMWrappedDefinition : public CMWrappedIrpObject {
@@ -150,6 +200,14 @@ namespace IrpsimEngineWrapper
 		property double Value
 		{
 			double get() { return value; }
+		}
+	};
+
+	public ref class CMWrappedSimulation : public CMWrappedIrpObject 
+	{
+	public:
+		CMWrappedSimulation(CMSimulation* s) : CMWrappedIrpObject(s)
+		{
 		}
 	};
 
@@ -193,7 +251,28 @@ namespace IrpsimEngineWrapper
 			}
 		}
 
-		virtual String^ ToString() override { return FileName; }
+		String^ ToString() override { return FileName; }
+	};
+	
+	public ref class LoadedFileCollection : public ObservableCollection < CMLoadedFile^ >
+	{
+
+	};
+	
+	public ref class IrpObjectCollection : public ObservableCollection < CMWrappedIrpObject^ >
+	{
+	public:
+		IrpObjectCollection() : ObservableCollection < CMWrappedIrpObject^ >()
+		{
+		}
+	};
+
+	public ref class IrpObjectDictionary : public Dictionary < String^, CMWrappedIrpObject^ >
+	{
+	public:
+		IrpObjectDictionary() : Dictionary<String^, CMWrappedIrpObject^>()
+		{
+		}
 	};
 
 	public ref class CMWrappedIrpApplication
@@ -201,14 +280,25 @@ namespace IrpsimEngineWrapper
 	private:
 		CMIrpApplication *app = nullptr;
 		CMSimulation *sim = nullptr;
-		ObservableCollection<CMWrappedVariable^>^ variableList = gcnew ObservableCollection<CMWrappedVariable^>();
-		ObservableCollection<CMLoadedFile^>^ loadedFileList = gcnew ObservableCollection<CMLoadedFile^>();
-		ObservableCollection<CMWrappedIrpObject^>^ definitionList = gcnew ObservableCollection<CMWrappedIrpObject^>();
-		ObservableCollection<CMWrappedIrpObject^>^ scenarioList = gcnew ObservableCollection<CMWrappedIrpObject^>();
-		ObservableCollection<CMWrappedIrpObject^>^ scriptList = gcnew ObservableCollection<CMWrappedIrpObject^>();
-		ObservableCollection<CMWrappedIrpObject^>^ categoryList = gcnew ObservableCollection<CMWrappedIrpObject^>();
+
+		IrpObjectDictionary^ variableDictionary = gcnew IrpObjectDictionary();
+
+		IrpObjectCollection^ variableList = gcnew IrpObjectCollection();
+		IrpObjectCollection^ aggregateList = gcnew IrpObjectCollection();
+		IrpObjectCollection^ demandList = gcnew IrpObjectCollection();
+		IrpObjectCollection^ supplyList = gcnew IrpObjectCollection();
+		IrpObjectCollection^ storageList = gcnew IrpObjectCollection();
+		IrpObjectCollection^ costList = gcnew IrpObjectCollection();
+		
+		LoadedFileCollection^ loadedFileList = gcnew LoadedFileCollection();
+		IrpObjectCollection^ definitionList = gcnew IrpObjectCollection();
+		IrpObjectCollection^ scenarioList = gcnew IrpObjectCollection();
+		IrpObjectCollection^ scriptList = gcnew IrpObjectCollection();
+		IrpObjectCollection^ categoryList = gcnew IrpObjectCollection();
+		IrpObjectCollection^ simulationList = gcnew IrpObjectCollection();
 
 	public:
+
 		CMWrappedIrpApplication()
 		{
 			app = new CMIrpApplication();
@@ -221,34 +311,64 @@ namespace IrpsimEngineWrapper
 			String^ get() { return marshal_as<String^>(app->GetProjectFile().c_str()); }
 		}
 
-		property ObservableCollection<CMWrappedVariable^>^ Variables
+		property IrpObjectDictionary^ VariableDictionary
 		{
-			ObservableCollection<CMWrappedVariable^>^ get() { return variableList; }
+			IrpObjectDictionary^ get() { return variableDictionary; }
+		}
+
+		property IrpObjectCollection^ Variables
+		{
+			IrpObjectCollection^ get() { return variableList; }
 		}
 		
-		property ObservableCollection<CMWrappedIrpObject^>^ Definitions
+		property IrpObjectCollection^ AggregateVariables
 		{
-			ObservableCollection<CMWrappedIrpObject^>^ get() { return definitionList; }
+			IrpObjectCollection^ get() { return aggregateList; }
 		}
 
-		property ObservableCollection<CMWrappedIrpObject^>^ Scenarios
+		property IrpObjectCollection^ DemandVariables
 		{
-			ObservableCollection<CMWrappedIrpObject^>^ get() { return scenarioList; }
+			IrpObjectCollection^ get() { return demandList; }
 		}
 
-		property ObservableCollection<CMWrappedIrpObject^>^ Scripts
+		property IrpObjectCollection^ SupplyVariables
 		{
-			ObservableCollection<CMWrappedIrpObject^>^ get() { return scriptList; }
+			IrpObjectCollection^ get() { return supplyList; }
 		}
 
-		property ObservableCollection<CMWrappedIrpObject^>^ Categories
+		property IrpObjectCollection^ StorageVariables
 		{
-			ObservableCollection<CMWrappedIrpObject^>^ get() { return categoryList; }
+			IrpObjectCollection^ get() { return storageList; }
 		}
 
-		property ObservableCollection<CMLoadedFile^>^ LoadedFiles
+		property IrpObjectCollection^ CostVariables
+		{
+			IrpObjectCollection^ get() { return costList; }
+		}
+		
+		property IrpObjectCollection^ Definitions
+		{
+			IrpObjectCollection^ get() { return definitionList; }
+		}
+
+		property IrpObjectCollection^ Scenarios
+		{
+			IrpObjectCollection^ get() { return scenarioList; }
+		}
+
+		property IrpObjectCollection^ Scripts
+		{
+			IrpObjectCollection^ get() { return scriptList; }
+		}
+
+		property IrpObjectCollection^ Categories
+		{
+			IrpObjectCollection^ get() { return categoryList; }
+		}
+
+		property LoadedFileCollection^ LoadedFiles
 		{		
-			ObservableCollection<CMLoadedFile^>^ get() { return loadedFileList; }
+			LoadedFileCollection^ get() { return loadedFileList; }
 		}
 
 #pragma endregion
@@ -260,6 +380,11 @@ namespace IrpsimEngineWrapper
 		{
 			std::wstring str = marshal_as<std::wstring>(fileName);
 			app->OpenProject(str.c_str());
+		}
+
+		String^ GetFilePath(int id)
+		{
+			return marshal_as<String^>(app->LoadedFile(id).c_str());
 		}
 
 		void CloseProject() {
@@ -280,8 +405,16 @@ namespace IrpsimEngineWrapper
 			CMDefinition* d;
 			int n;
 		
-			while ((v = iter()) != 0)
-				variableList->Add(gcnew CMWrappedVariable(v));
+			while ((v = iter()) != 0) {
+				CMWrappedVariable^ wv = gcnew CMWrappedVariable(v);
+				VariableDictionary->Add(wv->Name, wv);
+				if (wv->NType == IrpNodeType::Demand) DemandVariables->Add(wv);
+				else if (wv->NType == IrpNodeType::Supply) SupplyVariables->Add(wv);
+				else if (wv->NType == IrpNodeType::Storage) StorageVariables->Add(wv);
+				else if (wv->NType == IrpNodeType::Cost) CostVariables->Add(wv);
+				else if (wv->IsAggregate && !wv->IsRegional) AggregateVariables->Add(wv);
+				else if (wv->FileId>=0) Variables->Add(wv);
+			}
 
 			for (int i = 0; (d = CMDefinitions::GetDefinition(i)) != 0; i++)
 				definitionList->Add(gcnew CMWrappedDefinition(d));
@@ -305,12 +438,50 @@ namespace IrpsimEngineWrapper
 					i,
 					marshal_as<String^>(app->LoadedFile(i).c_str())));
 			}
+
+			for each (CMWrappedVariable^ wv in VariableDictionary->Values) 
+			{
+				int i = wv->Name->IndexOf('.');
+				if (i > 0) {
+					String^ prefix = wv->Name->Substring(0, i);
+					if (VariableDictionary->ContainsKey(prefix))
+					{
+						CMWrappedVariable^ found = (CMWrappedVariable^)variableDictionary[prefix];
+						if (found)
+							found->AddAssociatedVariable(wv);
+					}
+				}
+			}
+
+			for each (CMWrappedVariable^ wv in VariableDictionary->Values)
+			{
+				if (wv->IsNode) {
+					CMVariable* vUnmanaged = (CMVariable*)wv->UnmanagedObject;
+					CMString name, value;
+					for (int i = 0; vUnmanaged->GetAssociation(i, name, value) > 0; i++) {
+						if (_wcsicmp(name.c_str(), L"region") && _wcsicmp(name.c_str(), L"category")) {
+							String^ strValue = gcnew String(value.c_str());
+							if (VariableDictionary->ContainsKey(strValue)) {
+								CMWrappedVariable^ found = (CMWrappedVariable^)variableDictionary[strValue];
+								if (found)
+									wv->AddAssociatedVariable(found);
+							}
+						}
+					}
+				}
+			}
 		}
 
 		void UseScenario(String^ name)
 		{
 			std::wstring str = marshal_as<std::wstring>(name);
 			app->UseScenario(str.c_str());
+
+			for each (CMWrappedVariable^ var in VariableDictionary->Values)
+			{
+				CMVariable* v = (CMVariable*)var->UnmanagedObject;
+				var->Selected = (v->GetState() & CMVariable::vsSelected) ? true : false;
+			}
 		}
 
 		void UseScript(String^ name)
@@ -321,8 +492,10 @@ namespace IrpsimEngineWrapper
 
 		void RunSimulation()
 		{
-			sim = app->CreateSimulation();
-			app->RunSimulation(sim);
+			if (sim==nullptr)
+				sim = app->CreateSimulation();
+			BOOL val = app->RunSimulation(sim);
+			sdebug << "Sim run result: " << val << endl;
 		}
 
 #pragma endregion

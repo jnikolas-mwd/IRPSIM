@@ -24,3 +24,121 @@ The => is wrong and should be flagged by IRPSIM. Should be
 if(pvid_option [_y-1] >= (102500 * 0.9), 1, 0)			
 #ENDVAR
 			
+
+			        <CollectionViewSource x:Key="SupplyCollection" Source="{Binding Supply}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+         </CollectionViewSource>
+        <CollectionViewSource x:Key="DemandCollection" Source="{Binding Demand}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="StorageCollection" Source="{Binding Storage}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="CostCollection" Source="{Binding Cost}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="VariableCollection" Source="{Binding Variables}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="ScriptCollection" Source="{Binding Scripts}">
+              <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="ScenarioCollection" Source="{Binding Scenarios}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="CategoryCollection" Source="{Binding Categories}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+        <CollectionViewSource x:Key="DefinitionCollection" Source="{Binding Definitions}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="Name" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+
+
+
+		     <TreeView Grid.Row="1" SelectedItemChanged="TreeView_SelectedItemChanged" KeyDown="TreeView_KeyDown">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <cmd:EventToCommand Command="{Binding SelectIrpObjectCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <TreeViewItem ItemsSource="{Binding Source={StaticResource SupplyCollection}}" ItemTemplate="{StaticResource VariableTemplate}">
+                <TreeViewItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Margin="3,0" Source="/Images/Region.png" />
+                        <TextBlock Text="Supply" Focusable="True"/>
+                    </StackPanel>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+            <TreeViewItem ItemsSource="{Binding Source={StaticResource DemandCollection}}" ItemTemplate="{StaticResource VariableTemplate}">
+                <TreeViewItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Margin="3,0" Source="/Images/Region.png" />
+                        <TextBlock Text="Demand" Focusable="True"/>
+                    </StackPanel>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+            <TreeViewItem ItemsSource="{Binding Source={StaticResource StorageCollection}}" ItemTemplate="{StaticResource VariableTemplate}">
+                <TreeViewItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Margin="3,0" Source="/Images/Region.png" />
+                        <TextBlock Text="Supply" Focusable="True"/>
+                    </StackPanel>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+            <TreeViewItem Header="Cost" ItemsSource="{Binding Source={StaticResource CostCollection}}" ItemTemplate="{StaticResource VariableTemplate}"/>
+            <TreeViewItem Header="Scenarios" ItemsSource="{Binding Source={StaticResource ScenarioCollection}}" ItemTemplate="{StaticResource NormalTemplate}"/>
+            <TreeViewItem Header="Scripts" ItemsSource="{Binding Source={StaticResource ScriptCollection}}"/>
+            <TreeViewItem Header="Categories" ItemsSource="{Binding Source={StaticResource CategoryCollection}}"/>
+            <TreeViewItem Header="Definitions" ItemsSource="{Binding Source={StaticResource DefinitionCollection}}"/>
+            <TreeViewItem Header="Variables" ItemsSource="{Binding Source={StaticResource VariableCollection}}"/>
+        </TreeView>
+    </Grid>
+
+	            <TreeViewItem ItemsSource="{Binding Source={StaticResource SupplyCollection}}" ItemTemplate="{StaticResource VariableTemplate}">
+                <TreeViewItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Margin="3,0" Source="/Images/Region.png" />
+                        <TextBlock Text="Supply" Focusable="True"/>
+                    </StackPanel>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+            <TreeViewItem ItemsSource="{Binding Source={StaticResource DemandCollection}}" ItemTemplate="{StaticResource VariableTemplate}">
+                <TreeViewItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Margin="3,0" Source="/Images/Region.png" />
+                        <TextBlock Text="Demand" Focusable="True"/>
+                    </StackPanel>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+            <TreeViewItem ItemsSource="{Binding Source={StaticResource StorageCollection}}" ItemTemplate="{StaticResource VariableTemplate}">
+                <TreeViewItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Margin="3,0" Source="/Images/Region.png" />
+                        <TextBlock Text="Supply" Focusable="True"/>
+                    </StackPanel>
+                </TreeViewItem.Header>
+            </TreeViewItem>
+            <TreeViewItem Header="Cost" ItemsSource="{Binding Source={StaticResource CostCollection}}" ItemTemplate="{StaticResource VariableTemplate}"/>
+            <TreeViewItem Header="Scenarios" ItemsSource="{Binding Source={StaticResource ScenarioCollection}}" ItemTemplate="{StaticResource NormalTemplate}"/>
+            <TreeViewItem Header="Scripts" ItemsSource="{Binding Source={StaticResource ScriptCollection}}"/>
+            <TreeViewItem Header="Categories" ItemsSource="{Binding Source={StaticResource CategoryCollection}}"/>
+            <TreeViewItem Header="Definitions" ItemsSource="{Binding Source={StaticResource DefinitionCollection}}"/>
+            <TreeViewItem Header="Variables" ItemsSource="{Binding Source={StaticResource VariableCollection}}"/>

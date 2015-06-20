@@ -159,7 +159,7 @@ public:
 	void ResetApplication();
 
 	int LoadedFilesCount() {return loadedfiles.Count();}
-	CMString LoadedFile(unsigned short n) {if (n<loadedfiles.Count()) return loadedfiles[n]; return CMString();}
+	CMString LoadedFile(unsigned short n) {if (n>=0 && n<loadedfiles.Count()) return loadedfiles[n]; return CMString();}
 
 	//int AttachedFiles() {return attachedfiles.Count();}
 	//CMString AttachedFile(unsigned short n) {if (n<attachedfiles.Count()) return attachedfiles[n]; return CMString();}

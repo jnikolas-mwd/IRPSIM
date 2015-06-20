@@ -97,18 +97,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Behaviors\TextBoxBehavior.cs" />
     <Compile Include="Services\Services.cs" />
     <Compile Include="ViewModels\Converters.cs" />
     <Compile Include="ViewModels\ErrorViewModel.cs" />
-    <Compile Include="ViewModels\FileViewModel.cs" />
+    <Compile Include="ViewModels\DisplayViewModel.cs" />
+    <Compile Include="ViewModels\IrpFileViewModel.cs" />
+    <Compile Include="ViewModels\IrpObjectViewModel.cs" />
     <Compile Include="ViewModels\MainViewModel.cs" />
     <Compile Include="ViewModels\DelegateCommand.cs" />
-    <Compile Include="ViewModels\MouseBehavior.cs" />
-    <Compile Include="ViewModels\ObservableObject.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
-    <Compile Include="Views\FilesView.xaml.cs">
-      <DependentUpon>FilesView.xaml</DependentUpon>
+    <Compile Include="Views\DisplayView.xaml.cs">
+      <DependentUpon>DisplayView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\NotifyView.xaml.cs">
       <DependentUpon>NotifyView.xaml</DependentUpon>
@@ -131,7 +132,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\FilesView.xaml">
+    <Page Include="Views\DisplayView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -203,7 +204,20 @@
     <ProjectReference Include="..\IrpsimEngineWrapper\IrpsimEngineWrapper.vcxproj">
       <Project>{95243521-1858-4a9f-8418-869d85bcea41}</Project>
       <Name>IrpsimEngineWrapper</Name>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Aggregate.png" />
+    <Resource Include="Images\Category.png" />
+    <Resource Include="Images\Cost.png" />
+    <Resource Include="Images\Definition.png" />
+    <Resource Include="Images\Demand.png" />
+    <Resource Include="Images\Scenario.png" />
+    <Resource Include="Images\Script.png" />
+    <Resource Include="Images\Storage.png" />
+    <Resource Include="Images\Supply.png" />
+    <Resource Include="Images\Variable.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

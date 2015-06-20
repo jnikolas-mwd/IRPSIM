@@ -28,6 +28,7 @@
 #include <ctype.h>
 #include <iostream>
 #include <iomanip>
+
 //#include <fstream>
 //static wofstream sdebug("debug.variable.txt", ios::binary);
 
@@ -88,8 +89,6 @@ int				CMVariable::sort_method 		= CMVariable::byType;
 int				CMVariable::static_state 		= 0;
 CMVariableCollection* CMVariable::variables = 0;
 
-const wchar_t* CMVariable::IsA() { return L"CMVariable"; }
-
 CMVariable::CMVariable(const CMString& aName,ULONG astate,int id) :
 CMIrpObject(aName,id),
 //name(aName),
@@ -121,7 +120,7 @@ associations(0,16)
 CMVariable::~CMVariable()
 {
 	types.ResetAndDestroy(1);
-	associations.ResetAndDestroy(1);
+	associations.ResetAndDestroy();
 	if (iterator) delete iterator;
 	if (realized) delete realized;
 }
@@ -425,6 +424,8 @@ wistream& CMVariable::read(wistream& s)
 	long pos = (long)s.tellg();
 	int begin = 0;
 
+	CMTokenizer next(L"");
+
 	type = NOTYPE;
 	while(!s.eof()) {
 		pos = (long)s.tellg();
@@ -445,12 +446,15 @@ wistream& CMVariable::read(wistream& s)
 			continue;
 		else if (str[0] != L'#')
 			break;
-		CMTokenizer next(str.substr(1,str.length()-1));
+		//CMTokenizer next(str.substr(1,str.length()-2));
+		next.Reset(str.substr(1, str.length() - 2));
+
 		token = next(L" \t\r\n");
 
 		if (token==L"type") {
-			while (!(token2=next(L" \t\r\n")).is_null())
+			while (!(token2 = next(L" \t\r\n")).is_null()) {
 				SetType(token2);
+			}
 		}
 		else {
 			token2 = stripends(next(L"\r\n"));

@@ -41,7 +41,8 @@ protected:
 
 	static unsigned short naggregates;
 	static unsigned short nregions;
-	static class _IRPCLASS CMPBigArray<CMVariable> aggregates; // system aggregate vars
+	static class _IRPCLASS CMPSmallArray<CMVariable> aggregates; // system aggregate vars
+	//static class _IRPCLASS CMPBigArray<CMVariable> aggregates; // system aggregate vars
    														 // naggregates*(nregions+1)
 	static class _IRPCLASS CMPSmallArray<CMNode> nodes;
 	static CMTimeMachine* time;
@@ -103,7 +104,7 @@ public:
 
    // Static functions
 
-	static void ResetAggregateVariables();
+	static void ResetAggregateVariables(bool bCreateNew);
    static void InitAggregateVariables(CMTimeMachine* t);
 	static void DestroyNodes();
    static unsigned short NodeCount() {return nodes.Count();}

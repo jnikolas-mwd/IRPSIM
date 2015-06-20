@@ -28,7 +28,7 @@ using namespace std;
 class _IRPCLASS CMVariableDescriptor
 {
 	CMString name;
-   CMString type;
+    CMString type;
 	long state;
 public:
 	enum {vdSum=0x0001,vdMoney=0x0002,vdNoUnits=0x0004,vdInteger=0x0008,

@@ -26,8 +26,8 @@
 #include <iomanip>
 //#include <assert.h>
 
-//#include <fstream.h>
-//static ofstream sdebug("cmstring.deb");
+//#include <fstream>
+//static wofstream sdebug("debug_cmstring.txt");
 
 const unsigned CM_HASH_SHIFT = 5;
 int CMString::case_sensitive_flag = 0;
@@ -213,8 +213,11 @@ CMString::CMString(const CMSubString& substr)
 
 CMString::~CMString()
 {
-//  if (pref_->RemoveReference() == 0) delete pref_;
-  pref_->RemoveReference();
+	if (pref_->RemoveReference() == 0) {
+		//sdebug << pref_->array() << endl;
+		delete [] pref_;
+	}
+  //pref_->RemoveReference();
 }
 
 CMString&

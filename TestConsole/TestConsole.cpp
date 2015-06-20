@@ -29,30 +29,32 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		//CMNotifier::SetNotifier(new CMTestNotifier());
 
-		sdebug << "Size of wchar_t is " << sizeof(wchar_t) << endl;
-
-		_CrtMemState s1, s2, s3;
+		_CrtMemState s1, s2, s3, s4;
 		_CrtMemCheckpoint(&s1);
 
-		if (1) {
-			string a("This is a test");
-		}
+		//_CrtMemDumpStatistics(&s1);
 
-		//CMIrpApplication* app = new CMIrpApplication();
+		CMIrpApplication* app = new CMIrpApplication();
 
-		//app->OpenProject(L"C:\\Users\\Casey\\Documents\\IRPSIM Project Test\\Inputs\\Configuration\\IRP Resource Strategy.cfg");
-
-		//app->UseScenario(L"test");
-		//app->UseScript(L"basemix-cra-ondemand");
-
-		//CMSimulation* sim = app->CreateSimulation();
-		//app->RunSimulation(sim);
-
-		//delete app;
-		
-		_CrtMemCheckpoint(&s2);
+		app->OpenProject(L"C:\\Users\\Casey\\Documents\\IRPSIM Project Test\\Inputs\\Configuration\\IRP Resource Strategy.cfg");
 
 		if (_CrtMemDifference(&s3, &s1, &s2)) {
+			_CrtMemDumpStatistics(&s3);
+		}
+
+		app->UseScenario(L"test");
+		app->UseScript(L"basemix-cra-ondemand");
+
+		CMSimulation* sim = app->CreateSimulation();
+		app->RunSimulation(sim);
+
+		app->DeleteSimulation(sim, 0);
+		delete app;
+		
+		_CrtMemCheckpoint(&s4);
+		//_CrtMemDumpStatistics(&s2);
+
+		if (_CrtMemDifference(&s3, &s1, &s4)) {
 			_CrtMemDumpStatistics(&s3);
 		}
 	}

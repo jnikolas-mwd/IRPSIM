@@ -66,12 +66,12 @@ template<class TP> int
 CMPHashDictionary<TP>::Detach(const CMString& val,int destroy)
 {
 	int flag = CMString::set_case_sensitive(csflag);
-   int ret = 0;
+    int ret = 0;
 	unsigned short n = val.hash() % arraysize;
 	for (unsigned short i=0;i<array[n].Count();i++) {
 		if (val == array[n].At(i)->GetName()) {
 			array[n].DetachAt(i,destroy);
-         ret=1;
+			ret=1;
 			break;
 		}
 	}

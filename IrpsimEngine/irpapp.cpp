@@ -70,7 +70,7 @@ vartypes()
 CMIrpApplication::~CMIrpApplication()
 {
 	ResetApplication();
-    CMVariable::SetCollectionContext(oldvariables);
+    //CMVariable::SetCollectionContext(oldvariables);
     delete variables;
 	CMString::set_case_sensitive(casesensitiveflag);
 	CMString::skip_whitespace(skipwhitespaceflag);
@@ -198,7 +198,7 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 	CMString messageheader = L"Reading ";
 	CMString errorheader = L"problem reading file ";
 	wifstream* stack[128];
-	int current=0,currfile,oldfile;
+	int current=0,currfile,oldfile,defno;
 	CMString currpath = name;
 
 	stack[0] = new wifstream(name.c_str(),ios::in|IOS_BINARY);
@@ -210,6 +210,7 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 	}
 
 	currfile = add_file_to_list(name);
+	defno = 1;
 
 	CMNotifier::Notify(CMNotifier::LOG, messageheader + name);
 
@@ -220,6 +221,7 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 		long index = (long)s->tellg();
 		line.read_line(*s);
 		line = stripends(line);
+	
 		if (!line.is_null() && line[0]==L'#') {
 			CMTokenizer next(line);
 			CMString token = next(delims);
@@ -233,6 +235,7 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 					err = -1;
 				}
 				else {
+					defno = 0;
 					oldfile=currfile;
 					currfile = add_file_to_list(currpath);
 					CMNotifier::Notify(CMNotifier::LOG, messageheader + currpath);
@@ -246,48 +249,55 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 			}
 			*/
 			else if (token == L"define") {
+				defno++;
 				CMString s1 = next(delims);
 				CMString s2 = next(delims);
 				CMDefinitions::Add(s1,s2,currfile);
 			}
 			else if (token==L"options") {
+				defno++;
 				CMNotifier::Notify(CMNotifier::INFO, messageheader + L"options");
 				options.SetApplicationId(currfile);
-				options.SetApplicationIndex(index);
+				options.SetApplicationIndex(defno);
 				s->seekg(index);
 				*s >> options;
 			}
 			else if (token==L"intervals") {
+				defno++;
 				CMNotifier::Notify(CMNotifier::INFO, messageheader + L"intervals");
 				CMInterval::Read(*s);
 				CMInterval::SetApplicationIdAll(currfile);
-				CMInterval::SetApplicationIndexAll(index);
+				CMInterval::SetApplicationIndexAll(defno);
 			}
 			else if (token==L"scenario") {
+				defno++;
 				s->seekg(index);
 				CMScenario* sce = new CMScenario(currfile);
 				*s >> *sce;
 				scenarios.Add(sce);
-				sce->SetApplicationIndex(index);
+				sce->SetApplicationIndex(defno);
 				CMNotifier::Notify(CMNotifier::INFO, messageheader + sce->GetName());
 			}
 			else if (token==L"script") {
+				defno++;
 				s->seekg(index);
 				CMScript* scr = new CMScript(currfile);
 				*s >> *scr;
 				scripts.Add(scr);
-				scr->SetApplicationIndex(index);
+				scr->SetApplicationIndex(defno);
 				CMNotifier::Notify(CMNotifier::INFO, messageheader + scr->GetName());
 			}
 			else if (token==L"category") {
+				defno++;
 				s->seekg(index);
 				CMCategory* cat = new CMCategory(currfile);
 				*s >> *cat;
 				CMCategory::AddCategory(cat);
-				cat->SetApplicationIndex(index);
+				cat->SetApplicationIndex(defno);
 				CMNotifier::Notify(CMNotifier::INFO, messageheader + cat->GetName());
 			}
 			else if (token==L"vardef") {
+				defno++;
 				if (!varsread)
 					variables->SetStateAll(CMVariable::vsLinksUpdated,FALSE);
 				varsread++;
@@ -300,21 +310,22 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 					else {
 						variables->Add(v);
 						v->SetApplicationId(currfile);
-						v->SetApplicationIndex(index);
+						v->SetApplicationIndex(defno);
 						CMNotifier::Notify(CMNotifier::INFO, messageheader + v->GetName());
 					}
 				}
 			}
 			else {
-				CMNotifier::Notify(CMNotifier::WARNING, L"Unrecognized token: #" + token + L" in file " + currpath);
+				CMNotifier::Notify(CMNotifier::ERROR, L"Unrecognized token: #" + token + L" in file " + currpath);
 			}
-		}
+		} // if (!line.is_null() && line[0]==L'#') {
 		if (s->eof()) {
 			delete stack[current--];
-			s = current>=0 ? stack[current] : 0;
-			currfile=oldfile;
+			s = current >= 0 ? stack[current] : 0;
+			currfile = oldfile;
+			defno = 0;
 		}
-	}
+	} // while (s && !err) {
 
 	if (current >= 0)
 		for (int i=0;i<=current;i++)
@@ -478,32 +489,37 @@ CMScenario* CMIrpApplication::AddThisScenario(const CMString& name)
 
 CMScenario* CMIrpApplication::UseScenario(const CMString& name)
 {
-   try {
-
-	CMVariable::SetCollectionContext(variables);
-	unsigned short n;
-    for (n=0;n<scenarios.Count();n++)
-   	if (name == scenarios[n]->GetName())
-      	break;
-	if (n<scenarios.Count()) {
-		currentscenario = scenarios[n];
-		ResetOutputVariables();
-		scenarios[n]->Use(options);
-		options.SetOption(L"simulationname",scenarios[n]->GetName());
-		for (unsigned i=0;i<scenarios[n]->Variables();i++) {
-      	CMString varname = scenarios[n]->VariableName(i);
-			outputvars.Add(varname);
-         for (unsigned j=0;j<simulations.Count();j++) {
-				CMSimulationArray* array = simulations[j]->SimArray();
-				CMAccumulatorArray* accum = simulations[j]->Accumulator();
-				if (array)
-					array->SetVariableState(array->VariableIndex(varname),CMVariableDescriptor::vdOutput,TRUE);
-				if (accum)
-					accum->SetVariableState(accum->VariableIndex(varname),CMVariableDescriptor::vdOutput,TRUE);
+	try {
+		CMVariable::SetCollectionContext(variables);
+		unsigned short n;
+		for (n = 0; n < scenarios.Count(); n++)
+			if (name == scenarios[n]->GetName())
+				break;
+		if (n < scenarios.Count()) {
+			currentscenario = scenarios[n];
+			ResetOutputVariables();
+			scenarios[n]->Use(options);
+			for (unsigned i = 0; i < scenarios[n]->Variables(); i++) {
+				CMString varname = scenarios[n]->VariableName(i);
+				outputvars.Add(varname);
+				for (unsigned j = 0; j < simulations.Count(); j++) {
+					CMSimulationArray* array = simulations[j]->SimArray();
+					CMAccumulatorArray* accum = simulations[j]->Accumulator();
+					if (array)
+						array->SetVariableState(array->VariableIndex(varname), CMVariableDescriptor::vdOutput, TRUE);
+					if (accum)
+						accum->SetVariableState(accum->VariableIndex(varname), CMVariableDescriptor::vdOutput, TRUE);
+				}
 			}
-      }
-	}
-
+		}
+		else {
+			currentscenario = NULL;
+			CMVariableIterator next;
+			CMVariable* v;
+			while ((v = next()) != 0) {
+				v->SetState(CMVariable::vsSelected | CMVariable::vsSaveOutcomes, FALSE);
+			}
+		}
 	}
    catch (CMException& except) {
 	   CMNotifier::Notify(CMNotifier::ERROR, except.What());
@@ -530,7 +546,7 @@ CMScript* CMIrpApplication::FindScript(const CMString& name)
 	for (unsigned short i=0;i<scripts.Count();i++)
    	if (name == scripts[i]->GetName())
       	return scripts[i];
-   return 0;
+   return NULL;
 }
 
 CMScenario* CMIrpApplication::FindScenario(const CMString& name)
@@ -538,7 +554,7 @@ CMScenario* CMIrpApplication::FindScenario(const CMString& name)
 	for (unsigned short i=0;i<scenarios.Count();i++)
    	if (name == scenarios[i]->GetName())
       	return scenarios[i];
-   return 0;
+   return NULL;
 }
 
 CMCategory* CMIrpApplication::FindCategory(const CMString& name)
@@ -631,10 +647,12 @@ void CMIrpApplication::ResetApplication()
 	simulations.ResetAndDestroy(1);
 	if (variables)
 	   variables->ResetCollection();
+	CMRegions::Reset();
 	CMDefinitions::Reset();
 	CMInterval::Reset();
 	CMCategory::DestroyCategories();
 	CMNode::DestroyNodes();
+	CMNode::ResetAggregateVariables(false);
 	scenarios.ResetAndDestroy(1);
 	scripts.ResetAndDestroy(1);
 	outputvars.Reset(1);
@@ -724,15 +742,17 @@ BOOL CMIrpApplication::RunSimulation(CMSimulation* pSim)
 		return FALSE;
 	if (currentscript == NULL) {
 		CMNotifier::Notify(CMNotifier::ERROR, L"Cannot run simulation: No script selected");
-		return FALSE;
+			return FALSE;
 	}
 	if (!pSim->Initialized()) {
 		for (unsigned short i=0;i<scripts.Count();i++)
 			scripts[i]->Parse(*this);
 		pSim->SetScript(currentscript->GetName());
 	}
-	pSim->Run();
-	return TRUE;
+	BOOL success = pSim->Run();
+	if (!success)
+		CMNotifier::Notify(CMNotifier::ERROR, L"Problem running the simulation");
+	return success;
 }
 
 

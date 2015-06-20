@@ -145,6 +145,11 @@
     </ClCompile>
     <ClCompile Include="TestConsole.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\IrpsimEngine\IrpsimEngine.vcxproj">
+      <Project>{c2373396-ad44-4219-81df-b12136225486}</Project>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

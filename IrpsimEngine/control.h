@@ -36,6 +36,7 @@ class _IRPCLASS CMControlItem
    enum {sDontRenew=0x0001};
 public:
 	CMControlItem(const CMString& def);
+	~CMControlItem() { if (vinterval) delete vinterval; }
    void Initialize(CMTimeMachine* t);
    double LimitAmount(CMTimeMachine* t)
    	{return controlvalue.GetValue(t,CM_BIGDOUBLE,1);}

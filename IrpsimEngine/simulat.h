@@ -37,7 +37,7 @@ class _IRPCLASS CMReliability;
 class _IRPCLASS CMScript;
 class _IRPCLASS CMTimeMachine;
 
-class _IRPCLASS CMSimulation
+class _IRPCLASS CMSimulation : public CMIrpObject
 {
 	static const wchar_t* forbidden_set_options[];
 	static const wchar_t *file_header;
@@ -55,9 +55,10 @@ class _IRPCLASS CMSimulation
 	//DWORD  dwThreadId;  // Id of simulation run thread.
 
 	short state;
-	CMString filename,simname,comments; //, tempfile
+	CMString filename, comments; //, tempfile
 	long trialno;
 	long elapsedtime;
+	CMTime loadtime;
 	CMTime begintime;
 	CMIrpApplication* pApp;
 	CMScript* script;
@@ -83,7 +84,8 @@ class _IRPCLASS CMSimulation
    //void save_simulation_tail(wostream& s,int startpoint);
    int  get_vardesc_state(CMVariable* v);
 	void initialize();
-//protected:
+protected:
+	virtual const wchar_t* IsA() { return L"CMSimulation"; }
 	//friend class CMIrpApplication;
 	// These functions should only be called by CMIrpApplication;
 	//CMSimulation(const CMString& fname,short mode=0,CMIrpApplication* a=0);
@@ -99,7 +101,7 @@ public:
 
 	static CMSimulation* ActiveSimulation() {return active_simulation;}
 
-	CMString GetName() const {return simname;}
+	//MString GetName() const {return simname;}
 	CMString GetFileName() const {return filename;}
 
 	void Reset();

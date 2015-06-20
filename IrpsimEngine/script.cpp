@@ -409,7 +409,7 @@ int CMScript::SetSimulationContext(CMSimulation* s,CMIrpApplication* app)
    	return 0;
 
 	sim = s;
-	CMNode::ResetAggregateVariables();
+	CMNode::ResetAggregateVariables(true);
 
 	vnetsurplus = CMVariable::Find(CMVariableTypes::AggStringFromInt(CMVariableTypes::aNetSurplus));
 

@@ -17,50 +17,51 @@
 
 void CMAssociations::AddAssociation(const CMString& aName,const CMString& val)
 {
-	unsigned short i=0;
-	for (;i<Count();i++) {
-		if (*At(i) == aName) {
-      	At(i)->SetValue(val);
+	for (size_t i=0 ;i<_associations->Count(); i++) {
+		if (_associations->At(i)->name == aName) {
+			_associations->At(i)->value = val;
          return;
       }
    }
-	Add(new CMStringValue<CMString>(aName,val) );
+	//_associations->Add(new CMStringValue<CMString>(aName.c_str(),val.c_str()) );
+	_associations->Add(new NameValue(aName, val));
 }
 
 CMString CMAssociations::GetName(unsigned short n)
 {
-	if (n<Count())
-		return (CMString)(*At(n));
-   return CMString();
+	if (n < _associations->Count())
+		return _associations->At(n)->name;
+
+	return L"";
 }
 
 CMString CMAssociations::GetValue(unsigned short n)
 {
-	if (n<Count())
-		return At(n)->Value();
-   return CMString();
+	if (n < _associations->Count())
+		return _associations->At(n)->value;
+	return L"";
 }
 
 CMString CMAssociations::GetValue(const CMString& aName)
 {
 	int loc = GetAssociationIndex(aName);
-   if (loc>=0) return At(loc)->Value();
-   return CMString();
+	if (loc >= 0) return _associations->At(loc)->value;
+   return L"";
 }
 
 int CMAssociations::GetAssociationIndex(const CMString& aName)
 {
-	for (unsigned short i=0;i<Count();i++)
-		if (*At(i) == aName)
+	for (unsigned short i = 0; i<_associations->Count(); i++)
+		if (_associations->At(i)->name == aName)
 			return (int) i;
 	return -1;
 }
 
 int CMAssociations::GetAssociation(unsigned short n,CMString& s1,CMString& s2)
 {
-	if (n<Count()) {
-		s1 = (CMString)(*At(n));
-		s2 = At(n)->Value();
+	if (n<_associations->Count()) {
+		s1 = _associations->At(n)->name;
+		s2 = _associations->At(n)->value;
 		return 1;
 	}
 	return 0;
@@ -68,14 +69,14 @@ int CMAssociations::GetAssociation(unsigned short n,CMString& s1,CMString& s2)
 
 int CMAssociations::IsAssociation(CMString& s1,CMString& s2)
 {
-	for (unsigned short i=0;i<Count();i++)
-		if (*At(i) == s1 && At(i)->Value() == s2)
+	for (unsigned short i = 0; i<_associations->Count(); i++)
+		if (_associations->At(i)->name == s1 && _associations->At(i)->value == s2)
 			return 1;
 	return 0;
 }
 
 void CMAssociations::Compact()
 {
-	if (Count()>0)
-   	Resize(Count());
+	if (_associations->Count()>0)
+		_associations->Resize(_associations->Count());
 }

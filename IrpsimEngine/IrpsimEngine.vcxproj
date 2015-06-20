@@ -90,7 +90,6 @@
     <ClInclude Include="bgvarray.h" />
     <ClInclude Include="category.h" />
     <ClInclude Include="cmdefs.h" />
-    <ClInclude Include="cmerror.h" />
     <ClInclude Include="cmlib.h" />
     <ClInclude Include="cmstring.h" />
     <ClInclude Include="cmtime.h" />
@@ -159,9 +158,6 @@
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
     </ClCompile>
     <ClCompile Include="category.cpp">
-      <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
-    </ClCompile>
-    <ClCompile Include="cmerror.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
     </ClCompile>
     <ClCompile Include="cmlib.cpp">

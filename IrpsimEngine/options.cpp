@@ -139,7 +139,7 @@ CMOptions::CMOptions() :
 options(),
 maxwidth(0)
 {
-	SetDefaults();
+	//SetDefaults();
 }
 
 CMOptions::CMOptions(const CMOptions& opt) :
@@ -149,21 +149,22 @@ maxwidth(0)
 	for (unsigned i=0;i<opt.Count();i++) {
 		int len = opt.At(i)->GetName().length();
 		if (len>maxwidth) maxwidth=len;
-		options.Add(new CMOption(*opt.At(i)));
+			options.Add(new CMOption(*opt.At(i)));
 	}
 }
 
+/*
 void CMOptions::SetDefaults()
 {
 	options.ResetAndDestroy(1);
 	maxwidth=0;
 	for (int i=0;defaults[i].name;i++) {
-		CMString n(defaults[i].name);
-		if ((int)n.length()>maxwidth) maxwidth = (int)n.length();
-		options.Add(new CMOption(n,defaults[i].value,-1));
+		int len = wcslen(defaults[i].name);
+		if (len>maxwidth) maxwidth = len;
+		options.Add(new CMOption(defaults[i].name,defaults[i].value,-1));
 	}
 }
-
+*/
 CMString CMOptions::GetOption(const CMString& option)
 {
 	CMString ret;

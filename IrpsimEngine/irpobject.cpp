@@ -61,11 +61,10 @@ const wchar_t* CMIrpObjectIterator::GetNext()
 }
 
 CMIrpObject::CMIrpObject(const CMString& n, int id) :
-name(n),
 app_id(id)
 {
 	//name.to_lower();
-	name = stripends(name);
+	name = stripends(n);
 	if (name.length() && name[0] == L'#')
 		name = name.substr(1, name.length() - 1);
 }

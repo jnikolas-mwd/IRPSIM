@@ -36,7 +36,7 @@ class _IRPCLASS CMOption : public CMIrpObject {
 public:
 	CMOption() : CMIrpObject() , value(L"") {}
 	CMOption(const CMString& n, const CMString& v, int app_id) : CMIrpObject(n, app_id) { SetValue(v); }
-	CMOption(const CMOption& o) : value(o.value) {this->name = o.name; this->app_id = o.app_id; }
+	CMOption(const CMOption& o) : value(o.value) {name = o.name; app_id = o.app_id; }
 	CMOption& operator = (const CMOption& o) { name = o.name; value = o.value; app_id = o.app_id; return *this; }
 //	int operator == (const CMOption& o) {return name==o.name;}
 //	int operator < (const CMOption& o) {return name<o.name;}
@@ -52,17 +52,12 @@ protected:
 	virtual const wchar_t* IsA() { return L"CMOption"; }
 };
 
-
-//template class _IRPCLASS CMArrayDictionary<CMOption>;
-typedef class _IRPCLASS CMArrayDictionary<CMOption> CMOPTIONARRAYDICTIONARY;
-
 class _IRPCLASS CMOptions
 {
 	friend class CMOptionIterator;
 	friend _IRPFUNC wostream& operator << (wostream& s, CMOptions& o);
 	friend _IRPFUNC wistream& operator >> (wistream& s, CMOptions& o);
-//	CMArrayDictionary<CMOption> options;
-	CMOPTIONARRAYDICTIONARY options;
+	CMArrayDictionary<CMOption> options;
 	short maxwidth;
 	int app_id = -1;
 	long app_index = 0;
@@ -77,7 +72,7 @@ public:
 	void   SetApplicationIndex(long index) { this->app_index = index; }
 	int	   GetApplicationIndex() { return this->app_id; }
 	
-	void   SetDefaults();
+	//void   SetDefaults();
 
 	CMString GetOption(const CMString& option);
 	const  wchar_t* GetOptionString(const CMString& option);

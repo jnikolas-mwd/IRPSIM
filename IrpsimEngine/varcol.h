@@ -31,8 +31,12 @@
 typedef class _IRPCLASS CMPHashDictionary<CMVariable> CMPVARIABLEHASHDICTIONARY;
 typedef class _IRPCLASS CMPHashDictionaryIterator<CMVariable> CMPVARIABLEHASHDICTIONARYITERATOR;
 
-class _IRPCLASS CMVariableCollection : public CMPVARIABLEHASHDICTIONARY
+//class _IRPCLASS CMVariableCollection : public CMPVARIABLEHASHDICTIONARY
+class _IRPCLASS CMVariableCollection
 {
+	friend class _IRPCLASS CMVariableIterator;
+
+	CMPVARIABLEHASHDICTIONARY variables;
 	void destroy_variables(ULONG aState,BOOL ontrue,int force);
 	CMVariable* create_monitor_variable(CMVariable* v, const wchar_t* suffix, int typeno);
 	void create_demand_monitors(CMVariable* v);
@@ -43,6 +47,12 @@ class _IRPCLASS CMVariableCollection : public CMPVARIABLEHASHDICTIONARY
    enum {sCreateSystemVariables=0x0001};
 public:
 	CMVariableCollection(int create_system_variables);
+	~CMVariableCollection();
+
+	CMVariable* Find(const CMString& aName) { return variables.Find(aName); }
+	CMVariable* Add(CMVariable* v) { variables.Add(v); return v; }
+	long Count() { return variables.Count(); }
+
    void DestroyIfState(ULONG aState,int force) {destroy_variables(aState,TRUE,force);}
    void DestroyIfNotState(ULONG aState,int force) {destroy_variables(aState,FALSE,force);}
 	void UpdateVariableTypes();
@@ -61,7 +71,7 @@ class _IRPCLASS CMVariableIterator
 	CMPVARIABLEHASHDICTIONARYITERATOR iter;
 public:
 	CMVariableIterator();
-	CMVariableIterator(CMVariableCollection* v);
+	CMVariableIterator(const CMVariableCollection* vc);
 	void Reset() {iter.Reset();}
 	CMVariable* operator ()() {return iter();}
 };

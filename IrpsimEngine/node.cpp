@@ -36,13 +36,17 @@
 CMTimeMachine* CMNode::time = 0;
 unsigned short CMNode::naggregates;
 unsigned short CMNode::nregions;
-CMPBigArray<CMVariable> CMNode::aggregates;
+CMPSmallArray<CMVariable> CMNode::aggregates;
+//CMPBigArray<CMVariable> CMNode::aggregates;
 CMPSmallArray<CMNode> CMNode::nodes;
 CMVariable* CMNode::vtimestep;
 
-void CMNode::ResetAggregateVariables()
+void CMNode::ResetAggregateVariables(bool bCreateNew)
 {
 	aggregates.Reset(1);
+
+	if (!bCreateNew)
+		return;
 
 	naggregates = CMVariableTypes::AggNamesCount();
    nregions = CMRegions::RegionCount();

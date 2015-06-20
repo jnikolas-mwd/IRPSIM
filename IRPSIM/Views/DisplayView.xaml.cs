@@ -18,9 +18,9 @@ namespace IRPSIM.Views
     /// <summary>
     /// Interaction logic for FilesView.xaml
     /// </summary>
-    public partial class FilesView : UserControl
+    public partial class DisplayView : UserControl
     {
-        public FilesView()
+        public DisplayView()
         {
             InitializeComponent();
         }

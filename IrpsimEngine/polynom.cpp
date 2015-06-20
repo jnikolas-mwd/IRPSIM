@@ -152,6 +152,7 @@ void CMPolynomial::set_equal_to(const CMPolynomial& p)
 	if (variables.Count()) 		variables.Resize(variables.Count());
 	if (expressions.Count()) 	expressions.Resize(expressions.Count());
 	if (functions.Count()) 		functions.Resize(functions.Count());
+
 //	if (expression.Count()) 	expression.Resize(expression.Count());
 }
 

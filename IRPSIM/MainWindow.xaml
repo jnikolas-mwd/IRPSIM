@@ -13,11 +13,15 @@
             </Style.Triggers>
         </Style>
     </Window.Resources>
-     <DockPanel>
+    <Window.InputBindings>
+        <KeyBinding Modifiers="Control" Key="P" Command="{Binding ProjectOpenCommand}" />
+        <KeyBinding Modifiers="Control" Key="O" Command="{Binding DisplayCollectionViewModel.FileOpenCommand}" />
+    </Window.InputBindings>
+    <DockPanel>
         <Menu Name="mainMenu" DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="Open _Project..." Command="{Binding ProjectOpenCommand}"/>
-                <MenuItem Header="Open _File..." Command="{Binding FilesViewModel.FileOpenCommand}"/>
+                <MenuItem Header="Open _Project... (Ctrl+P)" Command="{Binding ProjectOpenCommand}"/>
+                <MenuItem Header="Open _File... (Ctrl+O)" Command="{Binding DisplayCollectionViewModel.FileOpenCommand}" ToolTip="Open a text file"/>
                 <Separator/>
                 <MenuItem Header="_Reload Project" Command="{Binding ProjectReloadCommand}"/>
                 <MenuItem Header="_Close Project" Command="{Binding ProjectCloseCommand}"/>
@@ -47,14 +51,14 @@
             </Grid.RowDefinitions>
             <TabControl TabStripPlacement="Bottom" Grid.Column="0" Grid.Row="0">
                 <TabItem Header="Objects">
-                    <view:ObjectView x:Name="objectView"/>
+                    <view:ObjectView x:Name="objectView" DataContext="{Binding Objects}"/>
                 </TabItem>
                 <TabItem Header="Files">
-                    <view:LoadedFilesView x:Name="loadedFilesView"/>
+                    <view:LoadedFilesView x:Name="loadedFilesView" DataContext="{Binding Files}"/>
                 </TabItem>
             </TabControl>
              <GridSplitter Grid.Column="0" Width="3"/>
-            <view:FilesView x:Name="filesView" Grid.Column="1" Grid.Row="0" DataContext="{Binding FilesViewModel}"/>
+            <view:DisplayView x:Name="displayView" Grid.Column="1" Grid.Row="0" DataContext="{Binding DisplayCollectionViewModel}"/>
             <GridSplitter Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="3" ResizeDirection="Rows" HorizontalAlignment="Stretch"/>
             <view:NotifyView x:Name="notifyView" Grid.Row="2" Grid.ColumnSpan="2"/>
         </Grid>

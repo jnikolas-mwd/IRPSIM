@@ -26,7 +26,8 @@
 
 class _IRPCLASS CMTokenizer
 {
-	const	CMString*  theString;
+	CMString  theString;
+//	const	CMString  theString;
 	const wchar_t*		place;
 public:
 	CMTokenizer(const CMString& s);	// Construct to lex a string

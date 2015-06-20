@@ -36,7 +36,7 @@ protected:
 	virtual const wchar_t* get_next() { return 0; }
 public:
 	CMIrpObjectIterator(CMIrpObject* o);
-	~CMIrpObjectIterator();
+	virtual ~CMIrpObjectIterator();
 	int Reset();
 	const wchar_t* GetNext();
 };

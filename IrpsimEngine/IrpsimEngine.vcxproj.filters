@@ -45,9 +45,6 @@
     <ClInclude Include="cmdefs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="cmerror.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="cmlib.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -219,9 +216,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="category.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="cmerror.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="cmlib.cpp">

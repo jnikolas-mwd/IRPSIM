@@ -30,6 +30,7 @@
 CMScenario::~CMScenario()
 {
 	options.ResetAndDestroy();
+	varnames.Reset();
 }
 
 void CMScenario::AddEntry(const CMString& nm,const CMString& value,int forceoption)

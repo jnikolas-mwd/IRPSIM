@@ -58,7 +58,6 @@ public:
 
 class _IRPCLASS CMStringRef : public CMReference
 {
-
   static CMStringRef*	getRep(size_t capac, size_t nchar);
 
   size_t	length   () const {return nchars_;}

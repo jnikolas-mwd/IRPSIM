@@ -22,7 +22,7 @@
 #include "cmstring.h"
 #include "cmdefs.h"
 
-template <class TP> class CMArrayDictionary
+template <class TP> class _IRPCLASS CMArrayDictionary
 {
 	unsigned short count;
 	unsigned short size;

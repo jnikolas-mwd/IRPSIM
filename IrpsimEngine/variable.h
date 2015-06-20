@@ -84,7 +84,7 @@ protected:
 	virtual void write_body(wostream& s) {}
 	virtual wistream& read(wistream& s);
 	virtual wostream& write(wostream& s);
-	virtual const wchar_t* IsA();
+	virtual const wchar_t* IsA() {return L"CMVariable";}
 public:
 	static const ULONG vsFailed;
 	static const ULONG vsStochastic;
@@ -124,7 +124,9 @@ public:
 			XIllegalTimeLag,XTimeOutOfRange,XNoAssociatedVariable};
 
 	CMVariable(const CMString& aName,ULONG astate=0L,int id=-1);
-	~CMVariable();
+
+	// Made destructor virtual
+	virtual ~CMVariable();
 
 	void   ReportError(int c,CMTime* t=0);
 	void   ReportError(int c,const CMString& st,CMTime* t=0);
@@ -154,6 +156,9 @@ public:
 	void   SetType(const CMString& aName);
 	void   SetType(int val); // for setting negative types
 	int	 IsType(const CMString& aName);
+
+	BOOL IsAggregate() {return GetState(vsAggregate);}
+	BOOL IsRegional() { return GetState(vsRegional); }
 
 	CMString GetSpecialType();
 

@@ -291,7 +291,7 @@ CMPBigArray<TP>::make_new_leaf(int level,long sz)
    CMPArrayNode<TP> *node,*newnode,*rightmost;
 
 	if (left==0) {
-   	root = left = new CMPArrayNode<TP>(0,sz,0);
+   	  root = left = new CMPArrayNode<TP>(0,sz,0);
       size += root->size;
       return root;
    }

@@ -23,6 +23,9 @@
 #include <iomanip>
 #include <stdlib.h>
 
+#include <fstream>
+static wofstream sdebug("debug_varray.txt");
+
 CMVArrayIterator::CMVArrayIterator(CMVArray* v) :
 CMIrpObjectIterator(v),
 iter(0),
@@ -40,16 +43,19 @@ const wchar_t* CMVArrayIterator::get_next()
 	const wchar_t* ret;
 	CMVArray* v = (CMVArray*)obj;
 
-	if (!(v->arraystate & v->containsPolynomials))
+	if (!(v->arraystate & v->containsPolynomials)) {
 		return 0;
-	while (pos < v->array.Count()) {
+	}
+	while (pos < v->_size) {
 		if (!iter) {
-			while (pos<v->array.Count() && !v->array[pos]->ContainsVariables())
+			//while (pos<v->array.Count() && !v->array[pos]->ContainsVariables())
+			while (pos<v->_size && (v->array[pos].e==NULL || !v->array[pos].e->ContainsVariables()))
 				pos++;
-			if (pos >= v->array.Count())
+			if (pos >= v->_size)
 				break;
 			else
-				iter = new CMExpressionIterator(*v->array[pos]);
+				iter = new CMExpressionIterator(*v->array[pos].e);
+				//iter = new CMExpressionIterator(*v->array[pos]);
 		}
 		if (iter && (ret=(*iter)())!=0)
 			return ret;
@@ -62,8 +68,7 @@ const wchar_t* CMVArrayIterator::get_next()
 }
 
 CMVArray::CMVArray(const CMString& aName,int rows,int cols) :
-CMVariable(aName),
-array()
+CMVariable(aName)
 {
 	SetState(vsDontMaintain,TRUE);
 	SetSize(rows,cols);
@@ -71,7 +76,9 @@ array()
 
 CMVArray::~CMVArray()
 {
-	array.ResetAndDestroy(1);
+	//array.ResetAndDestroy(1);
+	reset();
+	delete[] array;
 }
 
 CMIrpObjectIterator* CMVArray::create_iterator()
@@ -79,33 +86,86 @@ CMIrpObjectIterator* CMVArray::create_iterator()
 	return (arraystate&containsPolynomials) ? new CMVArrayIterator(this) : 0;
 }
 
+void CMVArray::reset()
+{
+	if (array == NULL) return;
+	for (size_t i = 0; i < _size; i++)
+		if (array[i].e != NULL)
+			delete array[i].e;
+}
+
 void CMVArray::SetSize(int rows,int cols)
 {
-	array.ResetAndDestroy(1);
-	nrows = rows;
-	ncols = cols;
+	reset();
+	if (array != NULL)
+		delete[] array;
+	_nrows = rows;
+	_ncols = cols;
+	_size = rows*cols;
+
+	if (_size == 0)
+		return;
+
+	array = new DoubleOrExpression[_size];
+	for (size_t i = 0; i < _size; i++) {
+		array[i].e = NULL;
+		array[i].dVal = 0;
+	}
+	/*
 	long n = (long)nrows*ncols;
 	for (long i=0;i<n;i++)
 		array.AddAt(i,0);
+	*/
 }
 
 double CMVArray::evaluate(CMTimeMachine* t,int index1,int index2)
 {
-	if (index1>0 && index1<=nrows && index2>0 && index2<=ncols)
-		return array[(long)(index1-1)*ncols+index2-1]->Evaluate(t);
+	if (index1>0 && index1 <= _nrows && index2 > 0 && index2 <= _ncols) {
+		//return array[(long)(index1 - 1)*ncols + index2 - 1]->Evaluate(t);
+		size_t index = (index1 - 1)*_ncols + index2 - 1;
+		if (array[index].e != NULL) {
+			return array[index].e->Evaluate(t);
+		}
+		//sdebug << GetName() << " at " << index1 << " " << index2 << " evaluates to " << array[index].dVal << endl;
+		return array[index].dVal;
+	}
 	return 0;
 }
 
 void CMVArray::update_variable_links()
 {
+	/*
 	if (arraystate & containsPolynomials)
-		for (long j=0;j<array.Count();j++)
+		for (long j = 0; j<array.Count(); j++)
 			array[j]->UpdateVariableLinks();
+    */
+
+	if (arraystate & containsPolynomials) {
+		for (size_t i = 0; i < _size; i++)
+			if (array[i].e!=NULL)
+				array[i].e->UpdateVariableLinks();
+	}
 }
 
 void CMVArray::Set(int row,int col,const CMString& str)
 {
-	if (row>=0 && row<nrows && col>=0 && col<ncols) {
+	if (row>=0 && row<_nrows && col>=0 && col<_ncols) {
+		size_t index = row*_ncols + col;
+		if (isnumber(str.c_str())) {
+			double d = _wtof(str.c_str());
+			array[index].e = NULL;
+			array[index].dVal = d;
+		}
+		else {
+			CMExpression* e = new CMExpression(str.c_str());
+			if (e->IsPolynomial()) arraystate |= containsPolynomials;
+			if (e->Fail()) {
+				SetState(vsFailed, 1);
+				ReportError(XBadVardef, e->GetString());
+			}
+			array[index].e = e;
+		}
+		/*
 		CMExpression* e = new CMExpression(str.c_str());
 		if (e->IsPolynomial()) arraystate |= containsPolynomials;
 		if (e->Fail()) {
@@ -113,6 +173,7 @@ void CMVArray::Set(int row,int col,const CMString& str)
    			ReportError(XBadVardef,e->GetString());
 	   }
 	   array.AddAt((long)row*ncols+col,e);
+	   */
 	}
 }
 
@@ -125,7 +186,7 @@ void CMVArray::read_body(wistream& s)
 	nr = _wtoi(token.c_str());
 	token=GetAssociation(L"columns");
 	nc = _wtoi(token.c_str());
-
+	
 	SetSize(nr,nc);
 
 	nr=0;
@@ -164,26 +225,27 @@ void CMVArray::read_body(wistream& s)
 			ptr += j;
 			Set(nr,nc++,token);
 		}
-		if (nc != ncols)
-			ReportError(XIncorrectNumColumns,token2,0);
 		nr++;
 	}
-	if (nr != nrows)
-		ReportError(XIncorrectNumColumns,token2,0);
+	if (nc != _ncols)
+		ReportError(XIncorrectNumColumns);
+	if (nr != _nrows)
+		ReportError(XIncorrectNumRows);
 }
 
 void CMVArray::write_body(wostream& s)
 {
 	s << setiosflags(ios::left);
-	for (int i=0;i<nrows;i++) {
-		for (int j=0;j<ncols;j++) {
-			CMExpression* ex = GetExpression(i,j);
-			if (!ex)
-				s << setw(column_width) << L"0";
-			else if (ex->IsPolynomial())
-				s << L'{' << *ex << L"}  ";
+	for (int i=0;i<_nrows;i++) {
+		for (int j=0;j<_ncols;j++) {
+			//CMExpression* ex = GetExpression(i,j);
+			DoubleOrExpression de = array[i*_ncols + j];
+			if (de.e==NULL)
+				s << setw(column_width) << de.dVal;
+			else if (de.e->IsPolynomial())
+				s << L'{' << *de.e << L"}  ";
 			else
-				s << setw(column_width) << *ex;
+				s << setw(column_width) << *de.e;
 		}
 		s << ENDL;
 	}

@@ -37,9 +37,9 @@
 #include "cmlib.h"
 #include <time.h>
 #include <fstream>
-using namespace std;
+static wofstream sdebug("debug_simulat.txt");
 
-//static wofstream sdebug("debug_simulat.txt");
+using namespace std;
 
 #define CM_BIGTIME 10000000L
 
@@ -85,7 +85,9 @@ state(0)
 //hRunEvent(NULL),
 //dwThreadId(0L)
 {
-    timemachine = new CMTimeMachine(CMTime::StringToTimeUnit(options.GetOption(L"siminterval")),1);
+	sdebug << "CMSimulation constructor" << endl;
+	loadtime.SetOutputFormat(CMTime::YYYYMMDDHHMMSS);
+	timemachine = new CMTimeMachine(CMTime::StringToTimeUnit(options.GetOption(L"siminterval")), 1);
 	get_data_from_options();
 	ntrials = options.GetOptionLong(L"numtrials");
 }
@@ -119,6 +121,7 @@ begintime()
 
 CMSimulation::~CMSimulation()
 {
+	sdebug << "Deleting" << endl;
 	set_variables_inuse(FALSE);
 	if (timemachine) delete timemachine;
 	if (simarray) 	  delete simarray;
@@ -202,6 +205,8 @@ void CMSimulation::initialize()
    unsigned short i;
 
 	//tempfile = createtempfile(L"irp",0);
+
+   sdebug << "Initializing" << endl;
 
 	get_data_from_options();
 	ntrials = options.GetOptionLong(L"numtrials");
@@ -479,11 +484,16 @@ void CMSimulation::SetOption(const CMString& opname,const CMString& opval)
 void CMSimulation::get_data_from_options()
 {
 	filename = options.GetOption(L"simulationfile");
-	simname  = options.GetOption(L"simulationname");
+	CMString simname  = options.GetOption(L"simulationname");
+	if (!simname.length()) simname = L"simulation";
 
-   if (!simname.length()) simname = L"<no name>";
+	name = simname + L"_" + loadtime.GetString();
+
+	sdebug << GetName() << endl;
+
+   //if (!simname.length()) simname = L"<no name>";
 	randomseed = options.GetOptionLong(L"randomseed");
-   if (randomseed<0) randomseed=0;
+	if (randomseed<0) randomseed=0;
 }
 
 double CMSimulation::get_cost(int region)
@@ -636,6 +646,7 @@ BOOL CMSimulation::Run()
 */
 
 // Single-threaded Run Method
+// Returns true on success and false on fail
 BOOL CMSimulation::Run()
 {
 	time_t inittime = time(NULL);
@@ -696,8 +707,9 @@ BOOL CMSimulation::Run()
 			}
 		}
 	}
+	sdebug << state << endl;
 	state &= ~sRunning;
-	return TRUE;
+	return !Fail();
 }
 
 /*
