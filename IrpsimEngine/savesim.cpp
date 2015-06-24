@@ -337,7 +337,7 @@ int CMSaveSimulation::Outcomes(const CMString& fname)
 	aggresults = new float[arrayindex.Count()];
    aggindex = new unsigned[arrayindex.Count()];
 
-   sdebug << "Writing outcomes to " << fname << endl;
+   sdebug << "Writing outcomes to " << fname << " array size = " << arrayindex.Count << endl;
 
 	get_data_from_simulation();
 
