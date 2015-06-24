@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:viewmodel="clr-namespace:IRPSIM.ViewModels"
         xmlns:view="clr-namespace:IRPSIM.Views"
+        DataContext="{Binding Main, Source={StaticResource Locator}}"
         Title="{Binding ProjectTitle}" Height="350" Width="525">
     <Window.Resources>
         <Style TargetType="{x:Type ProgressBar}">
@@ -14,30 +15,31 @@
         </Style>
     </Window.Resources>
     <Window.InputBindings>
-        <KeyBinding Modifiers="Control" Key="P" Command="{Binding ProjectOpenCommand}" />
-        <KeyBinding Modifiers="Control" Key="O" Command="{Binding DisplayCollectionViewModel.FileOpenCommand}" />
-    </Window.InputBindings>
+        <KeyBinding Modifiers="Control" Key="P" Command="{Binding Main.ProjectOpenCommand, Source={StaticResource Locator}}" />
+        <KeyBinding Modifiers="Control" Key="O" Command="{Binding DisplayCollection.FileOpenCommand, Source={StaticResource Locator}}" />
+    </Window.InputBindings>    
     <DockPanel>
         <Menu Name="mainMenu" DockPanel.Dock="Top">
             <MenuItem Header="_File">
-                <MenuItem Header="Open _Project... (Ctrl+P)" Command="{Binding ProjectOpenCommand}"/>
-                <MenuItem Header="Open _File... (Ctrl+O)" Command="{Binding DisplayCollectionViewModel.FileOpenCommand}" ToolTip="Open a text file"/>
+                <MenuItem Header="Open _Project... (Ctrl+P)" Command="{Binding Main.ProjectOpenCommand, Source={StaticResource Locator}}"/>
+                <MenuItem Header="Open _File... (Ctrl+O)" Command="{Binding DisplayCollection.FileOpenCommand, Source={StaticResource Locator}}" ToolTip="Open a text file"/>
                 <Separator/>
-                <MenuItem Header="_Reload Project" Command="{Binding ProjectReloadCommand}"/>
-                <MenuItem Header="_Close Project" Command="{Binding ProjectCloseCommand}"/>
+                <MenuItem Header="_Reload Project" Command="{Binding Main.ProjectReloadCommand, Source={StaticResource Locator}}"/>
+                <MenuItem Header="_Close Project" Command="{Binding Main.ProjectCloseCommand, Source={StaticResource Locator}}"/>
                 <Separator/>
                 <MenuItem Header="_Exit"/>
             </MenuItem>
-            <MenuItem Header="_Project">
-                <MenuItem Header="_Run Simulation" Command="{Binding RunSimulationCommand}"/>
+            <MenuItem Header="_Edit">
+                <MenuItem Header="_Find in Files..." Command="{Binding IrpLoadedFileCollection.FindInFilesCommand, Source={StaticResource Locator}}"/>
             </MenuItem>
-          </Menu>
+            <MenuItem Header="_Project">
+                <MenuItem Header="_Run Simulation" Command="{Binding Main.RunSimulationCommand, Source={StaticResource Locator}}"/>
+            </MenuItem>
+        </Menu>
         <StatusBar Name="statusBar" DockPanel.Dock="Bottom">
             <StatusBar.Resources>
             </StatusBar.Resources>
             <ProgressBar Value="{Binding Path=Progress}" Minimum="0" Maximum="100" Width="100" Height="10"/>
-            <CheckBox IsChecked="{Binding Path=IsSimulationRunning}" Content="Running?"/>
-            <Button Command="{Binding RunSimulationCommand}" Content="TEST"/>
         </StatusBar>
          <Grid DockPanel.Dock="Bottom">
                <Grid.ColumnDefinitions>
@@ -51,14 +53,14 @@
             </Grid.RowDefinitions>
             <TabControl TabStripPlacement="Bottom" Grid.Column="0" Grid.Row="0">
                 <TabItem Header="Objects">
-                    <view:ObjectView x:Name="objectView" DataContext="{Binding Objects}"/>
+                    <view:ObjectView x:Name="objectView"/>
                 </TabItem>
                 <TabItem Header="Files">
-                    <view:LoadedFilesView x:Name="loadedFilesView" DataContext="{Binding Files}"/>
+                    <view:LoadedFilesView x:Name="loadedFilesView"/>
                 </TabItem>
             </TabControl>
              <GridSplitter Grid.Column="0" Width="3"/>
-            <view:DisplayView x:Name="displayView" Grid.Column="1" Grid.Row="0" DataContext="{Binding DisplayCollectionViewModel}"/>
+            <view:DisplayView x:Name="displayView" Grid.Column="1" Grid.Row="0"/>
             <GridSplitter Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" Height="3" ResizeDirection="Rows" HorizontalAlignment="Stretch"/>
             <view:NotifyView x:Name="notifyView" Grid.Row="2" Grid.ColumnSpan="2"/>
         </Grid>

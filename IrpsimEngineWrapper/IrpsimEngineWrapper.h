@@ -388,12 +388,18 @@ namespace IrpsimEngineWrapper
 		}
 
 		void CloseProject() {
+			AggregateVariables->Clear();
+			DemandVariables->Clear();
+			SupplyVariables->Clear();
+			StorageVariables->Clear();
+			CostVariables->Clear();
 			Variables->Clear();
 			Definitions->Clear();
 			Scenarios->Clear();
 			Scripts->Clear();
 			Categories->Clear();
 			LoadedFiles->Clear();
+			VariableDictionary->Clear();
 			app->DeleteSimulation(sim, 0);
 			app->ResetApplication();
 		}

@@ -118,8 +118,8 @@ void CMScenario::Use(CMOptions& ops)
    unsigned i;
 	while ((v=next())!=0) {
 		v->SetState(CMVariable::vsSelected|CMVariable::vsSaveOutcomes|CMVariable::vsOutput,FALSE);
-		if (v->GetState(CMVariable::vsAggregate))
-			v->SetState(CMVariable::vsSelected,TRUE);
+		//if (v->GetState(CMVariable::vsAggregate))
+			//v->SetState(CMVariable::vsSelected,TRUE);
 	}
 	for (i=0;i<varnames.Count();i++) {
 		CMVariable* v = CMVariable::Find(varnames[i]);

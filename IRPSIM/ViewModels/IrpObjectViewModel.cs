@@ -7,52 +7,66 @@ using System.Threading.Tasks;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Command;
 using IrpsimEngineWrapper;
-using IRPSIM.ViewModels.Services;
+using IRPSIM.Services;
 using System.Diagnostics;
+using System.Windows.Data;
+using System.ComponentModel;
 
 namespace IRPSIM.ViewModels
 {
 
-    class IrpObjectContainer
+    public class IrpObjectContainer
     {
-        public IrpObjectContainer(String name, IrpObjectCollection objects)
+        private CollectionViewSource _collectionViewSource;
+
+        public IrpObjectContainer(String name, ObservableCollection<CMWrappedIrpObject> objects)
         {
             Name = name;
             Objects = objects;
+            _collectionViewSource = new CollectionViewSource();
+            _collectionViewSource.Source = objects;
+            _collectionViewSource.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
         }
 
         public String Name { get; set; }
 
-        public IrpObjectCollection Objects { get ; set; }
+        public ObservableCollection<CMWrappedIrpObject> Objects { get; set; }
+
+        //public CollectionViewSource Collection { get; set; }
+        public ICollectionView Collection { get { return _collectionViewSource.View; } }
     }
 
-    class IrpVariableContainer : IrpObjectContainer
+    public class IrpVariableContainer : IrpObjectContainer
     {
-        public IrpVariableContainer(String name, IrpObjectCollection objects) : base(name, objects)
+        public IrpVariableContainer(String name, ObservableCollection<CMWrappedIrpObject> objects)
+            : base(name, objects)
         {
         }
     }
     
-    class IrpObjectViewModel : ViewModelBase
+    public class IrpObjectViewModel : ViewModelBase
     {
-        private CMWrappedIrpApplication _irpApp;
+        private ICoreApplicationService _coreService;
+        private IOpenFileService _openFileService;
         private IrpObjectContainer _scenarios;
         private IrpObjectContainer _scripts;
 
-        public IrpObjectViewModel(CMWrappedIrpApplication app)
+        public IrpObjectViewModel(ICoreApplicationService coreService, IOpenFileService openFileService)
             : base()
         {
-            _irpApp = app;
+            _coreService = coreService;
+            _openFileService = openFileService;
 
-            _containers.Add(new IrpVariableContainer("Supply", _irpApp.SupplyVariables));
-            _containers.Add(new IrpVariableContainer("Demand", _irpApp.DemandVariables));
-            _containers.Add(new IrpVariableContainer("Storage", _irpApp.StorageVariables));
-            _containers.Add(new IrpVariableContainer("Cost", _irpApp.CostVariables));
-            _containers.Add(new IrpVariableContainer("Variables", _irpApp.Variables));
-            _containers.Add(new IrpObjectContainer("Definitions", _irpApp.Definitions));
-            _containers.Add(_scenarios = new IrpObjectContainer("Scenarios", _irpApp.Scenarios));
-            _containers.Add(_scripts = new IrpObjectContainer("Scripts", _irpApp.Scripts));
-            _containers.Add(new IrpObjectContainer("Categories", _irpApp.Categories));
+            _containers.Add(new IrpVariableContainer("Aggregates", _coreService.AggregateVariables));
+            _containers.Add(new IrpVariableContainer("Supply", _coreService.SupplyVariables));
+            _containers.Add(new IrpVariableContainer("Demand", _coreService.DemandVariables));
+            _containers.Add(new IrpVariableContainer("Storage", _coreService.StorageVariables));
+            _containers.Add(new IrpVariableContainer("Cost", _coreService.CostVariables));
+            _containers.Add(new IrpVariableContainer("Variables", _coreService.Variables));
+            _containers.Add(new IrpObjectContainer("Definitions", _coreService.Definitions));
+            _containers.Add(_scenarios = new IrpObjectContainer("Scenarios", _coreService.Scenarios));
+            _containers.Add(_scripts = new IrpObjectContainer("Scripts", _coreService.Scripts));
+            _containers.Add(new IrpObjectContainer("Categories", _coreService.Categories));
         }
 
         private object _selectedObject;
@@ -101,7 +115,7 @@ namespace IRPSIM.ViewModels
             if (irpObject != null && irpObject.FileId >= 0)
             {
                 Debug.WriteLine("Opening file with index {0}", irpObject.FileIndex);
-                OpenFileService.OpenFile(_irpApp.GetFilePath(irpObject.FileId), irpObject.FileIndex);
+                _openFileService.RequestOpenFile(_coreService.GetFilePath(irpObject.FileId), irpObject.FileIndex);
             }
                 //irpObject.Selected = !irpObject.Selected;
         }
@@ -122,9 +136,9 @@ namespace IRPSIM.ViewModels
                 string name = (current ? "" : irpObject.Name);
 
                 if (irpObject.Type == "CMScenario")
-                    _irpApp.UseScenario(name);
+                    _coreService.UseScenario(name);
                 else
-                    _irpApp.UseScript(name);
+                    _coreService.UseScript(name);
 
                 irpObject.Chosen = !current;
             }

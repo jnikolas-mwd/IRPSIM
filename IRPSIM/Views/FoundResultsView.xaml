@@ -1,0 +1,25 @@
+﻿<UserControl x:Class="IRPSIM.Views.FoundResultsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:s="clr-namespace:IRPSIM.Services"
+        xmlns:ignore="http://www.ignore.com"
+        mc:Ignorable="d ignore"
+        DataContext="{Binding FoundResults, Source={StaticResource Locator}}"
+        d:DesignWidth="300" d:DesignHeight="300">
+    <UserControl.Resources>
+        <DataTemplate x:Key="test" DataType="{x:Type s:FoundInFileInfo}">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition SharedSizeGroup="Col1" Width="100"/>
+                        <ColumnDefinition SharedSizeGroup="Col2" Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Grid.Column="0" Text="{Binding FoundText}" Margin="0,0,10,0"/>
+                    <GridSplitter Grid.Column="0" Width="3"/>
+                    <TextBlock Grid.Column="1" Text="{Binding Path}"/>
+                </Grid>
+        </DataTemplate>
+    </UserControl.Resources>
+    <ListBox ItemsSource="{Binding FoundItems}" ItemTemplate="{StaticResource test}" Grid.IsSharedSizeScope="True"/>
+</UserControl>

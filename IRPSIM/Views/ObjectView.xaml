@@ -7,7 +7,8 @@
              xmlns:viewmodel="clr-namespace:IRPSIM.ViewModels"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
-              mc:Ignorable="d" 
+              mc:Ignorable="d"
+             DataContext="{Binding IrpObjectCollection, Source={StaticResource Locator}}"
              d:DesignHeight="300" d:DesignWidth="300">
     <UserControl.Resources>
         <HierarchicalDataTemplate x:Key="VariableTemplate" ItemsSource="{Binding AssociatedVariables}">
@@ -30,13 +31,13 @@
                 </DataTrigger>
             </HierarchicalDataTemplate.Triggers>
         </HierarchicalDataTemplate>
-        <HierarchicalDataTemplate DataType="{x:Type viewmodel:IrpVariableContainer}" ItemsSource="{Binding Objects}" ItemTemplate="{StaticResource VariableTemplate}">
+        <HierarchicalDataTemplate DataType="{x:Type viewmodel:IrpVariableContainer}" ItemsSource="{Binding Collection}" ItemTemplate="{StaticResource VariableTemplate}">
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="headerimage" Width="16" Height="16" Margin="3,0" Source="/Images/Supply.png" />
                 <TextBlock Text="{Binding Name}" Focusable="True"/>
             </StackPanel>
         </HierarchicalDataTemplate>
-        <HierarchicalDataTemplate  DataType="{x:Type viewmodel:IrpObjectContainer}" ItemsSource="{Binding Objects}" ItemTemplate="{StaticResource IrpObjectTemplate}">
+        <HierarchicalDataTemplate  DataType="{x:Type viewmodel:IrpObjectContainer}" ItemsSource="{Binding Collection}" ItemTemplate="{StaticResource IrpObjectTemplate}">
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="headerimage" Width="16" Height="16" Margin="3,0" Source="/Images/Supply.png" />
                 <TextBlock Text="{Binding Name}" Focusable="True"/>

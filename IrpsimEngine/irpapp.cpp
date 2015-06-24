@@ -369,12 +369,10 @@ void CMIrpApplication::update_variable_links()
 	}
 
 	if (CMRegions::RegionCount()>0) {
-		swprintf_s(buffer,128,L"\r\n%d Regions Defined:\r\n",CMRegions::RegionCount());
-		CMNotifier::Notify(CMNotifier::LOG, buffer);
-
+		//swprintf_s(buffer,128,L"%d Regions Defined",CMRegions::RegionCount());
+		//CMNotifier::Notify(CMNotifier::LOG, buffer);
 		for (unsigned short i=0;i<CMRegions::RegionCount();i++)
-			CMNotifier::Notify(CMNotifier::LOG, CMRegions::GetRegionName(i));
-		CMNotifier::Notify(CMNotifier::LOG, L"");
+			CMNotifier::Notify(CMNotifier::LOG, L"Region " + CMRegions::GetRegionName(i) + L" defined");
 	}
 
 	// recreate aggregate regional variables
@@ -395,7 +393,7 @@ void CMIrpApplication::update_variable_links()
 	// find missing variables
 	
 	iter.Reset();
-	CMNotifier::Notify(CMNotifier::LOG, L"\r\nLooking for missing variables:");
+	//CMNotifier::Notify(CMNotifier::LOG, L"\r\nLooking for missing variables:");
 	iter.Reset();
 	long vcount = variables->Count();
 	for (long n=0;;n++) {
@@ -409,16 +407,17 @@ void CMIrpApplication::update_variable_links()
 		int first=1;
 		while (ni && ((vname=ni->GetNext())!=0)) {
 			if (!CMVariable::Find(vname) && !CMDefinitions::IsDefined(vname)) {
-				if (first)
-					CMNotifier::Notify(CMNotifier::LOG, CMString(L"\r\n") + v->GetName() + L"\r\n missing:");
-				first=0;
-				CMNotifier::Notify(CMNotifier::LOG, vname);
-				CMNotifier::Notify(CMNotifier::ERROR, L"Missing variable or definition " + CMString(vname) + L" in definition of " + v->GetName());
+				//if (first)
+					//CMNotifier::Notify(CMNotifier::LOG, CMString(L"\r\n") + v->GetName() + L"\r\n missing:");
+				//first=0;
+				CMString msg(L"Missing variable or definition " + CMString(vname) + L" in definition of " + v->GetName());
+				CMNotifier::Notify(CMNotifier::LOG, msg);
+				CMNotifier::Notify(CMNotifier::ERROR, msg);
 			}
 		}
 	}
-	CMNotifier::Notify(CMNotifier::LOG, L"\r\nFinished\r\n");
-	CMNotifier::Notify(CMNotifier::INFO, L"");
+	//CMNotifier::Notify(CMNotifier::LOG, L"\r\nFinished\r\n");
+	//CMNotifier::Notify(CMNotifier::INFO, L"");
 }
 
 /*
