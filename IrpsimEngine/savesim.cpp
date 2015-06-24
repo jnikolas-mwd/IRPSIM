@@ -32,7 +32,8 @@
 //#include <mem.h>
 #include <ctype.h>
 
-//static ofstream sdebug("savesim.deb");
+#include <fstream>
+static wofstream sdebug(L"debug_savesim.txt");
 
 const wchar_t* CMSaveSimulation::realization_header_names[] =
 	{L"trial",L"period",0};
@@ -335,6 +336,8 @@ int CMSaveSimulation::Outcomes(const CMString& fname)
 
 	aggresults = new float[arrayindex.Count()];
    aggindex = new unsigned[arrayindex.Count()];
+
+   sdebug << "Writing outcomes to " << fname << endl;
 
 	get_data_from_simulation();
 
