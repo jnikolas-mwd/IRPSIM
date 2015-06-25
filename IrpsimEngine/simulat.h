@@ -39,9 +39,6 @@ class _IRPCLASS CMTimeMachine;
 
 class _IRPCLASS CMSimulation : public CMIrpObject
 {
-	static const wchar_t* forbidden_set_options[];
-	static const wchar_t *file_header;
-	static const wchar_t *file_footer;
    static CMSimulation* active_simulation;
 	
 	//static DWORD WINAPI SimRunProc(LPVOID lpParameter);
@@ -55,7 +52,9 @@ class _IRPCLASS CMSimulation : public CMIrpObject
 	//DWORD  dwThreadId;  // Id of simulation run thread.
 
 	short state;
-	CMString filename, comments; //, tempfile
+	CMString m_strFileName;
+	CMString m_strProjectRoot;
+	CMString m_strOutputRoot;
 	long trialno;
 	long elapsedtime;
 	CMTime loadtime;
@@ -69,7 +68,7 @@ class _IRPCLASS CMSimulation : public CMIrpObject
    class _IRPCLASS CMPSSmallArray<CMVariable> 	summaryvars;
    class _IRPCLASS CMPSSmallArray<CMVariable> 	outcomevars;
    class _IRPCLASS CMVSmallArray<CMString>		missingvars;
-   //class _IRPCLASS CMVSmallArray<CMString>		loadedfiles;
+   class _IRPCLASS CMVSmallArray<CMString>		loadedfiles;
 
 	CMSimulationArray*  simarray;
 	CMAccumulatorArray* accumulator;
@@ -102,7 +101,9 @@ public:
 	static CMSimulation* ActiveSimulation() {return active_simulation;}
 
 	//MString GetName() const {return simname;}
-	CMString GetFileName() const {return filename;}
+	CMString GetFileName() const {return m_strFileName;}
+	CMString GetId() const { return loadtime.GetString(); }
+
 
 	void Reset();
 	//int  SaveTo(const CMString& fname);
@@ -126,8 +127,6 @@ public:
 	double GetOptionDouble(const CMString& opname) { return options.GetOptionDouble(opname); }
 	const wchar_t* GetOptionString(const CMString& opname) { return options.GetOption(opname).c_str(); }
 	void SetOption(const CMString& opname,const CMString& opval);
-   CMString GetComments() {return comments;}
-   void SetComments(const CMString& c) {comments=c;}
 	
 	void SetScript(const CMString& sname);
 

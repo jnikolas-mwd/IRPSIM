@@ -29,8 +29,8 @@
 #include <stdlib.h>
 #include <iomanip>
 
-//#include <fstream>
-//static wofstream sdebug("debug_options.txt");
+#include <fstream>
+static wofstream sdebug("debug_options.txt");
 
 CMOptions::_def CMOptions::defaults[] = {
 {L"simbegin",L"2016"},
@@ -258,6 +258,8 @@ wistream& operator >> (wistream& s, CMOptions& o)
 		line.read_line(s);
 		line = stripends(line);
 
+		sdebug << "Line = " << line << endl;
+
 		if (line.is_null() || line[0] == L'*') {
 			continue;
 		}
@@ -272,12 +274,14 @@ wistream& operator >> (wistream& s, CMOptions& o)
 		else if (!begin) {
 			continue;
 		}
+		/*
 		while (line.length() && line[line.length()-1] == L'\\') {
 			line = line(0,line.length()-1);
 			CMString cont;
 			cont.read_line(s);
 			line += stripends(cont);
 		}
+		*/
 		CMOption* poption = o.SetOption(line, o.GetApplicationId());
 		if (poption) poption->SetApplicationIndex(o.GetApplicationIndex());
 	}

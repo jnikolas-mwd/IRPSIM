@@ -49,38 +49,6 @@ CMString CMSaveSimulationAscii::get_aggregation_string()
    return CMString(buffer);
 }
 
-void CMSaveSimulationAscii::output_header(int which)
-{
-	if (!(state&rHeader))
-   	return;
-
-	int oldformat = CMTime::SetOutputFormat(CMTime::formatFull);
-   *fout << L"Simulation Information:" << ENDL
-  		  << L"  Name        "  << sim.GetName() << ENDL
-		  << L"  File        "  << sim.GetFileName() << ENDL
-		  << L"  StartTime   "  << sim.BeginTime() << ENDL
-		  << L"  Period      "  << sim.TimeMachine()->CycleAsString(0) << ENDL
-		  << L"  Trials      "  << sim.Trials() << ENDL
-  	     << ENDL;
-	if (which == OutRealizations) {
-		CMTime::SetOutputFormat(outincunits);
-	   *fout << L"Report Information:" << ENDL
-		 	  << L"  Variables   " << (arrayindex.Count()+2) << ENDL
-      	  << L"  Trials      " << (trialbeg+1) << L" to " << (trialend+1) << ENDL
-      	  << L"  Period      " << outbeg << L" to " << outend << ENDL
-			  << L"  Aggregation " << sim.GetOption(L"outputResolution")
-   	     << ((state & rCalendarAggregation) ? L"" : L" steps") << ENDL
-      	  << ENDL;
-   }
-   else if (which==OutReliabilitySeries || which==OutReliabilityDetail) {
-	   *fout << L"Reliability Targets:" << ENDL;
-		for (unsigned i=0;i<reliability->Targets();i++)
-   		*fout << "  " << (i+1) << "  " << reliability->Target(i)->GetString() << ENDL;
-	   *fout << ENDL;
-	}
-	CMTime::SetOutputFormat(oldformat);
-}
-
 void CMSaveSimulationAscii::output_item(int which, const wchar_t* str, long row, long col, int width, int prec)
 {
 	if (!str) return;

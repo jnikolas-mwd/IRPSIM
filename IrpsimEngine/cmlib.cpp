@@ -241,10 +241,10 @@ CMString strippath(const CMString& file)
 CMString extractpath(const CMString& file)
 {
 	size_t last = file.last(L'\\');
-   if (last == CM_NPOS) last = file.last(L'/');
-	if (last==CM_NPOS)
-   	return CMString(L".\\");
-   return CMString(file.substr(0,last+1));
+	if (last == CM_NPOS) last = file.last(L'/');
+	if (last == CM_NPOS)
+		return CMString(L".\\");
+	return CMString(file.substr(0, last + 1));
 }
 
 #if defined (WIN32)
@@ -320,6 +320,9 @@ CMString getrelativepath(const wchar_t* master, const wchar_t* slave)
 
 CMString getabsolutepath(const wchar_t* master, const wchar_t* slave)
 {
+	if (slave == NULL || wcslen(slave) == 0)
+		return master;
+	
 	if (wcschr(slave, L':') || slave[0]==L'\\' || slave[0]==L'/')
 		return CMString(slave);
 

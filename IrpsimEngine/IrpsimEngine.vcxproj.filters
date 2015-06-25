@@ -201,6 +201,9 @@
     <ClInclude Include="realizations.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="zip.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="accum.cpp">
@@ -357,6 +360,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="realizations.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="zip.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

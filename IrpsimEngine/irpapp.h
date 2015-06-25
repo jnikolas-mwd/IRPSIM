@@ -99,34 +99,23 @@ public:
 
 	// Open an IRPSIM project, which is essentially a collection of files (vardef, scripts, etc.)
 	void OpenProject(const CMString& name);
-	//void AddFiles(CMString *pNames,int nFiles);
-	//void DeleteFiles(CMString *pNames,int nFiles);
 
 	CMOptions& Options() {return options;}
 	void SetOptions(const CMOptions& op);
 
-	// void SetLogFile(const CMString& fname);
-
 	CMString GetProjectFile() { return m_strProjectFile; }
-	//CMString GetProjectName();
-	
 	
 	// Get the name (full path) of the file containing an IRPSIM object
 	CMString GetObjectFileName(CMIrpObject* pObject); 
 
 	unsigned short ScenariosCount() {return scenarios.Count();}
 	CMScenario* Scenario(unsigned short n) {return (n<scenarios.Count()) ? scenarios[n] : 0;}
-	//CMScenario* AddThisScenario(const CMString& name);
 	CMScenario* UseScenario(const CMString& name);
-    // void RemoveScenario(unsigned short n);
-    //void AddScenario(CMScenario* sce);
 	CMScenario* CurrentScenario() {return currentscenario;}
 
 	unsigned short ScriptsCount() {return scripts.Count();}
 	CMScript* Script(unsigned short n) {return (n<scripts.Count()) ? scripts[n] : 0;}
 	CMScript* UseScript(const CMString& name);
-    //void RemoveScript(unsigned short n);
-    // void AddScript(CMScript* scr);
 	CMScript* CurrentScript() {return currentscript;}
 
    unsigned short Categories() {return CMCategory::CategoryCount();}
@@ -138,7 +127,6 @@ public:
 
 	CMIrpObject* FindIrpObject(const CMString& name);
 		
-   //CMVariable* AddVariable(const CMString& vdef);
    CMVariableCollection* VariableCollection() {return variables;}
 
 	//Call to create a new simulation
@@ -148,11 +136,6 @@ public:
 	BOOL PauseSimulation(CMSimulation* pSim,BOOL bAction);
 	CMSimulation* RunningSimulation();
 
-	//int WriteOptions(const CMString& filename);
-	//int WriteScenarios(const CMString& filename);
-	//int WriteScripts(const CMString& filename);
-	//int WriteVariableDefs(const CMString& filename);
-	
 	int WriteOutcomes(const CMString& filename,CMSimulation* sim);
 	int WriteSummary(const CMString& filename,CMSimulation* sim);
 
@@ -161,23 +144,6 @@ public:
 	int LoadedFilesCount() {return loadedfiles.Count();}
 	CMString LoadedFile(unsigned short n) {if (n>=0 && n<loadedfiles.Count()) return loadedfiles[n]; return CMString();}
 
-	//int AttachedFiles() {return attachedfiles.Count();}
-	//CMString AttachedFile(unsigned short n) {if (n<attachedfiles.Count()) return attachedfiles[n]; return CMString();}
-
-	//int IsApplicationFile(const CMString& filename);
-
 	void DeleteSimulation(CMSimulation* pSim,int save);
 	unsigned SimulationsCount();
-
-	//virtual void SetProgramParameter(const CMString& parm, const CMString& val) = 0;
-	//virtual CMString GetProgramParameter(const CMString& parm) = 0;
-	// use InfoMessage for "quick and dirty" messages
-	//virtual void InfoMessage(const CMString& message) = 0;
-	//virtual void ErrorMessage(const CMString& msg) = 0;
-	// use ProgressMessage to add to previous messages. Call with message=0 to terminate
-	
-	// Synchronize is called by various threads for various reasons
-	// lpParameter is set depending on syncType
-	// return TRUE if user has cancelled operation
-	//virtual BOOL Synchronize(int syncType, const void* lpParameter) { return FALSE; }
 };

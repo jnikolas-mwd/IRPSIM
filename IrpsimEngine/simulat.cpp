@@ -24,13 +24,13 @@
 #include "variable.h"
 #include "varcol.h"
 #include "vartypes.h"
-#include "irpapp.h"
 #include "expresn.h"
 #include "reliab.h"
 #include "node.h"
 #include "vardesc.h"
 #include "notify.h"
 #include "defines.h"
+#include "./zip/zip.h"
 
 #include "token.h"
 #include "random.h"
@@ -43,6 +43,7 @@ using namespace std;
 
 #define CM_BIGTIME 10000000L
 
+/*
 const wchar_t* CMSimulation::forbidden_set_options[] = {
 L"demandcategories",
 L"supplycategories",
@@ -61,16 +62,14 @@ L"saveincrementsize",
 L"randomseed",
 0
 };
+*/
 
-const wchar_t* CMSimulation::file_header = L"#BEGINFILE";
-const wchar_t* CMSimulation::file_footer = L"#ENDFILE";
 CMSimulation* CMSimulation::active_simulation = 0;
 
 CMSimulation::CMSimulation(CMIrpApplication* a) :
 pApp(a),
 script(0),
 options(a->Options()),
-comments(),
 costvars(),
 outcomevars(),
 summaryvars(),
@@ -88,36 +87,9 @@ state(0)
 	sdebug << "CMSimulation constructor" << endl;
 	loadtime.SetOutputFormat(CMTime::YYYYMMDDHHMMSS);
 	timemachine = new CMTimeMachine(CMTime::StringToTimeUnit(options.GetOption(L"siminterval")), 1);
+	m_strProjectRoot = extractpath(a->GetProjectFile());
 	get_data_from_options();
-	ntrials = options.GetOptionLong(L"numtrials");
 }
-
-/*
-CMSimulation::CMSimulation(const CMString& fname,short mode,CMIrpApplication* a) :
-filename(fname),
-pApp(a),
-script(0),
-options(),
-comments(),
-costvars(),
-outcomevars(),
-summaryvars(),
-missingvars(),
-timemachine(0),
-simarray(0),
-accumulator(0),
-reliability(0),
-trialno(0),
-state(sInitialized|sFromFile|sPaused|mode),
-elapsedtime(0),
-begintime()
-//hRunEvent(NULL),
-//dwThreadId(0L)
-
-{
-	LoadSimulationFile(fname,mode);
-}
-*/
 
 CMSimulation::~CMSimulation()
 {
@@ -131,74 +103,6 @@ CMSimulation::~CMSimulation()
    if (active_simulation==this)
    	active_simulation=0;
 }
-
-/*
-BOOL CMSimulation::LoadSimulationFile(const CMString& fname,short mode)
-{
-	if (Running())
-		return FALSE;
-
-	set_variables_inuse(FALSE);
-	if (timemachine) delete timemachine;
-	timemachine = 0;
-	if (simarray) 	  delete simarray;
-	simarray = 0;
-	if (accumulator) delete accumulator;
-	accumulator = 0;
-	if (reliability) delete reliability;
-	reliability = 0;
-   //if (tempfile.length()) removefile(tempfile);
-   if (active_simulation==this)
-   	active_simulation=0;
-	
-	filename = fname;
-	script = NULL;
-	comments = L"";
-	costvars.Reset(1);
-	outcomevars.Reset(1);
-	summaryvars.Reset(1);
-	missingvars.Reset(1);
-	trialno=0;
-	state=sInitialized|sFromFile|sPaused|mode;
-	elapsedtime=0;
-	//tempfile = createtempfile(L"irp",0);
-	simarray = new CMSimulationArray(fname.c_str());
-	simarray->DeleteFileOnClose(0);
-	if (simarray->Fail()) {
-		state |= sBadBinaryFile;
-		return FALSE;
-	}
-	else {
-		short flag;
-		wfstream* file = simarray->File();
-		file->seekg(simarray->BinarySize(),ios::beg);
-		file->read((wchar_t*)&flag, sizeof(flag));
-		if (flag) {
-			accumulator = new CMAccumulatorArray();
-			accumulator->ReadBinary(*file);
-		}
-		file->read((wchar_t*)&flag, sizeof(flag));
-		if (flag) {
-			reliability = new CMReliability();
-			reliability->ReadBinary(*file);
-		}
-		begintime.Read(*file,1);
-		options.ReadBinary(*file);
-		unsigned short nfiles;
-		file->read((wchar_t*)&nfiles, sizeof(nfiles));
-		for (unsigned i=0;i<nfiles;i++)
-			loadedfiles.Add(readstringbinary(*file));
-		readstringbinary(comments,*file);
-		//wofstream os(tempfile.c_str(),IOS_BINARY);
-  	   //if (!os.fail()) *file >> os.rdbuf();
-		get_data_from_options();
-		timemachine = new CMTimeMachine(simarray->TimeMachine());
-		ntrials = accumulator->Trials();
-		trialno = ntrials ? ntrials-1 : 0;
-	}
-	return TRUE;
-}
-*/
 
 void CMSimulation::initialize()
 {
@@ -293,7 +197,7 @@ void CMSimulation::initialize()
 	long incsize = options.GetOptionLong(L"saveincrementsize")<<10;
 
 	accumulator = new CMAccumulatorArray(*timemachine,summaryvars.Count());
-	simarray = new CMSimulationArray(*timemachine,outcomevars.Count(),filename.c_str(),incsize);
+	simarray = new CMSimulationArray(*timemachine,outcomevars.Count(),GetFileName().c_str(),incsize);
 
 	if (!simarray || simarray->Fail()) {
 		state |= sCantOpenBinaryFile;
@@ -405,66 +309,6 @@ int CMSimulation::find_missing_variables()
 	return missingvars.Count();
 }
 
-/*
-void CMSimulation::save_simulation_tail(wostream& s,int startpoint)
-{
-   if (!s.fail()) {
-		if (startpoint==0) {
-			short flag = accumulator ? 1 : 0;
-			s.write((const wchar_t*)&flag, sizeof(flag));
-			if (flag) accumulator->WriteBinary(s);
-			flag = reliability ? 1 : 0;
-			s.write((const wchar_t*)&flag, sizeof(flag));
-			if (flag) reliability->WriteBinary(s);
-			begintime.Write(s,1);
-      }
-		options.WriteBinary(s);
-		unsigned short nfiles = loadedfiles.Count();
-		s.write((const wchar_t*)&nfiles, sizeof(nfiles));
-		for (unsigned i=0;i<loadedfiles.Count();i++)
-			writestringbinary(loadedfiles[i],s);
-		writestringbinary(comments,s);
-		//wifstream is(tempfile.c_str(),IOS_BINARY);
-       //if (!is.fail()) is >> s.rdbuf();
-	}
-}
-*/
-
-/*
-int CMSimulation::SaveTo(const CMString& fname)
-{
-	wfstream s(fname.c_str(),ios::out|IOS_BINARY);
-	if (!s.fail()) {
-		if (pApp) pApp->LogMessage(CMString(L"Saving Simulation ") + GetName() + CMString(L" to ") + fname, 1);
-		simarray->WriteBinary(s);
-      save_simulation_tail(s,0);
-	}
-   return (s.fail() ? -1 : 0);
-}
-
-void CMSimulation::Save()
-{
-	if (!simarray || Fail())
-   	return;
-	if (state&sFromFile) {
-		wfstream* s = simarray->File();
-		s->seekp(simarray->BinarySize()+2*sizeof(short)+begintime.BinarySize(),ios::beg);
-		if (accumulator) s->seekp(accumulator->BinarySize(),ios::cur);
-		if (reliability) s->seekp(reliability->BinarySize(),ios::cur);
-      save_simulation_tail(*s,1);
-	}
-	else if (!(state&sRunning) && timemachine->AtBeginning()) {
-		simarray->DeleteFileOnClose(0);
-		CMString msg = CMString(L"Saving Simulation ") + GetName();
-		if (pApp) pApp->LogMessage(msg, 1);
-		if (pApp) pApp->InfoMessage(msg);
-		simarray->WriteBinary();
-      save_simulation_tail(*simarray->File(),0);
-	  if (pApp) pApp->InfoMessage(L"");
-	}
-}
-*/
-
 void CMSimulation::SetOptions(const CMOptions& op)
 {
 	for (unsigned i=0;i<op.Count();i++)
@@ -475,21 +319,32 @@ void CMSimulation::SetOption(const CMString& opname,const CMString& opval)
 {
 	// return if simulation has been initialized and option is from
 	// set of options that can't be changed after initialization
-	if (contains(opname.c_str(),forbidden_set_options,500,0)>=0 && (state&sInitialized))
-		return;
+	//if (contains(opname.c_str(),forbidden_set_options,500,0)>=0 && (state&sInitialized))
+	//	return;
 	options.SetOption(opname,opval);
 	get_data_from_options();
 }
 
 void CMSimulation::get_data_from_options()
 {
-	filename = options.GetOption(L"simulationfile");
+	m_strFileName = options.GetOption(L"simulationfile");
 	CMString simname  = options.GetOption(L"simulationname");
 	if (!simname.length()) simname = L"simulation";
+	ntrials = options.GetOptionLong(L"numtrials");
+	m_strOutputRoot = getabsolutepath(m_strProjectRoot.c_str(), options.GetOption(L"outputfolder").c_str());
+	wchar_t lastchar = m_strOutputRoot[m_strOutputRoot.length() - 1];
+	if (lastchar != L'\\' && lastchar != L'/')
+		m_strOutputRoot += L"\\";
+	m_strOutputRoot += simname;
 
-	name = simname + L"_" + loadtime.GetString();
+	int result = _wmkdir(m_strOutputRoot.c_str());
 
-	sdebug << GetName() << endl;
+	if (result == ENOENT)
+		CMNotifier::Notify(CMNotifier::WARNING, L"Unable to create output directory " + m_strOutputRoot);
+
+    name = simname + L" " + loadtime.GetString();
+
+	sdebug << "Output root=" << m_strOutputRoot << endl;
 
    //if (!simname.length()) simname = L"<no name>";
 	randomseed = options.GetOptionLong(L"randomseed");
@@ -506,144 +361,6 @@ double CMSimulation::get_cost(int region)
    return ret;
 }
 
-/*
-int CMSimulation::RebuildFiles(const CMString& path)
-{
-	int oldcase = CMString::set_case_sensitive(0);
-	CMString dir(path);
-   if (dir[dir.length()-1] != L'\\') dir += L"\\";
-   wifstream is(tempfile.c_str(),IOS_BINARY);
-
-   wofstream os;
-	CMString line,token;
-   int reading = 0;
-
-   while (!is.fail() && !is.eof()) {
-		line.read_line(is);
-		if (is.eof())
-      	break;
-		line = stripends(line);
-      CMTokenizer next(line);
-		token = next(L" \t\r\n");
-      if (token == file_footer) {
-      	reading = 0;
-         os.close();
-      }
-      else if (reading) {
-      	if (!os.fail()) os << line << ENDL;
-      }
-      else if (token == file_header) {
-      	token = dir + strippath(next(L" \t\r\n"));
-		if (pApp) pApp->InfoMessage(CMString(L"Rebuilding file ") + token);
-         os.open(token.c_str(),ios::out|IOS_BINARY);
-         reading = 1;
-      }
-	}
-
-   if (pApp) pApp->InfoMessage(L"");
-	CMString::set_case_sensitive(oldcase);
-	return 1;
-}
-*/
-
-/*
-DWORD WINAPI CMSimulation::SimRunProc(LPVOID lpParameter)
-{
-   unsigned i;
-	CMSimulation* sim = (CMSimulation*)lpParameter;
-
-	while (TRUE) 
-	{
-		WaitForSingleObject(sim->hRunEvent,INFINITE);
-
-		CMIrpApplication* pApp = sim->pApp;
-
-		CMScript* script = sim->script;
-		CMTimeMachine* timemachine = sim->timemachine;
-		CMSimulationArray* simarray = sim->simarray;
-		CMAccumulatorArray* accumulator = sim->accumulator;
-		CMReliability* reliability = sim->reliability;
-
-	   time_t inittime = time(NULL);
-		long initelapsed = sim->elapsedtime;
-
-		while ((sim->trialno=timemachine->Count())<sim->ntrials && !sim->Fail() && !(sim->state&(sStopped|sFromFile))) {
-			int atbeginning = timemachine->AtBeginning();
-
-			if (atbeginning && (sim->state&sPaused))
-				break;
-
-			sim->state |= sRunning;
-
-			if (atbeginning) {
-				CMVariable::ResetTrial();
-				if (sim->trialno == 0 && pApp)
-					pApp->LogMessage(CMString(L"Start Simulation ") + sim->GetName(), 1);
-			}
-
-			if (script) script->Run(timemachine);
-
-			for (i=0;i<sim->outcomevars.Count();i++)
-				simarray->AddAt(*timemachine,i,sim->trialno,(float)sim->outcomevars[i]->GetValue(timemachine));
-			for (i=0;i<sim->summaryvars.Count();i++)
-				accumulator->AddAt(*timemachine,i,sim->summaryvars[i]->GetValue(timemachine));
-
-			if (reliability) reliability->Process(timemachine);
-
-			sim->elapsedtime = initelapsed + (long)time(NULL) - (long)inittime;
-			if (pApp) pApp->Synchronize(CMIrpApplication::SYNC_SIMULATION_UPDATE, sim);
-
-			timemachine->Step();
-		}
-		sim->elapsedtime = initelapsed + (long)time(NULL) - (long)inittime;
-		if (sim->trialno >= sim->ntrials) {
-			sim->state |= sStopped;
-			sim->trialno--;
-			if (pApp) {
-				CMString msg(L"End Simulation ");
-				pApp->LogMessage(msg + sim->GetName(), 1);
-				if (sim->options.GetOption(L"autooutcomes")==L"yes")
-					pApp->WriteOutcomes(sim->options.GetOption(L"outcomefile"), sim);
-				if (sim->options.GetOption(L"autosummary")==L"yes")
-					pApp->WriteSummary(sim->options.GetOption(L"summaryfile"), sim);
-			}
-		}
-		sim->state &= ~sRunning;
-	}
-
-	return 0L;
-}
-*/
-
-/*
-BOOL CMSimulation::Run()
-{
-	if (state&sFromFile || (app && app->RunningSimulation()!=NULL))
-		return FALSE;
-
-	if (!hRunEvent) {
-		hRunEvent = CreateEvent(NULL,FALSE,FALSE,NULL);
-		CreateThread(NULL,0L,SimRunProc,this,0L,&dwThreadId);
-	}
-
-	if (!(state&sInitialized))
-		initialize();
-
-	if ((ULONG)begintime == CM_BIGTIME) {
-		RandomVariable::randomize(randomseed);
-		timemachine->Reset();
-		begintime = CMTime();
-		elapsedtime = 0;
-	}
-
-   active_simulation = this;
-	state &= ~sPaused;
-
-	SetEvent(hRunEvent);
-
-	return TRUE;
-}
-*/
 
 // Single-threaded Run Method
 // Returns true on success and false on fail
@@ -690,21 +407,42 @@ BOOL CMSimulation::Run()
 	elapsedtime = initelapsed + (long)time(NULL) - (long)inittime;
 	if (trialno >= ntrials) {
 		CMNotifier::Notify(CMNotifier::PROGRESS, L"Completed", 100);
+		CMNotifier::Notify(CMNotifier::LOGTIME, L"End Simulation " + GetName());
 		state |= sStopped;
 		trialno--;
 		if (pApp) {
 			CMString fileName;
-			CMNotifier::Notify(CMNotifier::LOGTIME, L"End Simulation " + GetName());
-			if (options.GetOption(L"autooutcomes") == L"yes") {
-				fileName = options.GetOption(L"outcomefile");
+			fileName = m_strOutputRoot + L"\\archive-" + GetId() + L".zip";
+			CMNotifier::Notify(CMNotifier::LOGTIME, L"Writing input archive to " + fileName);
+
+			HZIP hz = CreateZip(fileName.c_str(), 0);
+
+			for (int i = 0; i < pApp->LoadedFilesCount(); i++)
+			{
+				fileName = pApp->LoadedFile(i);
+				ZipAdd(hz, strippath(fileName).c_str(), fileName.c_str());
+			}
+
+			CloseZip(hz);
+
+	
+			//if (options.GetOption(L"autooutcomes") == L"yes") { **TODO ALWAYS write outcomes and summary
+				//fileName = options.GetOption(L"outcomefile");
+				//if (fileName.length() == 0) fileName = L"Outcomes";
+				fileName = m_strOutputRoot + L"\\outcomes-" + GetId() + L".csv";
+				sdebug << "Outcome file " << fileName << endl;
 				CMNotifier::Notify(CMNotifier::LOGTIME, L"Writing Outcomes to " + fileName);
 				pApp->WriteOutcomes(fileName, this);
-			}
-			if (options.GetOption(L"autosummary") == L"yes") {
-				fileName = options.GetOption(L"summaryfile");
+			//}
+			//if (options.GetOption(L"autosummary") == L"yes") { 
+				//fileName = options.GetOption(L"summaryfile");
+				//if (fileName.length() == 0) fileName = L"Summary";
+				//fileName = m_strOutputRoot + L"\\" + fileName + L"-" + GetId() + L".csv";
+				fileName = m_strOutputRoot + L"\\summary-" + GetId() + L".csv";
+				sdebug << "Summary file " << fileName << endl;
 				CMNotifier::Notify(CMNotifier::LOGTIME, L"Writing Summary to " + fileName);
 				pApp->WriteSummary(fileName, this);
-			}
+			//}
 		}
 	}
 	sdebug << state << endl;

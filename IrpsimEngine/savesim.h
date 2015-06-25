@@ -33,18 +33,25 @@
 using namespace std;
 
 class _IRPCLASS CMIndexAndValue {
-	static CMUnits defaultunits;
+	unsigned _index;
+	int _state;
+	double _value;
 public:
-	unsigned index;
-   int state;
-	CMUnits* units;
-   double value;
-   CMIndexAndValue(unsigned i=0,int s=0,CMUnits* vunits=0,CMUnits* cunits=0);
-   CMIndexAndValue(const CMIndexAndValue& n) {index=n.index;state=n.state;units=n.units;value=n.value;}
-   CMIndexAndValue& operator = (const CMIndexAndValue& n) {index=n.index;state=n.state;units=n.units;value=n.value;return *this;}
-	double Translate(double v) {return (units) ? units->TranslateToLocal(v) : v;}   
-   int operator == (const CMIndexAndValue& n) const {return (index==n.index);}
-	int operator < (const CMIndexAndValue& n) const {return (index<n.index);}
+	CMIndexAndValue(unsigned i, int s) { _index = i; _state = s; }
+	CMIndexAndValue(const CMIndexAndValue& n) { _index = n.GetIndex(); _state = n.GetState(); }
+	CMIndexAndValue& operator = (const CMIndexAndValue& n) { _index = n.GetIndex(); _state = n.GetState(); return *this; }
+
+   int GetIndex() const { return _index; }
+   void SetIndex(int value) { _index = value; }
+
+   int GetState() const { return _state; }
+   BOOL IsCostVariable() const {return (_state&CMVariableDescriptor::vdMoney) ? true : false; }
+
+   double GetValue() const { return _value; }
+   void SetValue(double value) { _value = value; }
+
+   int operator == (const CMIndexAndValue& n) const {return (_index==n._index);}
+   int operator < (const CMIndexAndValue& n) const {return (_index<n._index);}
 };
 
 class _IRPCLASS CMSaveSimulation
@@ -52,6 +59,7 @@ class _IRPCLASS CMSaveSimulation
 private:
 	float* _aggresults;
     unsigned* _aggindex;
+	int _costPrecision = 0;
 	int _precision = 10;
 
 	void get_data_from_simulation();
@@ -62,33 +70,27 @@ private:
 	CMTime get_realizations(const CMTime& t,long trial);
    CMString message_header;
 protected:
-	static const wchar_t* realization_header_names[];
-	static const wchar_t* summary_header_names[];
-	static const wchar_t* relseries_header_names[];
-	static const wchar_t* reldetail_header_names[];
 	wofstream* fout;
 	CMIrpApplication* app;
 	CMSimulation& sim;
    CMSimulationArray* array;
-   CMAccumulatorArray* accum;
+   CMAccumulatorArray* _accum;
    CMReliability* reliability;
    class _IRPCLASS CMPSmallArray<CMIndexAndValue> accumindex;
    class _IRPCLASS CMPSmallArray<CMIndexAndValue> arrayindex;
 	CMTime outbeg,outend;
-	CMUnits outvolunits,outcostunits;
 	int outlen;
    int trialwidth,timestepwidth,fieldwidth,maxnamelength,maxtargetlength;
 	CMTIMEUNIT simincunits,outincunits;
    int simincsteps,outincsteps;
    long simtimesteps,outtimesteps;
-   long outtrials;
+   long _outtrials;
    long trialbeg,trialend;
    unsigned* reldetailindex;
    unsigned  reldetailtargets;
    long realization_records,summary_records,relseries_records,reldetail_records;
 	int state;
 
-	virtual void output_header(int which) = 0;
 	virtual void output_item(int which, const wchar_t* val, long row, long col, int width, int prec) = 0;
    virtual void output_item(int which,double val,long row,long col,int width,int prec) = 0;
 

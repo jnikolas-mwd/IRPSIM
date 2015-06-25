@@ -30,8 +30,6 @@ private:
 	wchar_t _delimiter = L',';
 	CMString get_aggregation_string();
 
-	void output_header(int which);
-
    void output_item(int which,const wchar_t* val,long row,long col,int width,int prec);
    void output_item(int which,double val,long row,long col,int width,int prec);
 	void output_record_end(long row);

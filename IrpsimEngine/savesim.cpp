@@ -35,47 +35,18 @@
 #include <fstream>
 static wofstream sdebug(L"debug_savesim.txt");
 
-const wchar_t* CMSaveSimulation::realization_header_names[] =
-	{L"trial",L"period",0};
-const wchar_t* CMSaveSimulation::summary_header_names[] =
-	{L"name",L"period",L"mean",L"stderr",L"min",L"max",0};
-const wchar_t* CMSaveSimulation::relseries_header_names[] =
-	{L"target",L"period",L"failpct",0};
-const wchar_t* CMSaveSimulation::reldetail_header_names[] =
-	{L"target",L"period",L"0%",L"5%",L"10%",L"15%",L"20%",L"25%",L"30%",L"35%",L"40%",L"45%",
-    L"50%",L"55%",L"60%",L"65%",L"70%",L"75%",L"80%",L"85%",L"90%",L"95%",L"P(S)",L"E(S)",0};
-
-CMUnits CMIndexAndValue::defaultunits;
-
-CMIndexAndValue::CMIndexAndValue(unsigned i,int s,CMUnits* vunits,CMUnits* cunits) :
-index(i),
-state(s),
-units(vunits)
-{
-	/* ***TODO remove ability to set units
-	if (state&CMVariableDescriptor::vdMoney)
-		units=cunits;
-	else if (state & CMVariableDescriptor::vdNoUnits)
-		units=&defaultunits;
-	*/
-	units = &defaultunits;
-}
-
 CMSaveSimulation::CMSaveSimulation(CMSimulation& s,CMIrpApplication* a) :
 fout(0),
 message_header(L"Writing "),
 app(a),
 sim(s),
 array(s.SimArray()),
-accum(s.Accumulator()),
+_accum(s.Accumulator()),
 reliability(s.Reliability()),
 outbeg(),
 outend(),
-outvolunits(),
-outcostunits(),
 outlen(0),
 outtimesteps(0),
-outtrials(0),
 trialbeg(0),
 trialend(0),
 accumindex(),
@@ -96,107 +67,39 @@ _aggresults(0),
 _aggindex(0),
 state(0)
 {
-	outtrials = sim.Trials();
-	trialend = outtrials-1;
-	accum->GetPeriod(outbeg,outend,simincunits,simincsteps);
-	trialwidth = 1+(int)ceil(log10(cmmax(1,outtrials)));
+	_outtrials = sim.Trials();
+	trialend = _outtrials-1;
+	_accum->GetPeriod(outbeg,outend,simincunits,simincsteps);
+	trialwidth = 1+(int)ceil(log10(cmmax(1,_outtrials)));
 }
 
 void CMSaveSimulation::get_data_from_simulation()
 {
-	static const wchar_t* delims = L" \t,-";
 	outlen = 0;
 	outtimesteps = 0;
 	state = 0;
 	CMString str;
 
-	outvolunits.Set(sim.GetOption(L"outputvolumeunits"));
-	outcostunits.Set(sim.GetOption(L"outputcostunits"));
+	sdebug << "Output folder " << sim.GetOption(L"outputfolder") << endl;
+	sdebug << "Id " << sim.GetId() << endl;
 
 	_precision = sim.GetOptionInt(L"precision");
+	_costPrecision = sim.GetOptionInt(L"costprecision");
 	sdebug << "Precision = " << _precision << endl;
-   
-	//if (sim.GetOption(L"outputheader")==L"yes")  ***TODO remove output header as an option
-   	//state |= rHeader;
+	sdebug << "Cost Precision = " << _costPrecision << endl;
 
-	//***TODO remove ability to specify an output delimiter. Always comma-delimited
-	/*
+	_accum->GetPeriod(outbeg,outend,outincunits,outincsteps);
 
-	CMString str = sim.GetOption(L"outputdelimiter");
-	if (str[0] == L's' || str[0] == L'S') {
-		outch = L' ';outlen = _wtoi(((CMString)str.substr(1)).c_str());
-	}
-	else if (iswdigit(str[0])) {
-		outch = L'\0';outlen = _wtoi(str.c_str());
-	}
-	else {
-		outch = str[0];outlen = 0;
-	}
-	*/
+	sdebug << "outbeg=" << outbeg << endl;
+	sdebug << "outend=" << outend << endl;
+	sdebug << "outincunits=" << outincunits << endl;
+	sdebug << "outincsteps=" << outincsteps << endl;
 
-	//CMTokenizer next(sim.GetOption(L"outputperiod"));
-	//CMString begstr(next(delims));
-	//CMString endstr(next(delims));
-
-	accum->GetPeriod(outbeg,outend,outincunits,outincsteps);
-
-	
-	//***TODO remove ability to specify an output period
-	/*
-	if (begstr.length() && begstr != L"entire") {
-		if (!endstr.length())
-      	endstr = begstr;
-		CMTime beg,end;
-      int lastmonth = CMTime::Month(sim.GetOption(L"yearend").c_str());
-		CMTime::GetInterval(begstr.c_str(),endstr.c_str(),simincunits,simincsteps,lastmonth,beg,end);
-		if (beg>=outbeg && beg<=outend) outbeg = beg;
-		if (end>=outbeg && end<=outend) outend = end;
-   }
-   */
-
-	outtrials = sim.Trials();
+	_outtrials = sim.Trials();
 	trialbeg = 0;
-	trialend = outtrials - 1;
-
-	/*
-	***TODO Remove ability to specify output trials
-	next.Reset(sim.GetOption(L"outputtrials"));
-	begstr = next(delims);
-	endstr = next(delims);
-
-	if (begstr.length() && begstr!=L"all") {
-		if (!endstr.length())
-      	endstr = begstr;
-		trialbeg = _wtol(begstr.c_str()) - 1;
-		trialend = _wtol(endstr.c_str()) - 1;
-      if (trialbeg<0 || trialbeg>=outtrials)
-      	trialbeg = 0;
-      if (trialend<trialbeg)
-      	trialend = trialbeg;
-      if (trialend>=outtrials)
-      	trialend = outtrials-1;
-		outtrials = trialend-trialbeg+1;
-   }
-   */
-
+	trialend = _outtrials - 1;
 	outincunits = simincunits;
 	outincsteps = 1;
-
-	/*
-	***TODO Remove ability to specify increment units and increment steps
-   str = sim.GetOption(L"outputResolution");
-   if (iswdigit(str[0])) {
-	   outincsteps = _wtoi(str.c_str());
-     	if (outincsteps<=0) outincsteps = 1;
-		outincunits = simincunits;
-   }
-   else {
-   	state |= rCalendarAggregation;
-	   outincunits = (int)CMTime::StringToTimeUnit(str);
-      outincsteps=1;
-   }
-   */
-	
 	simtimesteps = 1+CMTime::Diff(outend,outbeg,simincunits,simincsteps);
     outtimesteps = 1+CMTime::Diff(outend,outbeg,outincunits,outincsteps);
 
@@ -213,16 +116,16 @@ void CMSaveSimulation::get_data_from_simulation()
 
 	reldetailtargets = 0;
 	reldetailindex = new unsigned[reliability->Targets()>0 ? reliability->Targets() : 1];
-   maxtargetlength=0;
+    maxtargetlength=0;
 
-	for (unsigned i=0;i<reliability->Targets();i++) {
+	for (unsigned i = 0; i < reliability->Targets(); i++) {
 		CMReliabilityTarget* target = reliability->Target(i);
 		unsigned j = target->GetString().length();
-      maxtargetlength = cmmax(maxtargetlength,(int)j);
-		for (j=0;j<i;j++)
+		maxtargetlength = cmmax(maxtargetlength, (int)j);
+		for (j = 0; j < i; j++)
 			if (target->SameCurveAs(*reliability->Target(j)))
 				break;
-		if (j==i)
+		if (j == i)
 			reldetailindex[reldetailtargets++] = i;
 	}
 
@@ -248,13 +151,13 @@ CMSaveSimulation::~CMSaveSimulation()
 
 void CMSaveSimulation::AddOutputVariable(const CMString& name)
 {
-   maxnamelength = cmmax(maxnamelength,(int)name.length());
+	maxnamelength = cmmax(maxnamelength, (int)name.length());
 	unsigned n = array->VariableIndex(name);
-   if (n < array->Variables())
-   	arrayindex.Add(new CMIndexAndValue(n,array->GetVariableState(n),&outvolunits,&outcostunits));
-	n = accum->VariableIndex(name);
-   if (n < accum->Variables())
-   	accumindex.Add(new CMIndexAndValue(n,accum->GetVariableState(n),&outvolunits,&outcostunits));
+	if (n < array->Variables())
+		arrayindex.Add(new CMIndexAndValue(n, array->GetVariableState(n)));
+	n = _accum->VariableIndex(name);
+	if (n < _accum->Variables())
+		accumindex.Add(new CMIndexAndValue(n, _accum->GetVariableState(n)));
 }
 
 float CMSaveSimulation::get_realization(const CMTime& t,unsigned var,long trial)
@@ -278,7 +181,7 @@ CMTime CMSaveSimulation::get_realizations(const CMTime& tm,long trial)
 	else
 		ret = array->Aggregate(tm,trial,outincsteps,_aggindex,_aggresults,arrayindex.Count());
 	for (unsigned i=0;i<arrayindex.Count();i++)
-		arrayindex[i]->value = arrayindex[i]->Translate(_aggresults[i]);
+		arrayindex[i]->SetValue(_aggresults[i]);
    return ret;
 }
 
@@ -318,13 +221,15 @@ CMTime CMSaveSimulation::get_realizations(const CMTime& tm,long trial)
 
 wofstream* CMSaveSimulation::open_file(const CMString& fname)
 {
+	sdebug << "Opening " << fname << endl;
 	if (fout)
-	  	delete fout;
-	fout = new wofstream(fname.c_str(),IOS_BINARY);
-   if (fout->fail()) {
-   	delete fout;
-      fout=0;
-   }
+		delete fout;
+	fout = new wofstream(fname.c_str(), IOS_BINARY);
+	if (fout->fail()) {
+		CMNotifier::Notify(CMNotifier::WARNING, L"Unable to open file for output: " + fname);
+		delete fout;
+		fout = 0;
+	}
 	return fout;
 }
 
@@ -346,7 +251,7 @@ void CMSaveSimulation::output_realizations_record(const CMTime& t,long trialno,l
     output_item(OutRealizations,_wtof(tm.GetString(buffer, 128)),row,1,fieldwidth,0);
 
 	for (unsigned i = 0; i < arrayindex.Count(); i++)
-		output_item(OutRealizations, arrayindex[i]->value, row, i + 2, fieldwidth, _precision);   //arrayindex[i]->units->Precision()); ***TODO Change how precision is obtained
+		output_item(OutRealizations, arrayindex[i]->GetValue(), row, i + 2, fieldwidth, arrayindex[i]->IsCostVariable() ? _costPrecision : _precision);   //arrayindex[i]->units->Precision()); ***TODO Change how precision is obtained
 
    output_record_end(row);
 }
@@ -366,16 +271,14 @@ int CMSaveSimulation::Outcomes(const CMString& fname)
 
 	get_data_from_simulation();
 
-	output_header(OutRealizations);
+	output_item(OutRealizations, L"Trial", 0, 0, fieldwidth, 0);
+	output_item(OutRealizations, L"Period", 0, 1, fieldwidth, 0);
 
 	long row = 0;
 
-	output_item(OutRealizations, realization_header_names[0], 0, 0, fieldwidth, 0);
-	output_item(OutRealizations, realization_header_names[1], 0, 1, fieldwidth, 0);
-
 	for (unsigned i = 0; i < arrayindex.Count(); i++) {
-		_aggindex[i] = arrayindex[i]->index;
-		output_item(OutRealizations, array->GetVariableName(arrayindex[i]->index).c_str(), 0, i + 2, fieldwidth, arrayindex[i]->units->Precision());
+		_aggindex[i] = arrayindex[i]->GetIndex();
+		output_item(OutRealizations, array->GetVariableName(arrayindex[i]->GetIndex()).c_str(), 0, i + 2, fieldwidth, arrayindex[i]->IsCostVariable() ? _costPrecision : _precision);
 	}
 
 	output_record_end(row++);
@@ -417,40 +320,36 @@ int CMSaveSimulation::Outcomes(const CMString& fname)
 int CMSaveSimulation::Summary(const CMString& fname)
 {
 	unsigned i;
-	
+
 	if (!open_file(fname))
-   	return -1;
+		return -1;
 	wchar_t buffer[128];
 	get_data_from_simulation();
 
-	output_header(OutSummary);
+	long row = 0;
 
-	long row=0;
-
-	for (i=0;summary_header_names[i]!=0;i++)
-		output_item(OutSummary,summary_header_names[i],0,i,i==0?maxnamelength:fieldwidth,i<2?0:outvolunits.Precision());
-
-	output_record_end(row++);
+	sdebug << "Writing summary file" << endl;
 
 	int oldformat = CMTime::SetOutputFormat(simincunits);
 	long nrows = 1 + summary_records;
 
-	for (i=0;i<accumindex.Count();i++) {
+	for (i = 0; i < accumindex.Count(); i++) {
 		double val;
-      unsigned varindex = accumindex[i]->index;
-	  const wchar_t* vname = accum->GetVariableName(varindex).c_str();
-		for (CMTime tm=outbeg;tm<=outend;tm.inc(simincsteps,simincunits),row++) {
-		   output_item(OutSummary,vname,row,0,maxnamelength,0);
-		   output_item(OutSummary,_wtof(tm.GetString(buffer, 128)),row,1,fieldwidth,0);
-			for (int j=0;j<4;j++) {
+		unsigned varindex = accumindex[i]->GetIndex();
+		const wchar_t* vname = _accum->GetVariableName(varindex).c_str();
+		sdebug << vname << " cost var=" << accumindex[i]->IsCostVariable() << endl;
+		for (CMTime tm = outbeg; tm <= outend; tm.inc(simincsteps, simincunits), row++) {
+			output_item(OutSummary, vname, row, 0, maxnamelength, 0);
+			output_item(OutSummary, _wtof(tm.GetString(buffer, 128)), row, 1, fieldwidth, 0);
+			for (int j = 0; j < 4; j++) {
 				switch (j) {
-					case 0: val = accum->Mean(tm,varindex); break;
-					case 1: val = accum->StdDev(tm,varindex); break;
-					case 2: val = accum->Min(tm,varindex); break;
-					case 3: val = accum->Max(tm,varindex); break;
+				case 0: val = _accum->Mean(tm, varindex); break;
+				case 1: val = _accum->StdDev(tm, varindex); break;
+				case 2: val = _accum->Min(tm, varindex); break;
+				case 3: val = _accum->Max(tm, varindex); break;
 				}
-				output_item(OutSummary,accumindex[i]->units->TranslateToLocal(val),row,j+2,fieldwidth,outvolunits.Precision());
-         }
+				output_item(OutSummary, val, row, j + 2, fieldwidth, accumindex[i]->IsCostVariable() ? _costPrecision : _precision);
+			}
 			output_record_end(row);
 		}
 	}
@@ -459,8 +358,8 @@ int CMSaveSimulation::Summary(const CMString& fname)
 
 	CMTime::SetOutputFormat(oldformat);
 	delete fout;
-   fout=0;
-   return 0;
+	fout = 0;
+	return 0;
 }
 
 int CMSaveSimulation::ReliabilitySeries(const CMString& fname)
@@ -473,14 +372,7 @@ int CMSaveSimulation::ReliabilitySeries(const CMString& fname)
 	get_data_from_simulation();
 	int oldformat = CMTime::SetOutputFormat(simincunits);
 
-   output_header(OutReliabilitySeries);
-
 	long row=0;
-
-	for (i=0;relseries_header_names[i]!=0;i++)
-		output_item(OutReliabilitySeries,relseries_header_names[i],0,i,i==0?maxtargetlength:fieldwidth,i<2?0:1);
-
-	output_record_end(row++);
 
    long nrows = 1 + relseries_records;
 
@@ -515,15 +407,8 @@ int CMSaveSimulation::ReliabilityDetail(const CMString& fname)
 	if (!reldetailtargets)
 		return 0;
 
-   output_header(OutReliabilityDetail);
-
    long row = 0;
    CMTime tm;
-
-	for (i=0;reldetail_header_names[i]!=0;i++)
-		output_item(OutReliabilityDetail,reldetail_header_names[i],0,i,i==0?maxtargetlength:fieldwidth,i<2?0:1);
-
-	output_record_end(row++);
 
 	long** bins = new long*[reldetailtargets*outtimesteps];
 	for (i=0;i<outtimesteps;i++)
@@ -583,9 +468,9 @@ int CMSaveSimulation::ReliabilityDetail(const CMString& fname)
 		   output_item(OutReliabilityDetail,reliability->Target(reldetailindex[i])->GetString().c_str(),row,col++,maxtargetlength,0);
 		   output_item(OutReliabilityDetail,last_timestep_in_interval(tm),row,col++,fieldwidth,0);
          for (j=0;j<20;j++)
-				output_item(OutReliabilityDetail,100*(double)bins[step*reldetailtargets+i][j]/outtrials,row,col++,fieldwidth,1);
-			output_item(OutReliabilityDetail,100*(double)bins[step*reldetailtargets+i][0]/outtrials,row,col++,fieldwidth,1);
-			output_item(OutReliabilityDetail,expected[step*reldetailtargets+i]/outtrials,row,col++,fieldwidth,1);
+				output_item(OutReliabilityDetail,100*(double)bins[step*reldetailtargets+i][j]/_outtrials,row,col++,fieldwidth,1);
+			output_item(OutReliabilityDetail,100*(double)bins[step*reldetailtargets+i][0]/_outtrials,row,col++,fieldwidth,1);
+			output_item(OutReliabilityDetail,expected[step*reldetailtargets+i]/_outtrials,row,col++,fieldwidth,1);
          output_record_end(row);
       }
    }

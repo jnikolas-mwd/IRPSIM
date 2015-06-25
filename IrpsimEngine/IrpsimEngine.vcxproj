@@ -143,6 +143,7 @@
     <ClInclude Include="vtable.h" />
     <ClInclude Include="vtime.h" />
     <ClInclude Include="vtimevar.h" />
+    <ClInclude Include="zip.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="accum.cpp">
@@ -295,6 +296,7 @@
     <ClCompile Include="vtimevar.cpp">
       <CompileAsManaged Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</CompileAsManaged>
     </ClCompile>
+    <ClCompile Include="zip.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadMe.txt" />
