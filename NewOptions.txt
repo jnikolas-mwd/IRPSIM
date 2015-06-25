@@ -1,26 +1,33 @@
+#OPTIONS
 autooutcomes         yes
 autosummary          yes
-costunits            DX1000p2
-debugfile
-debugon              no
-displayperiod        2020
-focusperiod
+*costunits            DX1000p2
+*debugfile
+*debugon              no
+*displayperiod        2020
+*focusperiod
 numtrials            83
-outputpercentile      100
+*outputpercentile      100
 outcomefile          Test.out
-outcomeopenmode      Replace
-outputcostunits		 DX1p2
+*outcomeopenmode      Replace
+*outputcostunits		 DX1p2
 outputdelimiter      ,
-outputformat         ByTrial
+*outputformat         ByTrial
 outputheader         no
 outputperiod         2012 2050
+*outputreliability    Yes
 outputresolution     annual
-outputvolumeunits	AFX1
-precision           3
+*outputsortby         Trial
+*outputsortorder      Ascending
+*outputvariables      all
+outputvolumeunits	  GX1p2
+precision            5
+saveincrementsize    1024
+*shiftstorage         no
 simbegin             2013
 simend               2050
 siminterval          annual
-simulationfile	     revreq.sim
+simulationfile	     XXX.sim
 simulationname	     50-Year IRP
 summaryfile          Test.sum
 summaryopenmode      Replace
@@ -28,6 +35,19 @@ tracebegin           1922
 traceend             2004
 tracemode            dynamic
 tracestart           1922
-volumeunits          AFX10000p2
+*netsurplusdemandcut  yes
+*netsurplussupplycut  yes
+*transfersdemandcut   no
+*volumeunits          AFX10000p2
 yearend              Dec
+*netsurplussupplyreduction yes
+*usedemandcategories yes
+*usesupplycategories yes
+*usestoragecategories yes
+*usetransfercategories no
+*defaultdemandallocation Preserve
+*defaultsupplyallocation ByRank
+*defaultstorageallocation BalanceTake
+*defaulttransferallocation ByRank
 randomseed 99
+#END

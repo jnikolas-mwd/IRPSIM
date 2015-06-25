@@ -20,11 +20,13 @@
 /////////////////////////////////////////////////////////////////////////////
 #include "StdAfx.h"
 #include "savesima.h"
+#include "cmlib.h"
 
 #include <iomanip>
 #include <stdio.h>
 
-//static ofstream sdebug("savesima.deb");
+//#include <fstream>
+//static wofstream sdebug(L"debug_savesima.txt");
 
 CMSaveSimulationAscii::CMSaveSimulationAscii(CMSimulation& s,CMIrpApplication* a) :
 CMSaveSimulation(s,a)
@@ -79,21 +81,27 @@ void CMSaveSimulationAscii::output_header(int which)
 	CMTime::SetOutputFormat(oldformat);
 }
 
-void CMSaveSimulationAscii::output_item(int which,const wchar_t* str,long row,long col,int width,int prec)
+void CMSaveSimulationAscii::output_item(int which, const wchar_t* str, long row, long col, int width, int prec)
 {
 	if (!str) return;
-
-   if (outch == L'\0')	    				*fout << setw(outlen) << str;
-   else if (outch != L' ' && col!=0) *fout << (wchar_t)outch << str;
-   else if (col!=0)						*fout << setw(outlen) << L"" << str;
-   else *fout << str;
+	if (col == 0) *fout << str;
+	else *fout << _delimiter << str;
+	/*
+	if (outch == L'\0')	    				*fout << setw(outlen) << str;
+	else if (outch != L' ' && col != 0) *fout << (wchar_t)outch << str;
+	else if (col != 0)						*fout << setw(outlen) << L"" << str;
+	else *fout << str;
+	*/
 }
 
 void CMSaveSimulationAscii::output_item(int which,double val,long row,long col,int width,int prec)
 {
 	wchar_t buffer[128];
-   swprintf_s(buffer, 128, L"%.*f",prec,val);
-   output_item(which,buffer,row,col,width,prec);
+	swprintf_s(buffer, 128, L"%.*f",prec,val);
+	roundstring(buffer, prec);
+	output_item(which, buffer, row, col, width, prec);
+    //swprintf_s(buffer, 128, L"%.*f",prec,val);
+    //output_item(which,buffer,row,col,width,prec);
 }
 
 void CMSaveSimulationAscii::output_record_end(long row)

@@ -27,6 +27,7 @@
 class _IRPCLASS CMSaveSimulationAscii : public CMSaveSimulation
 {
 private:
+	wchar_t _delimiter = L',';
 	CMString get_aggregation_string();
 
 	void output_header(int which);

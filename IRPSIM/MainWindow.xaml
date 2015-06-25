@@ -19,23 +19,7 @@
         <KeyBinding Modifiers="Control" Key="O" Command="{Binding DisplayCollection.FileOpenCommand, Source={StaticResource Locator}}" />
     </Window.InputBindings>    
     <DockPanel>
-        <Menu Name="mainMenu" DockPanel.Dock="Top">
-            <MenuItem Header="_File">
-                <MenuItem Header="Open _Project... (Ctrl+P)" Command="{Binding Main.ProjectOpenCommand, Source={StaticResource Locator}}"/>
-                <MenuItem Header="Open _File... (Ctrl+O)" Command="{Binding DisplayCollection.FileOpenCommand, Source={StaticResource Locator}}" ToolTip="Open a text file"/>
-                <Separator/>
-                <MenuItem Header="_Reload Project" Command="{Binding Main.ProjectReloadCommand, Source={StaticResource Locator}}"/>
-                <MenuItem Header="_Close Project" Command="{Binding Main.ProjectCloseCommand, Source={StaticResource Locator}}"/>
-                <Separator/>
-                <MenuItem Header="_Exit"/>
-            </MenuItem>
-            <MenuItem Header="_Edit">
-                <MenuItem Header="_Find in Files..." Command="{Binding IrpLoadedFileCollection.FindInFilesCommand, Source={StaticResource Locator}}"/>
-            </MenuItem>
-            <MenuItem Header="_Project">
-                <MenuItem Header="_Run Simulation" Command="{Binding Main.RunSimulationCommand, Source={StaticResource Locator}}"/>
-            </MenuItem>
-        </Menu>
+        <view:MenuView DockPanel.Dock="Top"/>
         <StatusBar Name="statusBar" DockPanel.Dock="Bottom">
             <StatusBar.Resources>
             </StatusBar.Resources>

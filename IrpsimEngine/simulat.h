@@ -122,6 +122,8 @@ public:
 	void GetOptions(CMOptions& op) {op = options;}
 	void SetOptions(const CMOptions& op);
 	CMString GetOption(const CMString& opname) {return options.GetOption(opname);}
+	int GetOptionInt(const CMString& opname) { return options.GetOptionInt(opname); }
+	double GetOptionDouble(const CMString& opname) { return options.GetOptionDouble(opname); }
 	const wchar_t* GetOptionString(const CMString& opname) { return options.GetOption(opname).c_str(); }
 	void SetOption(const CMString& opname,const CMString& opval);
    CMString GetComments() {return comments;}

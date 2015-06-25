@@ -39,6 +39,7 @@ int	_IRPFUNC readstringbinary(CMString& s,wistream& os);
 CMString _IRPFUNC readstringbinary(wistream& is);
 int   _IRPFUNC stringbinarylength(const CMString& s);
 int	_IRPFUNC sign(double val);
+wchar_t* roundstring(wchar_t* str, int precision);
 CMString _IRPFUNC stripends(const CMString& s);
 //CMString _IRPFUNC createtempfile(const wchar_t* prefix, const wchar_t* path);
 int	_IRPFUNC removefile(const CMString& filename);

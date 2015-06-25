@@ -50,8 +50,10 @@ public:
 class _IRPCLASS CMSaveSimulation
 {
 private:
-	float* aggresults;
-   unsigned* aggindex;
+	float* _aggresults;
+    unsigned* _aggindex;
+	int _precision = 10;
+
 	void get_data_from_simulation();
     wofstream* open_file(const CMString& name);
 	double last_timestep_in_interval(const CMTime& t);
@@ -78,7 +80,6 @@ protected:
    int trialwidth,timestepwidth,fieldwidth,maxnamelength,maxtargetlength;
 	CMTIMEUNIT simincunits,outincunits;
    int simincsteps,outincsteps;
-   wchar_t outch;
    long simtimesteps,outtimesteps;
    long outtrials;
    long trialbeg,trialend;

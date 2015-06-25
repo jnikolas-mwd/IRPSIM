@@ -182,17 +182,20 @@ const wchar_t* CMOptions::GetOptionString(const CMString& option)
 
 double CMOptions::GetOptionDouble(const CMString& option)
 {
-	return _wtof(GetOption(option).c_str());
+	const wchar_t* str = GetOption(option).c_str();
+	return isnumber(str) ? _wtof(str) : 0;
 }
 
 short CMOptions::GetOptionInt(const CMString& option)
 {
-	return _wtoi(GetOption(option).c_str());
+	const wchar_t* str = GetOption(option).c_str();
+	return isnumber(str) ? _wtoi(str) : 0;
 }
 
 long CMOptions::GetOptionLong(const CMString& option)
 {
-	return _wtol(GetOption(option).c_str());
+	const wchar_t* str = GetOption(option).c_str();
+	return isnumber(str) ? _wtol(str) : 0;
 }
 
 CMOption* CMOptions::SetOption(const CMString& line, int id)

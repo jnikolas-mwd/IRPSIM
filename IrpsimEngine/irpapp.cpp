@@ -337,8 +337,7 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 void CMIrpApplication::update_variable_links()
 {
 	CMVariable* v;
-	wchar_t buffer[128];
-   CMString region,vtype,vname;
+    CMString region,vtype,vname;
 	const wchar_t* aggname;
 
 	CMNotifier::Notify(CMNotifier::LOG, L"Updating variable types");

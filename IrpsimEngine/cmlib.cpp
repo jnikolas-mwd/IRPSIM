@@ -124,6 +124,43 @@ int contains(const wchar_t* str, const wchar_t**list, int n, int case_sen)
 	return ret;
 }
 
+wchar_t* roundstring(wchar_t* str, int precision)
+{
+	wchar_t* start = wcschr(str, L'.');
+	if (start == NULL)
+		return str;
+
+	if (precision <= 0) {
+		*start = L'\0';
+		return str;
+	}
+	if (wcslen(start) >= (size_t)precision + 1) {
+		start += precision;
+		if (*start != L'0') {
+			wchar_t* next = start + 1;
+			if (*next == L'\0') {
+				return str;
+			}
+			if (*next == L'5' || *next == L'6' || *next == L'7' || *next == L'8' || *next == L'9')
+				*start = *start + 1;
+			*next = L'\0';
+			return str;
+		}
+	}
+	else
+		start += wcslen(start)-1;
+
+	while (*start == L'0')
+		start--;
+
+	if (*start != L'.')
+		start++;
+
+	*start = L'\0';
+
+	return str;
+}
+
 int _IRPFUNC writestringbinary(const CMString& s,wostream& os)
 {
 	size_t len = s.length();

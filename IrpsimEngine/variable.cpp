@@ -251,20 +251,20 @@ void CMVariable::SetType(const CMString& aName)
 {
 	int aType;
 	if (aName == L"carryforward")
-		SetState(vsCarryForward,TRUE);
-   else if (aName == L"accumulator")
-		SetState(vsCarryForward|vsAccumulate,TRUE);
+		SetState(vsCarryForward, TRUE);
+	else if (aName == L"accumulator")
+		SetState(vsCarryForward | vsAccumulate, TRUE);
 	else if (aName == L"sum")
-   	SetState(vsSum,TRUE);
+		SetState(vsSum, TRUE);
 	else if (aName == L"cost" || aName == L"money")
-   	SetState(vsMoney,TRUE);
+		SetState(vsMoney, TRUE);
 	else if (aName == L"nounits")
-   	SetState(vsNoUnits,TRUE);
+		SetState(vsNoUnits, TRUE);
 	else if (aName == L"alwaysevaluate")
-   	SetState(vsAlwaysEvaluate,TRUE);
-	if ((aType = CMVariableTypes::VarIntFromString(aName.c_str(),1)) >= 0) {
-   	type = aType;
-		if (CMVariableTypes::IsVarSum(type)) SetState(vsSum,TRUE);
+		SetState(vsAlwaysEvaluate, TRUE);
+	if ((aType = CMVariableTypes::VarIntFromString(aName.c_str(), 1)) >= 0) {
+		type = aType;
+		if (CMVariableTypes::IsVarSum(type)) SetState(vsSum, TRUE);
 	}
 	else
 		types.Add(new CMString(aName));

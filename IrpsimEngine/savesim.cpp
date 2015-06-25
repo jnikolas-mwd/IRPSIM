@@ -52,10 +52,13 @@ index(i),
 state(s),
 units(vunits)
 {
+	/* ***TODO remove ability to set units
 	if (state&CMVariableDescriptor::vdMoney)
 		units=cunits;
 	else if (state & CMVariableDescriptor::vdNoUnits)
 		units=&defaultunits;
+	*/
+	units = &defaultunits;
 }
 
 CMSaveSimulation::CMSaveSimulation(CMSimulation& s,CMIrpApplication* a) :
@@ -89,8 +92,8 @@ realization_records(0),
 summary_records(0),
 relseries_records(0),
 reldetail_records(0),
-aggresults(0),
-aggindex(0),
+_aggresults(0),
+_aggindex(0),
 state(0)
 {
 	outtrials = sim.Trials();
@@ -105,11 +108,19 @@ void CMSaveSimulation::get_data_from_simulation()
 	outlen = 0;
 	outtimesteps = 0;
 	state = 0;
+	CMString str;
 
 	outvolunits.Set(sim.GetOption(L"outputvolumeunits"));
 	outcostunits.Set(sim.GetOption(L"outputcostunits"));
-   if (sim.GetOption(L"outputheader")==L"yes")
-   	state |= rHeader;
+
+	_precision = sim.GetOptionInt(L"precision");
+	sdebug << "Precision = " << _precision << endl;
+   
+	//if (sim.GetOption(L"outputheader")==L"yes")  ***TODO remove output header as an option
+   	//state |= rHeader;
+
+	//***TODO remove ability to specify an output delimiter. Always comma-delimited
+	/*
 
 	CMString str = sim.GetOption(L"outputdelimiter");
 	if (str[0] == L's' || str[0] == L'S') {
@@ -121,13 +132,17 @@ void CMSaveSimulation::get_data_from_simulation()
 	else {
 		outch = str[0];outlen = 0;
 	}
+	*/
 
-	CMTokenizer next(sim.GetOption(L"outputperiod"));
-	CMString begstr(next(delims));
-	CMString endstr(next(delims));
+	//CMTokenizer next(sim.GetOption(L"outputperiod"));
+	//CMString begstr(next(delims));
+	//CMString endstr(next(delims));
 
 	accum->GetPeriod(outbeg,outend,outincunits,outincsteps);
 
+	
+	//***TODO remove ability to specify an output period
+	/*
 	if (begstr.length() && begstr != L"entire") {
 		if (!endstr.length())
       	endstr = begstr;
@@ -137,14 +152,17 @@ void CMSaveSimulation::get_data_from_simulation()
 		if (beg>=outbeg && beg<=outend) outbeg = beg;
 		if (end>=outbeg && end<=outend) outend = end;
    }
+   */
 
+	outtrials = sim.Trials();
+	trialbeg = 0;
+	trialend = outtrials - 1;
+
+	/*
+	***TODO Remove ability to specify output trials
 	next.Reset(sim.GetOption(L"outputtrials"));
 	begstr = next(delims);
 	endstr = next(delims);
-
-	trialbeg = 0;
-   outtrials = sim.Trials();
-	trialend = outtrials-1;
 
 	if (begstr.length() && begstr!=L"all") {
 		if (!endstr.length())
@@ -159,7 +177,13 @@ void CMSaveSimulation::get_data_from_simulation()
       	trialend = outtrials-1;
 		outtrials = trialend-trialbeg+1;
    }
+   */
 
+	outincunits = simincunits;
+	outincsteps = 1;
+
+	/*
+	***TODO Remove ability to specify increment units and increment steps
    str = sim.GetOption(L"outputResolution");
    if (iswdigit(str[0])) {
 	   outincsteps = _wtoi(str.c_str());
@@ -171,9 +195,10 @@ void CMSaveSimulation::get_data_from_simulation()
 	   outincunits = (int)CMTime::StringToTimeUnit(str);
       outincsteps=1;
    }
-
+   */
+	
 	simtimesteps = 1+CMTime::Diff(outend,outbeg,simincunits,simincsteps);
-   outtimesteps = 1+CMTime::Diff(outend,outbeg,outincunits,outincsteps);
+    outtimesteps = 1+CMTime::Diff(outend,outbeg,outincunits,outincsteps);
 
 	fieldwidth = outlen > 0 ? outlen : 9;
 	switch (outincunits) {
@@ -203,7 +228,7 @@ void CMSaveSimulation::get_data_from_simulation()
 
 	realization_records = (trialend-trialbeg+1) * outtimesteps;
 	summary_records = simtimesteps * accumindex.Count();
-   relseries_records = reliability->Targets() * simtimesteps;
+    relseries_records = reliability->Targets() * simtimesteps;
 	reldetail_records = reldetailtargets * outtimesteps;
 
 	str = sim.GetOption(L"outputsortby");
@@ -216,8 +241,8 @@ CMSaveSimulation::~CMSaveSimulation()
 	arrayindex.ResetAndDestroy();
 	accumindex.ResetAndDestroy();
    if (reldetailindex) delete [] reldetailindex;
-	if (aggresults) delete [] aggresults;
-	if (aggindex) 	 delete [] aggindex;
+	if (_aggresults) delete [] _aggresults;
+	if (_aggindex) 	 delete [] _aggindex;
    if (fout) delete fout;
 }
 
@@ -249,11 +274,11 @@ CMTime CMSaveSimulation::get_realizations(const CMTime& tm,long trial)
 {
 	CMTime ret;
    if (state & rCalendarAggregation)
-		ret = array->Aggregate(tm,trial,outincunits,aggindex,aggresults,arrayindex.Count());
+		ret = array->Aggregate(tm,trial,outincunits,_aggindex,_aggresults,arrayindex.Count());
 	else
-		ret = array->Aggregate(tm,trial,outincsteps,aggindex,aggresults,arrayindex.Count());
+		ret = array->Aggregate(tm,trial,outincsteps,_aggindex,_aggresults,arrayindex.Count());
 	for (unsigned i=0;i<arrayindex.Count();i++)
-		arrayindex[i]->value = arrayindex[i]->Translate(aggresults[i]);
+		arrayindex[i]->value = arrayindex[i]->Translate(_aggresults[i]);
    return ret;
 }
 
@@ -320,8 +345,8 @@ void CMSaveSimulation::output_realizations_record(const CMTime& t,long trialno,l
     output_item(OutRealizations,trialno+1,row,0,fieldwidth,0);
     output_item(OutRealizations,_wtof(tm.GetString(buffer, 128)),row,1,fieldwidth,0);
 
-	for (unsigned i=0;i<arrayindex.Count();i++)
-      output_item(OutRealizations,arrayindex[i]->value,row,i+2,fieldwidth,arrayindex[i]->units->Precision());
+	for (unsigned i = 0; i < arrayindex.Count(); i++)
+		output_item(OutRealizations, arrayindex[i]->value, row, i + 2, fieldwidth, _precision);   //arrayindex[i]->units->Precision()); ***TODO Change how precision is obtained
 
    output_record_end(row);
 }
@@ -329,29 +354,29 @@ void CMSaveSimulation::output_realizations_record(const CMTime& t,long trialno,l
 int CMSaveSimulation::Outcomes(const CMString& fname)
 {
 	if (!open_file(fname))
-   	return -1;
+		return -1;
 
-	if (aggresults) delete [] aggresults;
-	if (aggindex) 	 delete [] aggindex;
+	if (_aggresults) delete[] _aggresults;
+	if (_aggindex) 	 delete[] _aggindex;
 
-	aggresults = new float[arrayindex.Count()];
-   aggindex = new unsigned[arrayindex.Count()];
+	_aggresults = new float[arrayindex.Count()];
+	_aggindex = new unsigned[arrayindex.Count()];
 
-   sdebug << "Writing outcomes to " << fname << " array size = " << arrayindex.Count << endl;
+	sdebug << "Writing outcomes to " << fname << " array size = " << arrayindex.Count() << endl;
 
 	get_data_from_simulation();
 
 	output_header(OutRealizations);
 
-	long row=0;
+	long row = 0;
 
-	output_item(OutRealizations,realization_header_names[0],0,0,fieldwidth,0);
-	output_item(OutRealizations,realization_header_names[1],0,1,fieldwidth,0);
+	output_item(OutRealizations, realization_header_names[0], 0, 0, fieldwidth, 0);
+	output_item(OutRealizations, realization_header_names[1], 0, 1, fieldwidth, 0);
 
-	for (unsigned i=0;i<arrayindex.Count();i++) {
-   		aggindex[i] = arrayindex[i]->index;
-		output_item(OutRealizations,array->GetVariableName(arrayindex[i]->index).c_str(),0,i+2,fieldwidth,arrayindex[i]->units->Precision());
-   }
+	for (unsigned i = 0; i < arrayindex.Count(); i++) {
+		_aggindex[i] = arrayindex[i]->index;
+		output_item(OutRealizations, array->GetVariableName(arrayindex[i]->index).c_str(), 0, i + 2, fieldwidth, arrayindex[i]->units->Precision());
+	}
 
 	output_record_end(row++);
 
@@ -362,27 +387,28 @@ int CMSaveSimulation::Outcomes(const CMString& fname)
 	long trialno;
 
 	CMTime tm;
+
 	if (state & rSortByTrial) {
-		for (trialno=trialbeg;trialno<=trialend;trialno++) {
-			for (tm=outbeg;tm<=outend;tm.inc(outincsteps,outincunits))
-				output_realizations_record(tm,trialno,row++);
+		for (trialno = trialbeg; trialno <= trialend; trialno++) {
+			for (tm = outbeg; tm <= outend; tm.inc(outincsteps, outincunits))
+				output_realizations_record(tm, trialno, row++);
 		}
 	}
 	else {
-		for (tm=outbeg;tm<=outend;tm.inc(outincsteps,outincunits)) {
-			for (trialno=trialbeg;trialno<=trialend;trialno++)
-				output_realizations_record(tm,trialno,row++);
+		for (tm = outbeg; tm <= outend; tm.inc(outincsteps, outincunits)) {
+			for (trialno = trialbeg; trialno <= trialend; trialno++)
+				output_realizations_record(tm, trialno, row++);
 		}
 	}
 
 	output_footer(OutRealizations);
 
-	delete [] aggresults;
-   delete [] aggindex;
-   aggresults = 0;
-   aggindex = 0;
+	delete[] _aggresults;
+	delete[] _aggindex;
+	_aggresults = 0;
+	_aggindex = 0;
 	delete fout;
-	fout=0;
+	fout = 0;
 	CMNotifier::Notify(CMNotifier::INFO, L"");
 	CMTime::SetOutputFormat(oldformat);
 	return 0;

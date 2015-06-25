@@ -26,8 +26,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-//#include <fstream>
-//static wofstream sdebug("debug_simarray.txt");
+#include <fstream>
+static wofstream sdebug("debug_simarray.txt");
 
 static const wchar_t* simid = L"simarray0001";
 
@@ -347,41 +347,44 @@ float CMSimulationArray::Aggregate(const CMTime& time,const CMString& var,long t
    return ret;
 }
 
-CMTime CMSimulationArray::Aggregate(const CMTime& time,long trial,int resolution,unsigned* varindex,float* results,unsigned n)
+CMTime CMSimulationArray::Aggregate(const CMTime& time, long trial, int resolution, unsigned* varindex, float* results, unsigned n)
 {
 	if (Fail()) return time;
+
+	sdebug << "Calling Aggregate: time=" << time << " trial = " << trial << " resolution = " << resolution << " n = " << n << endl;
+
 	CMTime begt(time);
-   int nstep=1;
-   int esc=0;
-   CMTime tm(time);
+	int nstep = 1;
+	int esc = 0;
+	CMTime tm(time);
 	CMTime ret;
 	while (!esc) {
 		ret = tm;
-      for (unsigned i=0;i<n;i++) {
+		for (unsigned i = 0; i < n; i++) {
 			int issum = (GetVariableState(varindex[i]) & CMVariableDescriptor::vdSum);
-			float val = At(tm,varindex[i],trial,0);
-         if (nstep==1 || !issum) results[i] = val;
-         else results[i] += val;
+			float val = At(tm, varindex[i], trial, 0);
+			if (nstep == 1 || !issum) results[i] = val;
+			else results[i] += val;
 		}
-      if (resolution<0 && resolution>=incunits)
-      	break;
-      tm.inc(inclength,incunits);
+		if (resolution < 0 && resolution >= incunits)
+			break;
+		tm.inc(inclength, incunits);
 		if (resolution > 0)
-      	esc = (nstep>=resolution);
-      else {
-	      switch (resolution) {
-   	   	case CM_YEAR: 	 esc = (tm.Year() != begt.Year()); break;
-      		case CM_MONTH:  esc = (tm.Month() != begt.Month()); break;
+			esc = (nstep >= resolution);
+		else {
+			switch (resolution) {
+			case CM_YEAR: 	 esc = (tm.Year() != begt.Year()); break;
+			case CM_MONTH:  esc = (tm.Month() != begt.Month()); break;
 			case CM_WEEK: 	 esc = abs((long)tm - (long)begt) >= 7; break;
-	      	case CM_DAY: 	 esc = ((ULONG)tm != (ULONG)begt); break;
-   	   	case CM_HOUR: 	 esc = (tm.Hour() != begt.Hour());	break;
-      		case CM_MINUTE: esc = (tm.Minute() != begt.Minute()); break;
-         	default: esc=1; break;
-	      }
-      }
-      nstep++;
+			case CM_DAY: 	 esc = ((ULONG)tm != (ULONG)begt); break;
+			case CM_HOUR: 	 esc = (tm.Hour() != begt.Hour());	break;
+			case CM_MINUTE: esc = (tm.Minute() != begt.Minute()); break;
+			default: esc = 1; break;
+			}
+		}
+		nstep++;
 	}
-   return ret;
+	return ret;
 }
 
 CMTime CMSimulationArray::Summary(const CMTime& time,int resolution,unsigned* varindex,float* vmean,float* vstderr,float* vmin,float* vmax,unsigned n,long begtrial,long endtrial)
