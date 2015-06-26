@@ -75,6 +75,10 @@ namespace IRPSIM.Services
 
         IrpObjectCollection Categories { get; }
 
+        IrpObjectCollection Options { get; }
+
+        IrpObjectCollection Simulations { get; }
+
         LoadedFileCollection LoadedFiles { get; }
 
         Boolean HasErrors { get; }
@@ -88,6 +92,10 @@ namespace IRPSIM.Services
         void UseScenario(String name);
 
         void UseScript(String name);
+
+        void SetOption(string name, string value);
+
+        String GetOption(string name);
 
         void RunSimulation();
     }
@@ -150,6 +158,10 @@ namespace IRPSIM.Services
 
         public IrpObjectCollection Categories { get { return _app.Categories; } }
 
+        public IrpObjectCollection Options { get { return _app.Options; } }
+
+        public IrpObjectCollection Simulations { get { return _app.Simulations; } }
+
         public LoadedFileCollection LoadedFiles { get { return _app.LoadedFiles; } }
 
         private Boolean _hasErrors;
@@ -176,12 +188,16 @@ namespace IRPSIM.Services
 
         public void UseScript(String name) { _app.UseScript(name); }
 
+        public void SetOption(string name, string value) { _app.SetOption(name, value); }
+
+        public String GetOption(string name) { return _app.GetOption(name); }
+
         public void RunSimulation()
         {
             _hasErrors = false;
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += (s, e) => _app.RunSimulation();
-            bw.RunWorkerCompleted += (s,e) => {if (IrpSimulationCompleted != null) IrpSimulationCompleted(this, new BoolEventArgs(true));};
+            bw.RunWorkerCompleted += (s, e) => { _app.AfterRunSimulation(); if (IrpSimulationCompleted != null) IrpSimulationCompleted(this, new BoolEventArgs(true)); };
             bw.RunWorkerAsync();
         }
     }

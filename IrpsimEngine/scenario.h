@@ -47,7 +47,7 @@ public:
 	CMScenario(const CMString& aName,int id = -1) : CMIrpObject(aName,id),
 		options() , varnames(), maxwidth(0) {}
 	~CMScenario();
-	void Use(CMOptions& op);
+	void Use(CMOptions* op);
 	unsigned short Variables() {return varnames.Count();}
 	CMString VariableName(unsigned short n) {return varnames[n];}
     //int Flags(unsigned short n) {return flags[n];}

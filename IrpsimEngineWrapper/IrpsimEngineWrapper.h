@@ -134,6 +134,30 @@ namespace IrpsimEngineWrapper
 		}
 	};
 	
+	public ref class CMWrappedOption : public CMWrappedIrpObject
+	{
+	public:
+		CMWrappedOption(CMOption* o) : CMWrappedIrpObject(o)
+		{
+		}
+
+		property String^ Value
+		{
+			String^ get() 
+			{
+				CMOption* o = (CMOption*)obj;
+				return marshal_as<String^>(o->GetValue().c_str());
+			}
+			void set(String^ value)
+			{
+				std::wstring str = marshal_as<std::wstring>(value);
+				CMOption* o = (CMOption*)obj;
+				sdebug << "Setting value of " << o->GetName() << " to " << str << endl;
+				o->SetValue(str.c_str());
+			}
+		}
+	};
+
 	public ref class CMWrappedVariable : public CMWrappedIrpObject {
 	private:
 		IrpNodeType _ntype = IrpNodeType::None;
@@ -279,7 +303,7 @@ namespace IrpsimEngineWrapper
 	{
 	private:
 		CMIrpApplication *app = nullptr;
-		CMSimulation *sim = nullptr;
+		CMSimulation *currentSimulation = nullptr;
 
 		IrpObjectDictionary^ variableDictionary = gcnew IrpObjectDictionary();
 
@@ -296,6 +320,7 @@ namespace IrpsimEngineWrapper
 		IrpObjectCollection^ scriptList = gcnew IrpObjectCollection();
 		IrpObjectCollection^ categoryList = gcnew IrpObjectCollection();
 		IrpObjectCollection^ simulationList = gcnew IrpObjectCollection();
+		IrpObjectCollection^ optionsList = gcnew IrpObjectCollection();
 
 	public:
 
@@ -366,6 +391,16 @@ namespace IrpsimEngineWrapper
 			IrpObjectCollection^ get() { return categoryList; }
 		}
 
+		property IrpObjectCollection^ Options
+		{
+			IrpObjectCollection^ get() { return optionsList; }
+		}
+
+		property IrpObjectCollection^ Simulations
+		{
+			IrpObjectCollection^ get() { return simulationList; }
+		}
+
 		property LoadedFileCollection^ LoadedFiles
 		{		
 			LoadedFileCollection^ get() { return loadedFileList; }
@@ -398,9 +433,10 @@ namespace IrpsimEngineWrapper
 			Scenarios->Clear();
 			Scripts->Clear();
 			Categories->Clear();
+			Options->Clear();
 			LoadedFiles->Clear();
 			VariableDictionary->Clear();
-			app->DeleteSimulation(sim, 0);
+			Simulations->Clear();
 			app->ResetApplication();
 		}
 
@@ -444,6 +480,11 @@ namespace IrpsimEngineWrapper
 					i,
 					marshal_as<String^>(app->LoadedFile(i).c_str())));
 			}
+
+			CMOptions* options = app->Options();
+			n = options->Count();
+			for (unsigned i = 0; i < options->Count(); i++)
+				optionsList->Add(gcnew CMWrappedOption(options->At(i)));
 
 			for each (CMWrappedVariable^ wv in VariableDictionary->Values) 
 			{
@@ -496,14 +537,35 @@ namespace IrpsimEngineWrapper
 			app->UseScript(str.c_str());
 		}
 
+		void SetOption(String^ name, String^ value)
+		{
+			std::wstring cname = marshal_as<std::wstring>(name);
+			std::wstring cval = marshal_as<std::wstring>(value);
+			app->SetOption(cname.c_str(), cval.c_str());
+		}
+
+		String^ GetOption(String^ name)
+		{
+			std::wstring cname = marshal_as<std::wstring>(name);
+			sdebug << cname << endl;
+			return marshal_as<String^>(app->GetOption(cname.c_str()).c_str());
+		}
+
 		void RunSimulation()
 		{
-			if (sim==nullptr)
-				sim = app->CreateSimulation();
-			BOOL val = app->RunSimulation(sim);
+			currentSimulation = app->CreateSimulation();
+			if (currentSimulation == NULL)
+				return;
+			BOOL val = app->RunSimulation(currentSimulation);
 			sdebug << "Sim run result: " << val << endl;
 		}
 
-#pragma endregion
+		void AfterRunSimulation()
+		{
+			if (currentSimulation!=NULL)
+				simulationList->Add(gcnew CMWrappedSimulation(currentSimulation));
+		}
+
+		#pragma endregion
 	};
 }

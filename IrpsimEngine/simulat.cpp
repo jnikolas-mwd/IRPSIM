@@ -69,7 +69,7 @@ CMSimulation* CMSimulation::active_simulation = 0;
 CMSimulation::CMSimulation(CMIrpApplication* a) :
 pApp(a),
 script(0),
-options(a->Options()),
+options(*a->Options()),
 costvars(),
 outcomevars(),
 summaryvars(),
@@ -197,7 +197,7 @@ void CMSimulation::initialize()
 	long incsize = options.GetOptionLong(L"saveincrementsize")<<10;
 
 	accumulator = new CMAccumulatorArray(*timemachine,summaryvars.Count());
-	simarray = new CMSimulationArray(*timemachine,outcomevars.Count(),GetFileName().c_str(),incsize);
+	simarray = new CMSimulationArray(*timemachine,outcomevars.Count(),ntrials);
 
 	if (!simarray || simarray->Fail()) {
 		state |= sCantOpenBinaryFile;
@@ -206,7 +206,6 @@ void CMSimulation::initialize()
 		accumulator->AssignVariable(i,summaryvars[i]->GetName(),summaryvars[i]->GetSpecialType(),get_vardesc_state(summaryvars[i]));
 	for (i=0;i<outcomevars.Count() && simarray;i++)
 		simarray->AssignVariable(i,outcomevars[i]->GetName(),outcomevars[i]->GetSpecialType(),get_vardesc_state(outcomevars[i]));
-	simarray->DeleteFileOnClose(1);
 	set_variables_inuse(TRUE);
 	state |= sInitialized;
 }
@@ -230,9 +229,8 @@ void CMSimulation::Reset()
 	elapsedtime = 0;
 	timemachine->Reset();
 	if (simarray) {
-   	simarray->Reset();
-		simarray->DeleteFileOnClose(1);
-   }
+   		simarray->Reset();
+    }
 	if (accumulator) accumulator->Reset();
 	if (reliability) reliability->Reset();
 	state &= ~(sStopped | sRunning);
@@ -327,7 +325,7 @@ void CMSimulation::SetOption(const CMString& opname,const CMString& opval)
 
 void CMSimulation::get_data_from_options()
 {
-	m_strFileName = options.GetOption(L"simulationfile");
+	//m_strFileName = options.GetOption(L"simulationfile");
 	CMString simname  = options.GetOption(L"simulationname");
 	if (!simname.length()) simname = L"simulation";
 	ntrials = options.GetOptionLong(L"numtrials");
@@ -371,6 +369,8 @@ BOOL CMSimulation::Run()
 	
 	if (!(state&sInitialized))
 		initialize();
+
+	sdebug << "Running simulation " << GetName() << endl;
 
 	while ((trialno = timemachine->Count())<ntrials && !Fail() && !(state&(sStopped | sFromFile))) 
 	{
@@ -445,7 +445,7 @@ BOOL CMSimulation::Run()
 			//}
 		}
 	}
-	sdebug << state << endl;
+	sdebug << "Current state = " << state << endl;
 	state &= ~sRunning;
 	return !Fail();
 }

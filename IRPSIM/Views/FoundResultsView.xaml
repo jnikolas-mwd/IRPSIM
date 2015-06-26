@@ -7,19 +7,33 @@
         xmlns:ignore="http://www.ignore.com"
         mc:Ignorable="d ignore"
         DataContext="{Binding FoundResults, Source={StaticResource Locator}}"
-        d:DesignWidth="300" d:DesignHeight="300">
+        d:DesignWidth="500" d:DesignHeight="200">
     <UserControl.Resources>
-        <DataTemplate x:Key="test" DataType="{x:Type s:FoundInFileInfo}">
+        <DataTemplate x:Key="foundTemplate" DataType="{x:Type s:FoundInFileInfo}">
                 <Grid>
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition SharedSizeGroup="Col1" Width="100"/>
-                        <ColumnDefinition SharedSizeGroup="Col2" Width="*"/>
+                        <ColumnDefinition SharedSizeGroup="Col1" Width="200"/>
+                        <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" Text="{Binding FoundText}" Margin="0,0,10,0"/>
-                    <GridSplitter Grid.Column="0" Width="3"/>
-                    <TextBlock Grid.Column="1" Text="{Binding Path}"/>
+                    <TextBlock Grid.Column="0" Text="{Binding Path}" Margin="0,0,10,0"/>
+                    <TextBlock Grid.Column="1" Text="{Binding FoundText}"/>
                 </Grid>
         </DataTemplate>
     </UserControl.Resources>
-    <ListBox ItemsSource="{Binding FoundItems}" ItemTemplate="{StaticResource test}" Grid.IsSharedSizeScope="True"/>
+    <Grid Grid.IsSharedSizeScope="True">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition SharedSizeGroup="Col1" Width="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="Path"/>
+            <GridSplitter Width="2"/>
+            <TextBlock Text="Text" Grid.Column="1"/>
+        </Grid>
+        <ListBox Grid.Row="1" ItemsSource="{Binding FoundItems}" ItemTemplate="{StaticResource foundTemplate}"/>
+    </Grid>
 </UserControl>

@@ -48,7 +48,6 @@ static wofstream sdebug(L"debug_irpapp.txt");
 //template class _IRPCLASS CMPSSmallArray<CMVariable>;
 
 CMIrpApplication::CMIrpApplication() :
-options(),
 scenarios(),
 simulations(),
 outputvars(),
@@ -61,6 +60,7 @@ currentscenario(0),
 errorcode(0),
 vartypes()
 {
+	options = new CMOptions();
 	casesensitiveflag = CMString::set_case_sensitive(0);
 	skipwhitespaceflag = CMString::skip_whitespace(1);
     variables = new CMVariableCollection(1);
@@ -71,6 +71,7 @@ CMIrpApplication::~CMIrpApplication()
 {
 	ResetApplication();
     //CMVariable::SetCollectionContext(oldvariables);
+	delete options;
     delete variables;
 	CMString::set_case_sensitive(casesensitiveflag);
 	CMString::skip_whitespace(skipwhitespaceflag);
@@ -170,10 +171,10 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 			else if (token==L"options") {
 				defno++;
 				CMNotifier::Notify(CMNotifier::INFO, messageheader + L"options");
-				options.SetApplicationId(currfile);
-				options.SetApplicationIndex(defno);
+				options->SetApplicationId(currfile);
+				options->SetApplicationIndex(defno);
 				s->seekg(index);
-				*s >> options;
+				*s >> *options;
 			}
 			else if (token==L"intervals") {
 				defno++;
@@ -468,6 +469,11 @@ CMSimulation* CMIrpApplication::CreateSimulation()  //const wchar_t* pFileName)
 {
 	CMSimulation* newsim = NULL;
 
+	if (currentscript == NULL) {
+		CMNotifier::Notify(CMNotifier::ERROR, L"Cannot create simulation: No script selected");
+		return NULL;
+	}
+
 	try {
 		CMVariable::SetCollectionContext(variables);
 		if (!RunningSimulation()) {
@@ -495,7 +501,7 @@ void CMIrpApplication::DeleteSimulation(CMSimulation* pSim,int save)
 	try {
 		for (unsigned i=0;i<simulations.Count();i++) {
 			if (pSim==simulations[i]) {
-				CMString fname = pSim->GetFileName();
+				//CMString fname = pSim->GetFileName();
 				//if (save) pSim->Save();
 				simulations.DetachAt(i,1);
 				/*

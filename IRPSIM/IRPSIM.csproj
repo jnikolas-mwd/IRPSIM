@@ -117,6 +117,7 @@
     <Compile Include="ViewModels\DelegateCommand.cs" />
     <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="ViewModels\NotifyViewModel.cs" />
+    <Compile Include="ViewModels\OptionsViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -147,6 +148,9 @@
     </Compile>
     <Compile Include="Views\LoadedFilesView.xaml.cs">
       <DependentUpon>LoadedFilesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\OptionsView.xaml.cs">
+      <DependentUpon>OptionsView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -194,6 +198,10 @@
     </Page>
     <Page Include="Views\LoadedFilesView.xaml">
       <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\OptionsView.xaml">
+      <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>

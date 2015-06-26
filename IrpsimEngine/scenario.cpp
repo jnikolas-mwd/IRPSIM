@@ -111,7 +111,7 @@ wistream& CMScenario::read(wistream& s)
 	return s;
 }
 
-void CMScenario::Use(CMOptions& ops)
+void CMScenario::Use(CMOptions* ops)
 {
 	CMVariableIterator next;
 	CMVariable* v;
@@ -130,7 +130,7 @@ void CMScenario::Use(CMOptions& ops)
 		}
 	}
 	for (i=0;i<options.Count();i++)
-		ops.SetOption(options[i]->GetName(),options[i]->GetValue());
+		ops->SetOption(options[i]->GetName(),options[i]->GetValue());
 }
 
 

@@ -31,35 +31,31 @@ static wofstream sdebug("debug_simarray.txt");
 
 static const wchar_t* simid = L"simarray0001";
 
-CMSimulationArray::CMSimulationArray(const CMTimeMachine& t, unsigned nv, const wchar_t* name, long ss) :
-filename(name?name:L""),
+CMSimulationArray::CMSimulationArray(const CMTimeMachine& t, unsigned nv, unsigned numTrials) :
 time(t),
 beg(t[0].Begin()),
 end(t[0].End()),
 incunits(t.IncUnits()),
 inclength(t.IncLength()),
 nvars(nv),
-filecount(0),
-savetrials(0),
-savesize(0),
-file(0),
 array(0),
 key(0),
-fbuffer(0),
 vardesc(0),
-begindex(-1),
 state(0)
 {
 	periodlength = CMTime::Diff(end,beg,incunits,inclength) + 1;
-	SetSaveSize(ss);
 	vardesc = nvars ? new CMVSmallArray<CMVariableDescriptor>(nvars) : 0;
-	fbuffer = nvars ? new float[nvars] : 0;
-	wcscpy_s(head, 16, simid);
-	open_file();
+
+	if ((state&readonly) || !nvars || !periodlength || Fail())
+		return;
+
+	array = new CMVBigArray<float>(numTrials * periodlength * nvars);
+	if (!array)
+		state |= failbit;
 }
 
+/*
 CMSimulationArray::CMSimulationArray(const wchar_t* name) :
-filename(name?name:L""),
 time(CM_MONTH,1),
 array(0),
 key(0),
@@ -71,14 +67,15 @@ begindex(-1),
 state(0)
 {
 	state |= readonly;
-	file = new wfstream(name,ios::in|ios::out|IOS_BINARY);
+	//file = new wfstream(name,ios::in|ios::out|IOS_BINARY);
 	if (file->fail())
 		state |= failbit;
 	else
 		ReadBinary();
 }
+*/
 
-
+/*
 int CMSimulationArray::open_file()
 {
 	if (file)
@@ -106,19 +103,13 @@ int CMSimulationArray::open_file()
 	}
 	return (state & failbit);
 }
+*/
 
 CMSimulationArray::~CMSimulationArray()
 {
 	if (array) delete array;
 	if (key) delete key;
 	if (vardesc) delete vardesc;
-	if (fbuffer) delete [] fbuffer;
-	if (file) {
-   	delete file;
-	if (state&deletefileonclose)
-		removefile(filename);
-		  // remove((const wchar_t*)filename.c_str());  //***TODO: convert wchar_t* to char*
-   }
 }
 
 void CMSimulationArray::Reset()
@@ -126,12 +117,12 @@ void CMSimulationArray::Reset()
 	if (state & readonly)
 		return;
 	if (array) array->Reset(0);
-	filecount = 0;
+
 	if (key) delete key;
 	key = 0;
-	open_file();
 }
 
+/*
 void CMSimulationArray::WriteBinary(wostream& s)
 {
 	if (file && !file->fail() && !s.fail()) {
@@ -227,6 +218,7 @@ void CMSimulationArray::SetSaveSize(long ss)
 	if (!array)
 		state |= failbit;
 }
+*/
 
 unsigned CMSimulationArray::VariableIndex(const CMString& name) const
 {
@@ -261,6 +253,7 @@ void CMSimulationArray::SetVariableState(unsigned n,int aState,BOOL action)
 		vardesc->At(n).SetState(aState,action);
 }
 
+/*
 void CMSimulationArray::save_array_to_file()
 {
 	if (!array || !array->Count() || Fail() || !file || (state&readonly))
@@ -276,7 +269,7 @@ void CMSimulationArray::save_array_to_file()
 		file->write((const wchar_t*)&(array->At(i)), sizeof(float));
 	array->Reset();
 }
-
+*/
 /*
 void CMSimulationArray::Add(float val)
 {
@@ -291,10 +284,10 @@ void CMSimulationArray::AddAt(const CMTime& t,unsigned var,long trial,float val)
 {
 	if (!array || Fail()) return;
 	long per = CMTime::Diff(t,beg,incunits,inclength);
-	long index = trial*nvars*periodlength + per*nvars + var - filecount;
+	long index = trial*nvars*periodlength + per*nvars + var;
 	array->AddAt(index,val);
-	if (array->Count() >= savesize)
-		save_array_to_file();
+	//if (array->Count() >= savesize)
+		//save_array_to_file();
 }
 
 float CMSimulationArray::At(const CMTime& t,unsigned var,long trial,int usekey)
@@ -304,6 +297,7 @@ float CMSimulationArray::At(const CMTime& t,unsigned var,long trial,int usekey)
 	long per = CMTime::Diff(t,beg,incunits,inclength);
 	trial = (usekey && key) ? (key->At(trial)).Index() : trial;
 	long index = trial*nvars*periodlength + per*nvars + var;
+	/*
 	if (index < filecount) {
 		if (begindex<0 || index<begindex || index>=begindex+nvars) {
 			file->clear();
@@ -314,7 +308,8 @@ float CMSimulationArray::At(const CMTime& t,unsigned var,long trial,int usekey)
 		ret = fbuffer[var];
 	}
 	else if (array)
-		ret = array->At(index-filecount);
+	*/
+	ret = array->At(index);
 	return ret;
 }
 
@@ -341,7 +336,7 @@ float CMSimulationArray::Sum(const CMTime& time,unsigned var,long trial,int time
 
 float CMSimulationArray::Aggregate(const CMTime& time,const CMString& var,long trial,int resolution)
 {
-	unsigned index = VariableIndex(var);
+   unsigned index = VariableIndex(var);
    float ret;
    Aggregate(time,trial,resolution,&index,&ret,1);
    return ret;
@@ -424,7 +419,7 @@ CMTime CMSimulationArray::Summary(const CMTime& time,int resolution,unsigned* va
 long CMSimulationArray::Trials() const
 {
 	if (Fail() || !nvars || !periodlength) return 0;
-	return ( (filecount + (array ? array->Count() : 0)) / (periodlength*nvars) );
+	return ( ((array ? array->Count() : 0)) / (periodlength*nvars) );
 }
 
 long CMSimulationArray::GetPeriod(CMTime& b,CMTime& e,short& units,short& length) const
@@ -450,6 +445,7 @@ int CMSimulationArray::MakeKey(const CMTime& t,int var)
 	return (key != 0);
 }
 
+/*
 long CMSimulationArray::BinarySize() const
 {
 	long ret = HeaderSize() + filecount*sizeof(float);
@@ -457,4 +453,4 @@ long CMSimulationArray::BinarySize() const
 		ret += vardesc->At(i).BinarySize();
 	return ret;
 }
-
+*/

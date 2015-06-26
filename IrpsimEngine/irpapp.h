@@ -49,7 +49,7 @@ protected:
     CMScript* currentscript;
     CMScenario* currentscenario;
 	int errorcode;
-	CMOptions options;
+	CMOptions* options;
 	CMVariableTypes vartypes;
 	CMVariableCollection* oldvariables;
 	CMVariableCollection* variables;
@@ -100,8 +100,8 @@ public:
 	// Open an IRPSIM project, which is essentially a collection of files (vardef, scripts, etc.)
 	void OpenProject(const CMString& name);
 
-	CMOptions& Options() {return options;}
-	void SetOptions(const CMOptions& op);
+	CMOptions* Options() {return options;}
+	void SetOptions(const CMOptions* op);
 
 	CMString GetProjectFile() { return m_strProjectFile; }
 	
@@ -117,6 +117,9 @@ public:
 	CMScript* Script(unsigned short n) {return (n<scripts.Count()) ? scripts[n] : 0;}
 	CMScript* UseScript(const CMString& name);
 	CMScript* CurrentScript() {return currentscript;}
+
+	void SetOption(const CMString &name, const CMString& value) { options->SetOption(name, value); }
+	CMString GetOption(const CMString& name) { return options->GetOption(name); }
 
    unsigned short Categories() {return CMCategory::CategoryCount();}
    CMCategory* Category(unsigned short n) {return CMCategory::GetCategory(n);}

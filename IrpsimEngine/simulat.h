@@ -52,7 +52,7 @@ class _IRPCLASS CMSimulation : public CMIrpObject
 	//DWORD  dwThreadId;  // Id of simulation run thread.
 
 	short state;
-	CMString m_strFileName;
+	CMString mstrFileName;
 	CMString m_strProjectRoot;
 	CMString m_strOutputRoot;
 	long trialno;
@@ -101,7 +101,7 @@ public:
 	static CMSimulation* ActiveSimulation() {return active_simulation;}
 
 	//MString GetName() const {return simname;}
-	CMString GetFileName() const {return m_strFileName;}
+	//CMString GetFileName() const {return m_strFileName;}
 	CMString GetId() const { return loadtime.GetString(); }
 
 
@@ -148,12 +148,12 @@ public:
 
 inline int operator == (const CMSimulation& s1,const CMSimulation& s2)
 {
-	return s1.GetFileName() == s2.GetFileName();
+	return s1.GetName() == s2.GetName();
 }
 
 inline int operator < (const CMSimulation& s1,const CMSimulation& s2)
 {
-	return s1.GetFileName() < s2.GetFileName();
+	return s1.GetName() < s2.GetName();
 }
 
 #endif

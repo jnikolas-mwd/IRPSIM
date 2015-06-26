@@ -165,12 +165,13 @@ void CMOptions::SetDefaults()
 	}
 }
 */
-CMString CMOptions::GetOption(const CMString& option)
+CMString CMOptions::GetOption(const CMString& name)
 {
 	CMString ret;
-	CMOption* op = options.Find(option);
-	if (op)
-		ret = op->GetValue();
+	CMString _name(name);
+	_name.to_lower();
+	CMOption* op = options.Find(_name);
+	if (op) ret = op->GetValue();
 	return ret;
 }
 
@@ -208,7 +209,10 @@ CMOption* CMOptions::SetOption(const CMString& line, int id)
 
 CMOption* CMOptions::SetOption(const CMString& name, const CMString& value, int id)
 {
+	sdebug << "Setting option name=" << name << " value=" << value << " id=" << id << endl;
+
 	CMString nm = stripends(name);
+	nm.to_lower();
 	int len = nm.length();
 	if (len>maxwidth) maxwidth=len;
 	CMOption* op = options.Find(nm);

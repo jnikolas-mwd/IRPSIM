@@ -36,7 +36,7 @@ class _IRPCLASS CMOption : public CMIrpObject {
 public:
 	CMOption() : CMIrpObject() , value(L"") {}
 	CMOption(const CMString& n, const CMString& v, int app_id) : CMIrpObject(n, app_id) { SetValue(v); }
-	CMOption(const CMOption& o) : value(o.value) {name = o.name; app_id = o.app_id; }
+	CMOption(const CMOption& o) : CMIrpObject(o.name) { value= o.value; app_id = o.app_id; }
 	CMOption& operator = (const CMOption& o) { name = o.name; value = o.value; app_id = o.app_id; return *this; }
 //	int operator == (const CMOption& o) {return name==o.name;}
 //	int operator < (const CMOption& o) {return name<o.name;}

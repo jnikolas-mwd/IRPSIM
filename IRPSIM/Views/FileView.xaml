@@ -15,10 +15,12 @@
                      b:TextBoxBehavior.SelectedLine="{Binding SelectedLine, Mode=OneWay}"
                      b:TextBoxBehavior.SelectedCharacterIndex="{Binding SelectedCharacterIndex, Mode=OneWay}"
                      b:TextBoxBehavior.SearchText="{Binding SearchText, Mode=OneWay}"  
-                     VerticalScrollBarVisibility="Auto" 
+                     VerticalScrollBarVisibility="Auto"
+                     AcceptsReturn="True"
+                     AcceptsTab="True"
                      HorizontalScrollBarVisibility="Auto">
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="TextChanged" >
+             <i:Interaction.Triggers>
+                 <i:EventTrigger EventName="PreviewKeyDown" >
                     <cmd:EventToCommand Command="{Binding ModifiedCommand}"/>
                 </i:EventTrigger>
             </i:Interaction.Triggers>

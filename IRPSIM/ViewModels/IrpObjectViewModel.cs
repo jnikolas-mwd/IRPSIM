@@ -29,7 +29,8 @@ namespace IRPSIM.ViewModels
         }
 
         public String Name { get; set; }
-
+        
+        //public IrpObjectCollection Objects { get; set; }
         public ObservableCollection<CMWrappedIrpObject> Objects { get; set; }
 
         //public CollectionViewSource Collection { get; set; }
@@ -67,6 +68,8 @@ namespace IRPSIM.ViewModels
             _containers.Add(_scenarios = new IrpObjectContainer("Scenarios", _coreService.Scenarios));
             _containers.Add(_scripts = new IrpObjectContainer("Scripts", _coreService.Scripts));
             _containers.Add(new IrpObjectContainer("Categories", _coreService.Categories));
+           // _containers.Add(new IrpObjectContainer("Options", _coreService.Options));
+            _containers.Add(new IrpObjectContainer("Simulations", _coreService.Simulations));
         }
 
         private object _selectedObject;
