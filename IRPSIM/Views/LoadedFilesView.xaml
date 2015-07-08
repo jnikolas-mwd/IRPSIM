@@ -1,0 +1,47 @@
+﻿<UserControl x:Class="IRPSIM.Views.LoadedFilesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:scm="clr-namespace:System.ComponentModel;assembly=WindowsBase"
+             xmlns:viewmodel="clr-namespace:IRPSIM.ViewModels"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+             mc:Ignorable="d"
+             DataContext="{Binding IrpLoadedFileCollection, Source={StaticResource Locator}}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <CollectionViewSource x:Key="LoadedFilesCollection" Source="{Binding LoadedFiles}">
+            <CollectionViewSource.SortDescriptions>
+                <scm:SortDescription PropertyName="FileName" />
+            </CollectionViewSource.SortDescriptions>
+        </CollectionViewSource>
+    </UserControl.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+             <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Right">
+            <TextBlock Text="Find in Files:" Margin="0,0,5,0"  VerticalAlignment="Center"/>
+            <TextBox Width="100" Height="24" Text="{Binding SearchText}"/>
+            <Button Height="24" Margin="5,0,5,0" Command="{Binding FindInFilesCommand}">
+                <Button.Content>
+                    <Image Source="/Images/search.png" Width="12"/>
+                </Button.Content>
+            </Button>
+        </StackPanel>
+        <ListBox Grid.Row="1" SelectedItem="{Binding SelectedItem}" ItemsSource="{Binding Source={StaticResource LoadedFilesCollection}}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <cmd:EventToCommand Command="{Binding SelectFileCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding FileName}" Margin="10,0,3,0"/>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+     </Grid>
+</UserControl>

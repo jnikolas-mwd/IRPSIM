@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="IRPSIM.Views.DisplayView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:viewmodel="clr-namespace:IRPSIM.ViewModels"
+             xmlns:view="clr-namespace:IRPSIM.Views"
+             xmlns:ctrl="clr-namespace:IRPSIM.Controls"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
+             mc:Ignorable="d" 
+             DataContext="{Binding DisplayCollection, Source={StaticResource Locator}}"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <DataTemplate DataType="{x:Type viewmodel:FileViewModel}">
+            <view:FileView/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodel:SimulationViewModel}">
+            <view:SimulationView/>
+        </DataTemplate>
+
+        <Style x:Key="CloseStyle" TargetType="{x:Type Button}">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Width" Value="{Binding RelativeSource={RelativeSource Self}, Path=ActualHeight}" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Content" Value="X" />
+            <Setter Property="FontSize" Value="8" />
+         </Style>
+        
+        <Style x:Key="MarkModifiedStyle" TargetType="{x:Type TextBlock}">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Modified}" Value="True">
+                    <Setter Property="Text" Value="*"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
+        <DataTemplate x:Key="TabItemTemplate">
+            <StackPanel Orientation="Horizontal" Height="20">
+                <TextBlock Text="{Binding Name}"/>
+                <TextBlock Margin="0,0,0,0" Style="{StaticResource MarkModifiedStyle}"/>
+                <Button Width="16" Height="16" Margin="3,0,0,0" Style="{StaticResource CloseStyle}" Command="{Binding CloseMeCommand}"/>
+            </StackPanel>
+        </DataTemplate>
+        
+        <Style TargetType="{x:Type TabControl}">
+            <Setter Property="Background" Value="{DynamicResource {x:Static SystemColors.AppWorkspaceBrushKey}}"/>
+        </Style>
+    </UserControl.Resources>
+    <TabControl Grid.Row="0" TabStripPlacement="Top" ItemsSource="{Binding Models}" SelectedItem="{Binding SelectedItem}" ItemTemplate="{StaticResource TabItemTemplate}"/>
+</UserControl>

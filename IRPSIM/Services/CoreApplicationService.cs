@@ -49,9 +49,12 @@ namespace IRPSIM.Services
         event IrpSimulationProgressEventHandler IrpSimulationProgress;
         event IrpProjectLoadedEventHandler IrpProjectLoaded;
         event EventHandler IrpProjectClosed;
+        event EventHandler IrpSimulationStarting;
         event IrpSimulationCompletedEventHandler IrpSimulationCompleted;
  
         String ProjectFile { get; }
+
+        CMWrappedSimulation CurrentSimulation { get; }
 
         IrpObjectDictionary VariableDictionary { get; }
 
@@ -81,6 +84,12 @@ namespace IRPSIM.Services
 
         LoadedFileCollection LoadedFiles { get; }
 
+        void SetSaveArchive(bool value);
+
+        void SetSaveOutcomes(bool value);
+
+        void SetSaveSummary(bool value);
+        
         Boolean HasErrors { get; }
 
         String GetFilePath(int id);
@@ -126,6 +135,7 @@ namespace IRPSIM.Services
         public event IrpSimulationProgressEventHandler IrpSimulationProgress;
         public event IrpProjectLoadedEventHandler IrpProjectLoaded;
         public event EventHandler IrpProjectClosed;
+        public event EventHandler IrpSimulationStarting;
         public event IrpSimulationCompletedEventHandler IrpSimulationCompleted;
 
         public CoreApplicationService()
@@ -135,6 +145,8 @@ namespace IRPSIM.Services
         }
         
         public String ProjectFile { get { return _app.ProjectFile; } }
+
+        public CMWrappedSimulation CurrentSimulation { get { return _app.CurrentSimulation; } }
 
         public IrpObjectDictionary VariableDictionary { get { return _app.VariableDictionary; } }
 
@@ -163,6 +175,12 @@ namespace IRPSIM.Services
         public IrpObjectCollection Simulations { get { return _app.Simulations; } }
 
         public LoadedFileCollection LoadedFiles { get { return _app.LoadedFiles; } }
+
+        public void SetSaveArchive(bool value) { _app.SetSaveArchive(value); }
+
+        public void SetSaveOutcomes(bool value) { _app.SetSaveOutcomes(value); }
+
+        public void SetSaveSummary(bool value) { _app.SetSaveSummary(value); }
 
         private Boolean _hasErrors;
         public Boolean HasErrors { get { return _hasErrors; } }
@@ -195,6 +213,7 @@ namespace IRPSIM.Services
         public void RunSimulation()
         {
             _hasErrors = false;
+            if (IrpSimulationStarting != null) IrpSimulationStarting(this, EventArgs.Empty);
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += (s, e) => _app.RunSimulation();
             bw.RunWorkerCompleted += (s, e) => { _app.AfterRunSimulation(); if (IrpSimulationCompleted != null) IrpSimulationCompleted(this, new BoolEventArgs(true)); };

@@ -32,8 +32,8 @@
 //#include <mem.h>
 #include <ctype.h>
 
-#include <fstream>
-static wofstream sdebug(L"debug_savesim.txt");
+//#include <fstream>
+//static wofstream sdebug(L"debug_savesim.txt");
 
 CMSaveSimulation::CMSaveSimulation(CMSimulation& s,CMIrpApplication* a) :
 fout(0),
@@ -80,20 +80,10 @@ void CMSaveSimulation::get_data_from_simulation()
 	state = 0;
 	CMString str;
 
-	sdebug << "Output folder " << sim.GetOption(L"outputfolder") << endl;
-	sdebug << "Id " << sim.GetId() << endl;
-
 	_precision = sim.GetOptionInt(L"precision");
 	_costPrecision = sim.GetOptionInt(L"costprecision");
-	sdebug << "Precision = " << _precision << endl;
-	sdebug << "Cost Precision = " << _costPrecision << endl;
 
 	_accum->GetPeriod(outbeg,outend,outincunits,outincsteps);
-
-	sdebug << "outbeg=" << outbeg << endl;
-	sdebug << "outend=" << outend << endl;
-	sdebug << "outincunits=" << outincunits << endl;
-	sdebug << "outincsteps=" << outincsteps << endl;
 
 	_outtrials = sim.Trials();
 	trialbeg = 0;
@@ -176,7 +166,7 @@ float CMSaveSimulation::get_realization(const CMTime& t,unsigned var,long trial)
 CMTime CMSaveSimulation::get_realizations(const CMTime& tm,long trial)
 {
 	CMTime ret;
-   if (state & rCalendarAggregation)
+    if (state & rCalendarAggregation)
 		ret = array->Aggregate(tm,trial,outincunits,_aggindex,_aggresults,arrayindex.Count());
 	else
 		ret = array->Aggregate(tm,trial,outincsteps,_aggindex,_aggresults,arrayindex.Count());
@@ -221,7 +211,6 @@ CMTime CMSaveSimulation::get_realizations(const CMTime& tm,long trial)
 
 wofstream* CMSaveSimulation::open_file(const CMString& fname)
 {
-	sdebug << "Opening " << fname << endl;
 	if (fout)
 		delete fout;
 	fout = new wofstream(fname.c_str(), IOS_BINARY);
@@ -266,8 +255,6 @@ int CMSaveSimulation::Outcomes(const CMString& fname)
 
 	_aggresults = new float[arrayindex.Count()];
 	_aggindex = new unsigned[arrayindex.Count()];
-
-	sdebug << "Writing outcomes to " << fname << " array size = " << arrayindex.Count() << endl;
 
 	get_data_from_simulation();
 
@@ -328,8 +315,6 @@ int CMSaveSimulation::Summary(const CMString& fname)
 
 	long row = 0;
 
-	sdebug << "Writing summary file" << endl;
-
 	int oldformat = CMTime::SetOutputFormat(simincunits);
 	long nrows = 1 + summary_records;
 
@@ -337,7 +322,6 @@ int CMSaveSimulation::Summary(const CMString& fname)
 		double val;
 		unsigned varindex = accumindex[i]->GetIndex();
 		const wchar_t* vname = _accum->GetVariableName(varindex).c_str();
-		sdebug << vname << " cost var=" << accumindex[i]->IsCostVariable() << endl;
 		for (CMTime tm = outbeg; tm <= outend; tm.inc(simincsteps, simincunits), row++) {
 			output_item(OutSummary, vname, row, 0, maxnamelength, 0);
 			output_item(OutSummary, _wtof(tm.GetString(buffer, 128)), row, 1, fieldwidth, 0);

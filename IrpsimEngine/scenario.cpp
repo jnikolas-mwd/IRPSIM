@@ -24,6 +24,7 @@
 
 #include "cmlib.h"
 #include "token.h"
+#include "notify.h"
 
 #include <iomanip>
 
@@ -86,9 +87,15 @@ wistream& CMScenario::read(wistream& s)
 
 	int begin = 0;
 
+	BOOL bFoundSaveWrite = false;
+
 	while (!s.eof()) {
 		line.read_line(s);
 		line = stripends(line);
+
+		if (!bFoundSaveWrite && (line.contains(L"save") || line.contains(L"write")))
+			bFoundSaveWrite = TRUE;
+
 		if (line.is_null() || line[0]==L'*')
 			continue;
 		CMTokenizer next(line);
@@ -107,6 +114,9 @@ wistream& CMScenario::read(wistream& s)
 
 		AddEntry(first,next(L"\r\n"));
 	}
+
+	if (bFoundSaveWrite)
+		CMNotifier::Notify(CMNotifier::WARNING, L"Scenario " + GetName() + L": Use of 'save' and 'write' is deprecated");
 
 	return s;
 }

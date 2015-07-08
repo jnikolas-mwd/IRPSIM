@@ -4,13 +4,15 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:s="clr-namespace:IRPSIM.Services"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
         xmlns:ignore="http://www.ignore.com"
         mc:Ignorable="d ignore"
         DataContext="{Binding FoundResults, Source={StaticResource Locator}}"
         d:DesignWidth="500" d:DesignHeight="200">
     <UserControl.Resources>
         <DataTemplate x:Key="foundTemplate" DataType="{x:Type s:FoundInFileInfo}">
-                <Grid>
+            <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition SharedSizeGroup="Col1" Width="200"/>
                         <ColumnDefinition Width="*"/>
@@ -34,6 +36,12 @@
             <GridSplitter Width="2"/>
             <TextBlock Text="Text" Grid.Column="1"/>
         </Grid>
-        <ListBox Grid.Row="1" ItemsSource="{Binding FoundItems}" ItemTemplate="{StaticResource foundTemplate}"/>
+        <ListBox Grid.Row="1" ItemsSource="{Binding FoundItems}" SelectedItem="{Binding SelectedItem}" ItemTemplate="{StaticResource foundTemplate}">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDoubleClick">
+                    <cmd:EventToCommand Command="{Binding Path=SelectFoundItemCommand}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+        </ListBox>
     </Grid>
 </UserControl>

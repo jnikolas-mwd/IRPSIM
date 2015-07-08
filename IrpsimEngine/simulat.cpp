@@ -36,8 +36,9 @@
 #include "random.h"
 #include "cmlib.h"
 #include <time.h>
-#include <fstream>
-static wofstream sdebug("debug_simulat.txt");
+
+//#include <fstream>
+//static wofstream sdebug("debug_simulat.txt");
 
 using namespace std;
 
@@ -65,6 +66,9 @@ L"randomseed",
 */
 
 CMSimulation* CMSimulation::active_simulation = 0;
+BOOL CMSimulation::_saveArchive = TRUE;
+BOOL CMSimulation::_saveOutcomes = TRUE;
+BOOL CMSimulation::_saveSummary = TRUE;
 
 CMSimulation::CMSimulation(CMIrpApplication* a) :
 pApp(a),
@@ -84,7 +88,6 @@ state(0)
 //hRunEvent(NULL),
 //dwThreadId(0L)
 {
-	sdebug << "CMSimulation constructor" << endl;
 	loadtime.SetOutputFormat(CMTime::YYYYMMDDHHMMSS);
 	timemachine = new CMTimeMachine(CMTime::StringToTimeUnit(options.GetOption(L"siminterval")), 1);
 	m_strProjectRoot = extractpath(a->GetProjectFile());
@@ -93,7 +96,6 @@ state(0)
 
 CMSimulation::~CMSimulation()
 {
-	sdebug << "Deleting" << endl;
 	set_variables_inuse(FALSE);
 	if (timemachine) delete timemachine;
 	if (simarray) 	  delete simarray;
@@ -109,8 +111,6 @@ void CMSimulation::initialize()
    unsigned short i;
 
 	//tempfile = createtempfile(L"irp",0);
-
-   sdebug << "Initializing" << endl;
 
 	get_data_from_options();
 	ntrials = options.GetOptionLong(L"numtrials");
@@ -177,12 +177,11 @@ void CMSimulation::initialize()
 	while ((v=iter())!=0) {
 		if (v->GetState(CMVariable::vsSystem)==TRUE)
       		continue;
-		if (v->GetState(CMVariable::vsSelected)==TRUE) {
+		if (v->GetState(CMVariable::vsSelected|CMVariable::vsSaveOutcomes) == TRUE) {    /*TODO This used to be GetState(CMVariable::vsSelected*/
+			outcomevars.Add(v);
 			summaryvars.Add(v);
 			if (v->IsType(L"cost"))
 				costvars.Add(v);
-			if (v->GetState(CMVariable::vsSaveOutcomes)==TRUE)
-				outcomevars.Add(v);
 		}
 	}
 
@@ -342,8 +341,6 @@ void CMSimulation::get_data_from_options()
 
     name = simname + L" " + loadtime.GetString();
 
-	sdebug << "Output root=" << m_strOutputRoot << endl;
-
    //if (!simname.length()) simname = L"<no name>";
 	randomseed = options.GetOptionLong(L"randomseed");
 	if (randomseed<0) randomseed=0;
@@ -369,8 +366,6 @@ BOOL CMSimulation::Run()
 	
 	if (!(state&sInitialized))
 		initialize();
-
-	sdebug << "Running simulation " << GetName() << endl;
 
 	while ((trialno = timemachine->Count())<ntrials && !Fail() && !(state&(sStopped | sFromFile))) 
 	{
@@ -412,113 +407,65 @@ BOOL CMSimulation::Run()
 		trialno--;
 		if (pApp) {
 			CMString fileName;
-			fileName = m_strOutputRoot + L"\\archive-" + GetId() + L".zip";
-			CMNotifier::Notify(CMNotifier::LOGTIME, L"Writing input archive to " + fileName);
 
-			HZIP hz = CreateZip(fileName.c_str(), 0);
-
-			for (int i = 0; i < pApp->LoadedFilesCount(); i++)
+			if (_saveArchive)
 			{
-				fileName = pApp->LoadedFile(i);
-				ZipAdd(hz, strippath(fileName).c_str(), fileName.c_str());
+				fileName = m_strOutputRoot + L"\\archive-" + GetId() + L".zip";
+				CMNotifier::Notify(CMNotifier::LOGTIME, L"Writing archive to " + fileName);
+
+				HZIP hz = CreateZip(fileName.c_str(), 0);
+
+				wchar_t* tempFileName = _wtempnam(L".\\", L"irpsim_temp");
+				wofstream os(tempFileName);
+
+				os << L"Simulation: " << GetName() << endl;
+				os << pApp->GetVersionInfo() << endl;
+				if (pApp->CurrentScript() != NULL)
+					os << L"Using Script " << pApp->CurrentScript()->GetName() << endl;
+
+				os << endl << this->options << endl << endl;
+
+				os << L"#SCENARIO OutputVariables" << endl;
+
+				for (unsigned i = 0; i < this->accumulator->Variables(); i++)
+					os << this->accumulator->GetVariableName(i) << endl;
+
+				os << "#END" << endl;
+
+				os.close();
+
+				ZipAdd(hz, L"README.TXT", tempFileName);
+
+				if (tempFileName) {
+					_wremove(tempFileName);
+					free(tempFileName);
+				}
+
+				for (int i = 0; i < pApp->LoadedFilesCount(); i++)
+				{
+					fileName = pApp->LoadedFile(i);
+					ZipAdd(hz, strippath(fileName).c_str(), fileName.c_str());
+				}
+
+				CloseZip(hz);
 			}
 
-			CloseZip(hz);
-
-	
-			//if (options.GetOption(L"autooutcomes") == L"yes") { **TODO ALWAYS write outcomes and summary
-				//fileName = options.GetOption(L"outcomefile");
-				//if (fileName.length() == 0) fileName = L"Outcomes";
+			if (_saveOutcomes)
+			{
 				fileName = m_strOutputRoot + L"\\outcomes-" + GetId() + L".csv";
-				sdebug << "Outcome file " << fileName << endl;
 				CMNotifier::Notify(CMNotifier::LOGTIME, L"Writing Outcomes to " + fileName);
 				pApp->WriteOutcomes(fileName, this);
-			//}
-			//if (options.GetOption(L"autosummary") == L"yes") { 
-				//fileName = options.GetOption(L"summaryfile");
-				//if (fileName.length() == 0) fileName = L"Summary";
-				//fileName = m_strOutputRoot + L"\\" + fileName + L"-" + GetId() + L".csv";
+			}
+
+			if (_saveSummary)
+			{
 				fileName = m_strOutputRoot + L"\\summary-" + GetId() + L".csv";
-				sdebug << "Summary file " << fileName << endl;
 				CMNotifier::Notify(CMNotifier::LOGTIME, L"Writing Summary to " + fileName);
 				pApp->WriteSummary(fileName, this);
-			//}
+			}
 		}
 	}
-	sdebug << "Current state = " << state << endl;
 	state &= ~sRunning;
 	return !Fail();
 }
 
-/*
-
-Old, single-threaded version of Run()  
-	 
-void CMSimulation::Run()
-{
-   unsigned i;
-	if (state&sFromFile)
-		return;
-
-	if (!(state&sInitialized))
-		initialize();
-	
-	if ((ULONG)begintime == CM_BIGTIME) {
-		RandomVariable::randomize(randomseed);
-		timemachine->Reset();
-		begintime = CMTime();
-		elapsedtime = 0;
-	}
-
-	if (pApp && (pApp->RunningSimulation()>=0))
-		return;
-
-   active_simulation = this;
-
-   time_t inittime = time(NULL);
-   long initelapsed = elapsedtime;
-
-	while ((trialno=timemachine->Count())<ntrials && !Fail() && !(state&(sStopped|sFromFile))) {
-		int atbeginning = timemachine->AtBeginning();
-
-		if (atbeginning && (state&sPaused))
-			break;
-
-		state |= sRunning;
-
-		if (atbeginning) {
-			CMVariable::ResetTrial();
-			if (trialno==0 && pApp)
-				pApp->LogMessage(CMString("Start Simulation ") + GetName(),1);
-		}
-
-		if (script) script->Run(timemachine);
-
-		for (i=0;i<outcomevars.Count();i++)
-			simarray->AddAt(*timemachine,i,trialno,(float)outcomevars[i]->GetValue(timemachine));
-		for (i=0;i<summaryvars.Count();i++)
-			accumulator->AddAt(*timemachine,i,summaryvars[i]->GetValue(timemachine));
-
-		if (reliability) reliability->Process(timemachine);
-
-		elapsedtime = initelapsed + time(NULL) - inittime;
-		if (pApp) pApp->ProcessWhileRunning(this);
-		timemachine->Step();
-	}
-	elapsedtime = initelapsed + time(NULL) - inittime;
-	if (trialno >= ntrials) {
-		state |= sStopped;
-		trialno--;
-		if (pApp) {
-			CMString msg("End Simulation ");
-			pApp->LogMessage(msg+GetName(),1);
-			if (options.GetOption("autooutcomes")=="yes")
-				pApp->WriteOutcomes(options.GetOption("outcomefile"),this);
-			if (options.GetOption("autosummary")=="yes")
-				pApp->WriteSummary(options.GetOption("summaryfile"),this);
-		}
-	}
-	state &= ~sRunning;
-}
-
-*/

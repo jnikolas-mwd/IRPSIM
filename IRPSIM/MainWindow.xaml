@@ -4,7 +4,7 @@
         xmlns:viewmodel="clr-namespace:IRPSIM.ViewModels"
         xmlns:view="clr-namespace:IRPSIM.Views"
         DataContext="{Binding Main, Source={StaticResource Locator}}"
-        Title="{Binding ProjectTitle}" Height="400" Width="600">
+        Title="{Binding ProjectTitle}" Height="400" Width="600" WindowState="Maximized">
     <Window.Resources>
         <Style TargetType="{x:Type ProgressBar}">
             <Style.Triggers>
@@ -17,6 +17,7 @@
     <Window.InputBindings>
         <KeyBinding Modifiers="Control" Key="P" Command="{Binding Main.ProjectOpenCommand, Source={StaticResource Locator}}" />
         <KeyBinding Modifiers="Control" Key="O" Command="{Binding DisplayCollection.FileOpenCommand, Source={StaticResource Locator}}" />
+        <KeyBinding Modifiers="Control" Key="S" Command="{Binding DisplayCollection.FileSaveCommand, Source={StaticResource Locator}}" />
     </Window.InputBindings>    
     <DockPanel>
         <view:MenuView DockPanel.Dock="Top"/>
@@ -27,8 +28,8 @@
         </StatusBar>
          <Grid DockPanel.Dock="Bottom">
                <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*"/>
@@ -37,13 +38,13 @@
             </Grid.RowDefinitions>
             <TabControl TabStripPlacement="Bottom" Grid.Column="0" Grid.Row="0">
                 <TabItem Header="Objects">
-                    <view:ObjectView x:Name="objectView"/>
+                    <view:ObjectView x:Name="objectView" Width="Auto"/>
                 </TabItem>
                 <TabItem Header="Options">
-                    <view:OptionsView x:Name="optionsView"/>
+                    <view:OptionsView x:Name="optionsView" Width="Auto"/>
                 </TabItem>
                 <TabItem Header="Files">
-                    <view:LoadedFilesView x:Name="loadedFilesView"/>
+                    <view:LoadedFilesView x:Name="loadedFilesView" Width="Auto"/>
                 </TabItem>
             </TabControl>
              <GridSplitter Grid.Column="0" Width="3"/>

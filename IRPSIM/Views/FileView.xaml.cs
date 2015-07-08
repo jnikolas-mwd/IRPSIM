@@ -1,6 +1,8 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
 using System.Diagnostics;
+using IRPSIM.ViewModels;
+using System.Windows.Input;
 
 namespace IRPSIM.Views
 {
@@ -16,6 +18,23 @@ namespace IRPSIM.Views
         {
             InitializeComponent();
         }
- 
+
+        private void textbox_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            FileViewModel vm = DataContext as FileViewModel;
+            if (vm == null)
+                return;
+
+            if (e.Key == Key.Back || e.Key == Key.Space || e.Key == Key.Return)
+                vm.Modified = true;
+        }
+
+        private void textbox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            FileViewModel vm = DataContext as FileViewModel;
+            if (vm == null)
+                return;
+             vm.Modified = true;
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,46 @@ using IrpsimEngineWrapper;
 
 namespace IRPSIM.ViewModels
 {
+    public class SimulationOption : ViewModelBase
+    {
+        public SimulationOption(string title, string optionName)
+        {
+            Name = optionName;
+            Title = title;
+        }
+
+        public static ICoreApplicationService CoreService { get; set; }
+
+        public string Name { get; set; }
+
+        public string Title {get; set;}
+
+        public string Value
+        {
+            get { return CoreService.GetOption(Name); }
+            set { CoreService.SetOption(Name, value); }
+        }
+    }
+
+    public class SimulationTextOption : SimulationOption
+    {
+        public SimulationTextOption(string title, string optionName) 
+            : base(title, optionName)
+        {
+        }
+    }
+
+    public class SimulationSelectOption : SimulationOption
+    {
+        public SimulationSelectOption(string title, string optionName, string [] items)
+            : base(title, optionName)
+        {
+            Items = items;
+        }
+
+        public string[] Items { get; set; }
+    }
+
     public class OptionsViewModel : ViewModelBase
     {
         private ICoreApplicationService _coreService;
@@ -17,34 +58,39 @@ namespace IRPSIM.ViewModels
             : base()
         {
             _coreService = coreService;
-            //_coreService.IrpProjectLoaded += onProjectLoaded;
+            SimulationOption.CoreService = coreService;
+            Options = new ObservableCollection<SimulationOption>();
+            _coreService.IrpProjectLoaded += onProjectLoaded;
         }
 
+        void onProjectLoaded(object sender, BoolEventArgs e)
+        {
+            Options.Clear();
+            Options.Add(new SimulationTextOption("Simulation Name", "simulationname"));
+            Options.Add(new SimulationTextOption("Output Folder", "outputfolder"));
+            Options.Add(new SimulationTextOption("Number of Trials", "numtrials"));
+            Options.Add(new SimulationSelectOption("Precision", "precision", new string [] {"0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"}));
+            Options.Add(new SimulationSelectOption("Cost Precision", "costprecision", new string[] { "0", "2" }));
+            Options.Add(new SimulationTextOption("Simulation Begin", "simbegin"));
+            Options.Add(new SimulationTextOption("Simulation End", "simend"));
+            Options.Add(new SimulationSelectOption("Simulation Interval", "siminterval", new string [] {"annual", "monthly", "weekly", "daily"}));
+            Options.Add(new SimulationTextOption("Trace Begin", "tracebegin"));
+            Options.Add(new SimulationTextOption("Trace End", "traceend"));
+            Options.Add(new SimulationTextOption("Trace Start", "tracestart"));
+            Options.Add(new SimulationSelectOption("Trace Mode", "tracemode", new string [] {"static" , "dynamic"}));
+            Options.Add(new SimulationSelectOption("Year End", "yearend", new string [] {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"}));
+            Options.Add(new SimulationTextOption("Random Seed", "randomseed"));
+        }
+
+        /*
         public IrpObjectCollection Options
         {
             get { return _coreService.Options; }
         }
+        */
 
-        private string _autoarchive;
-        public string AutoArchive 
-        {
-            get { return getOption("autoarchive"); }
-            set { setOption("AutoArchive", "autoarchive", ref _autoarchive, value);}
-        }
+        public ObservableCollection<SimulationOption> Options { get; set; }
 
-        private string _autooutcomes;
-        public string AutoOutcomes
-        {
-            get { return getOption("autooutcomes"); }
-            set { setOption("AutoOutcomes", "autooutcomes", ref _autooutcomes, value); }
-        }
-
-        private string _autosummary;
-        public string AutoSummary
-        {
-            get { return getOption("autosummary"); }
-            set { setOption("AutoSummary", "autosummary", ref _autosummary, value); }
-        }
 
         private string _outputfolder;
         public string OutputFolder

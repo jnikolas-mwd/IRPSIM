@@ -101,11 +101,11 @@
 		vardesc(0),
 		state(0)
 	{
-		periodlength = CMTime::Diff(end, beg, incunits, inclength) + 1;
+		_timesteps = CMTime::Diff(end, beg, incunits, inclength) + 1;
 		if (end<beg)
 			state |= failbit;
-		else if (periodlength>0 && nvars > 0){
-			long sz = periodlength*nvars;
+		else if (_timesteps>0 && nvars > 0){
+			long sz = _timesteps*nvars;
 			array = new CMVBigArray<accumulator>(sz);
 			for (long i = 0; i < sz; i++)
 				array->Add(accumulator());
@@ -174,39 +174,34 @@
 		count++;
 	}
 
-	double CMAccumulatorArray::Mean(const CMTime& t, unsigned var) const
+	double CMAccumulatorArray::Mean(unsigned index, unsigned var) const
 	{
-		if (!array) return 0;
-		long per = CMTime::Diff(t, beg, incunits, inclength);
-		return array->At(per*nvars + var).Mean(Trials());
+		if (!array || index >= _timesteps) return 0;
+		return array->At(index*nvars + var).Mean(Trials());
 	}
 
-	double CMAccumulatorArray::StdDev(const CMTime& t, unsigned var) const
+	double CMAccumulatorArray::StdDev(unsigned index, unsigned var) const
 	{
-		if (!array) return 0;
-		long per = CMTime::Diff(t, beg, incunits, inclength);
-		return array->At(per*nvars + var).StdDev(Trials());
+		if (!array || index >= _timesteps) return 0;
+		return array->At(index*nvars + var).StdDev(Trials());
 	}
 
-	double CMAccumulatorArray::Variance(const CMTime& t, unsigned var) const
+	double CMAccumulatorArray::Variance(unsigned index, unsigned var) const
 	{
-		if (!array) return 0;
-		long per = CMTime::Diff(t, beg, incunits, inclength);
-		return array->At(per*nvars + var).Variance(Trials());
+		if (!array || index >= _timesteps) return 0;
+		return array->At(index*nvars + var).Variance(Trials());
 	}
 
-	double CMAccumulatorArray::Min(const CMTime& t, unsigned var) const
+	double CMAccumulatorArray::Min(unsigned index, unsigned var) const
 	{
-		if (!array) return 0;
-		long per = CMTime::Diff(t, beg, incunits, inclength);
-		return array->At(per*nvars + var).Min();
+		if (!array || index >= _timesteps) return 0;
+		return array->At(index*nvars + var).Min();
 	}
 
-	double CMAccumulatorArray::Max(const CMTime& t, unsigned var) const
+	double CMAccumulatorArray::Max(unsigned index, unsigned var) const
 	{
-		if (!array) return 0;
-		long per = CMTime::Diff(t, beg, incunits, inclength);
-		return array->At(per*nvars + var).Max();
+		if (!array || index >= _timesteps) return 0;
+		return array->At(index*nvars + var).Max();
 	}
 
 	long CMAccumulatorArray::GetPeriod(CMTime& b, CMTime& e, CMTIMEUNIT& units, int& length) const
@@ -215,7 +210,7 @@
 		e = end;
 		units = incunits;
 		length = inclength;
-		return periodlength;
+		return _timesteps;
 	}
 
 	unsigned CMAccumulatorArray::VariableIndex(const CMString& name) const
@@ -236,7 +231,7 @@
 		s.write((const wchar_t*)&inclength, sizeof(inclength));
 		for (unsigned i = 0; i < nvars; i++)
 			vardesc->At(i).WriteBinary(s);
-		for (long j = 0; j < periodlength*nvars; j++)
+		for (unsigned j = 0; j < _timesteps*nvars; j++)
 			s << array->At(j);
 		return s;
 	}
@@ -253,16 +248,16 @@
 		end.Read(s, 1);
 		s.read((wchar_t*)&incunits, sizeof(incunits));
 		s.read((wchar_t*)&inclength, sizeof(inclength));
-		periodlength = CMTime::Diff(end, beg, incunits, inclength) + 1;
-		if (periodlength > 0 && nvars > 0) {
-			array = new CMVBigArray<accumulator>(periodlength*nvars);
+		_timesteps = CMTime::Diff(end, beg, incunits, inclength) + 1;
+		if (_timesteps > 0 && nvars > 0) {
+			array = new CMVBigArray<accumulator>(_timesteps*nvars);
 			vardesc = new CMVSmallArray<CMVariableDescriptor>(nvars);
 			for (unsigned i = 0; i < nvars; i++) {
 				CMVariableDescriptor vd;
 				vd.ReadBinary(s);
 				vardesc->AddAt(i, vd);
 			}
-			for (long j = 0; j < periodlength*nvars; j++)
+			for (unsigned j = 0; j < _timesteps*nvars; j++)
 				s >> array->At(j);
 		}
 		return s;
@@ -273,5 +268,5 @@
 		long ret = 2 * CMTime::BinarySize() + 3 * sizeof(short)+sizeof(long);
 		for (unsigned i = 0; i < nvars; i++)
 			ret += vardesc->At(i).BinarySize();
-		return ret + periodlength*nvars*accumulator::BinarySize();
+		return ret + _timesteps*nvars*accumulator::BinarySize();
 	}

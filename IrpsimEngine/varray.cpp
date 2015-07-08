@@ -23,8 +23,8 @@
 #include <iomanip>
 #include <stdlib.h>
 
-#include <fstream>
-static wofstream sdebug("debug_varray.txt");
+//#include <fstream>
+//static wofstream sdebug("debug_varray.txt");
 
 CMVArrayIterator::CMVArrayIterator(CMVArray* v) :
 CMIrpObjectIterator(v),
@@ -126,7 +126,6 @@ double CMVArray::evaluate(CMTimeMachine* t,int index1,int index2)
 		if (array[index].e != NULL) {
 			return array[index].e->Evaluate(t);
 		}
-		//sdebug << GetName() << " at " << index1 << " " << index2 << " evaluates to " << array[index].dVal << endl;
 		return array[index].dVal;
 	}
 	return 0;

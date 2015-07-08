@@ -9,8 +9,8 @@
 #include <defines.h>
 #include <msclr\marshal_cppstd.h>
 
-#include <fstream>
-static wofstream sdebug("debug_wrapper.txt");
+//#include <fstream>
+//static wofstream sdebug("debug_wrapper.txt");
 
 using namespace System;
 using namespace System::Collections;
@@ -94,7 +94,8 @@ namespace IrpsimEngineWrapper
 			long get() { return obj->GetApplicationIndex(); }
 		}
 
-		property bool Selected
+		/*
+		virtual property bool Selected
 		{
 			bool get() { return _selected; }
 			void set(bool value) {
@@ -104,6 +105,7 @@ namespace IrpsimEngineWrapper
 				}
 			}
 		}
+		*/
 
 		property bool Chosen
 		{
@@ -152,7 +154,6 @@ namespace IrpsimEngineWrapper
 			{
 				std::wstring str = marshal_as<std::wstring>(value);
 				CMOption* o = (CMOption*)obj;
-				sdebug << "Setting value of " << o->GetName() << " to " << str << endl;
 				o->SetValue(str.c_str());
 			}
 		}
@@ -160,6 +161,7 @@ namespace IrpsimEngineWrapper
 
 	public ref class CMWrappedVariable : public CMWrappedIrpObject {
 	private:
+		bool _saveOutcomes = false;
 		IrpNodeType _ntype = IrpNodeType::None;
 		Collection<CMWrappedVariable^>^ _associatedVariables = gcnew Collection<CMWrappedVariable^>();
 	public:
@@ -205,6 +207,23 @@ namespace IrpsimEngineWrapper
 			BOOL get() { return ((CMVariable*)UnmanagedObject)->IsRegional(); }
 		}
 
+		property bool SaveOutcomes 
+		{
+			bool get() { return _saveOutcomes; }
+			void set(bool value) {
+				((CMVariable*)obj)->SetState(CMVariable::vsSelected | CMVariable::vsSaveOutcomes, value);
+				if (_saveOutcomes != value) {
+					_saveOutcomes = value;
+					OnPropertyChanged(L"SaveOutcomes");
+				}
+			}
+		}
+
+		void ToggleSelected()
+		{
+			SaveOutcomes = !SaveOutcomes;
+		}
+
 		void AddAssociatedVariable(CMWrappedVariable^ v)
 		{
 			//sdebug << "Adding associated variable to " << UnmanagedObject->GetName() << " " << v->UnmanagedObject->GetName() << endl;
@@ -227,11 +246,92 @@ namespace IrpsimEngineWrapper
 		}
 	};
 
+	public ref class CMVariableSummary
+	{
+	private:
+		double _mean, _min, _max, _stderr;
+
+	public:
+		CMVariableSummary() {}
+		CMVariableSummary(double mean, double min, double max, double se) : _mean(mean), _min(min), _max(max), _stderr(se) {}
+
+		property double Mean
+		{
+			double get() { return _mean; }
+			void set(double value) { _mean = value; }
+		}
+
+		property double Minimum
+		{
+			double get() { return _min; }
+			void set(double value) { _min = value; }
+		}
+
+		property double Maximum
+		{
+			double get() { return _max; }
+			void set(double value) { _max = value; }
+		}
+
+		property double StandardError
+		{
+			double get() { return _stderr; }
+			void set(double value) { _stderr = value; }
+		}
+	};
+
 	public ref class CMWrappedSimulation : public CMWrappedIrpObject 
 	{
+	private:
+		List<String^>^ _variables = gcnew List<String^>();
+		List<CMWrappedOption^>^ _options = gcnew List<CMWrappedOption^>();
 	public:
 		CMWrappedSimulation(CMSimulation* s) : CMWrappedIrpObject(s)
 		{
+			CMAccumulatorArray *accum = s->Accumulator();
+			for (unsigned i = 0; i < accum->Variables(); i++) 
+				_variables->Add(gcnew String(accum->GetVariableName(i).c_str()));
+			const CMOptions& options = s->GetOptions();
+			for (unsigned i = 0; i < options.Count(); i++)
+				_options->Add(gcnew CMWrappedOption(options.At(i)));
+		}
+
+		List<CMVariableSummary^>^ GetSummaries(String^ variableName)
+		{
+			CMSimulation* sim = (CMSimulation*)obj;
+			CMAccumulatorArray* accumulator = sim->Accumulator();
+			std::wstring _variableName = marshal_as<std::wstring>(variableName);
+			int variableindex = accumulator->VariableIndex(_variableName.c_str());
+
+			List<CMVariableSummary^>^ list = gcnew List<CMVariableSummary^>();
+
+			unsigned timesteps = accumulator->TimeSteps();
+
+			for (unsigned i = 0; i < timesteps; i++) 
+			{
+				CMVariableSummary^ summary = gcnew CMVariableSummary(accumulator->Mean(i, variableindex),
+					accumulator->Min(i, variableindex),
+					accumulator->Max(i, variableindex),
+					accumulator->StdDev(i, variableindex));
+				list->Add(summary);
+			}
+
+			return list;
+		}
+
+		property List<String^>^ Variables
+		{
+			List<String^>^ get() { return _variables; }
+		}
+
+		property List<CMWrappedOption^>^ Options
+		{
+			List<CMWrappedOption^>^ get() { return _options; }
+		}
+
+		property int TimeSteps
+		{
+			int get() { return ((CMSimulation*)obj)->Accumulator()->TimeSteps(); }
 		}
 	};
 
@@ -304,6 +404,7 @@ namespace IrpsimEngineWrapper
 	private:
 		CMIrpApplication *app = nullptr;
 		CMSimulation *currentSimulation = nullptr;
+		CMWrappedSimulation^ currentWrappedSimulation = nullptr;
 
 		IrpObjectDictionary^ variableDictionary = gcnew IrpObjectDictionary();
 
@@ -336,7 +437,12 @@ namespace IrpsimEngineWrapper
 			String^ get() { return marshal_as<String^>(app->GetProjectFile().c_str()); }
 		}
 
-		property IrpObjectDictionary^ VariableDictionary
+		property CMWrappedSimulation^ CurrentSimulation
+		{
+			CMWrappedSimulation^ get() { return currentWrappedSimulation; }
+		}
+
+	    property IrpObjectDictionary^ VariableDictionary
 		{
 			IrpObjectDictionary^ get() { return variableDictionary; }
 		}
@@ -410,6 +516,12 @@ namespace IrpsimEngineWrapper
 
 
 #pragma region Methods
+
+		void SetSaveArchive(bool value) { CMSimulation::SetSaveArchive(value); }
+
+		void SetSaveOutcomes(bool value) { CMSimulation::SetSaveOutcomes(value); }
+
+		void SetSaveSummary(bool value) { CMSimulation::SetSaveSummary(value); }
 
 		void OpenProject(String^ fileName)
 		{
@@ -527,7 +639,7 @@ namespace IrpsimEngineWrapper
 			for each (CMWrappedVariable^ var in VariableDictionary->Values)
 			{
 				CMVariable* v = (CMVariable*)var->UnmanagedObject;
-				var->Selected = (v->GetState() & CMVariable::vsSelected) ? true : false;
+				var->SaveOutcomes = (v->GetState() & CMVariable::vsSaveOutcomes) ? true : false;
 			}
 		}
 
@@ -547,7 +659,6 @@ namespace IrpsimEngineWrapper
 		String^ GetOption(String^ name)
 		{
 			std::wstring cname = marshal_as<std::wstring>(name);
-			sdebug << cname << endl;
 			return marshal_as<String^>(app->GetOption(cname.c_str()).c_str());
 		}
 
@@ -556,14 +667,16 @@ namespace IrpsimEngineWrapper
 			currentSimulation = app->CreateSimulation();
 			if (currentSimulation == NULL)
 				return;
+			
 			BOOL val = app->RunSimulation(currentSimulation);
-			sdebug << "Sim run result: " << val << endl;
 		}
 
 		void AfterRunSimulation()
 		{
-			if (currentSimulation!=NULL)
-				simulationList->Add(gcnew CMWrappedSimulation(currentSimulation));
+			if (currentSimulation != NULL) {
+				currentWrappedSimulation = gcnew CMWrappedSimulation(currentSimulation);
+				simulationList->Add(currentWrappedSimulation);
+			}
 		}
 
 		#pragma endregion

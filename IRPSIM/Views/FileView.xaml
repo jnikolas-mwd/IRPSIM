@@ -4,36 +4,45 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
-        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"  
-        xmlns:b="clr-namespace:IRPSIM.Behaviors"
+        xmlns:cmd="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform" 
+        xmlns:ctrl="clr-namespace:IRPSIM.Controls"
         xmlns:ignore="http://www.ignore.com"
         mc:Ignorable="d ignore"
         d:DesignWidth="400" d:DesignHeight="400">
-     <Grid>
-        <TextBox x:Name="textbox"
+    <UserControl.InputBindings>
+        <KeyBinding Modifiers="Control" Key="F" Command="{Binding StartSearchCommand}" />
+    </UserControl.InputBindings>
+    <Grid>
+        <ctrl:FileTextBox x:Name="textbox"
                      Text="{Binding Contents, IsAsync=True}"
-                     b:TextBoxBehavior.SelectedLine="{Binding SelectedLine, Mode=OneWay}"
-                     b:TextBoxBehavior.SelectedCharacterIndex="{Binding SelectedCharacterIndex, Mode=OneWay}"
-                     b:TextBoxBehavior.SearchText="{Binding SearchText, Mode=OneWay}"  
+                     SelectedLine="{Binding SelectedLine, Mode=OneWay}"
+                     SelectedCharacterIndex="{Binding SelectedCharacterIndex, Mode=OneWay}"
+                     SearchText="{Binding SearchText, Mode=OneWay}"
+                     SavingFile="{Binding Saving}"
                      VerticalScrollBarVisibility="Auto"
                      AcceptsReturn="True"
                      AcceptsTab="True"
-                     HorizontalScrollBarVisibility="Auto">
-             <i:Interaction.Triggers>
-                 <i:EventTrigger EventName="PreviewKeyDown" >
-                    <cmd:EventToCommand Command="{Binding ModifiedCommand}"/>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </TextBox>
-        <StackPanel Grid.Row="0" Orientation="Horizontal" VerticalAlignment="Top" HorizontalAlignment="Right" Height="20" Margin="0,0,20,0">
-            <StackPanel.Background>
-                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                    <GradientStop Color="Black" Offset="0"/>
-                    <GradientStop Color="#FF2B2424" Offset="1"/>
-                </LinearGradientBrush>
-            </StackPanel.Background>
-            <TextBox Text="{Binding SearchText}" Width="70"  Margin="0,0,2,0"/>
-            <Button Content=">" Command="{Binding SearchCommand}"/>
+                     HorizontalScrollBarVisibility="Auto" PreviewKeyDown="textbox_PreviewKeyDown" PreviewTextInput="textbox_PreviewTextInput">
+        </ctrl:FileTextBox>
+        <StackPanel Grid.Row="0" 
+                    Orientation="Horizontal" 
+                    Background="LightGray" 
+                    VerticalAlignment="Top" 
+                    HorizontalAlignment="Right" 
+                    Height="36"
+                    Margin="0,0,24,0">
+            <StackPanel.Resources>
+                <Style TargetType="StackPanel">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Searching}" Value="False">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </StackPanel.Resources>
+            <Button Content="x" Height="24" Margin="5,0,2,0"  Command="{Binding StopSearchCommand}"/>
+            <TextBox Text="{Binding SearchText}" Width="100" Height="24" Margin="5,0,2,0"/>
+            <Button Content=">" Height="24" Margin="0,0,5,0"  Command="{Binding SearchCommand}"/>
         </StackPanel>
     </Grid>
 </UserControl>

@@ -49,15 +49,19 @@ namespace IRPSIM.ViewModels
     {
         private ICoreApplicationService _coreService;
         private IOpenFileService _openFileService;
+        private IOpenSimulationService _openSimulationService;
         private IrpObjectContainer _scenarios;
         private IrpObjectContainer _scripts;
 
-        public IrpObjectViewModel(ICoreApplicationService coreService, IOpenFileService openFileService)
+        public IrpObjectViewModel(ICoreApplicationService coreService, IOpenFileService openFileService, IOpenSimulationService openSimulationService)
             : base()
         {
             _coreService = coreService;
             _openFileService = openFileService;
+            _openSimulationService = openSimulationService;
 
+            _containers.Add(_scripts = new IrpObjectContainer("Scripts", _coreService.Scripts));
+            _containers.Add(_scenarios = new IrpObjectContainer("Scenarios", _coreService.Scenarios));
             _containers.Add(new IrpVariableContainer("Aggregates", _coreService.AggregateVariables));
             _containers.Add(new IrpVariableContainer("Supply", _coreService.SupplyVariables));
             _containers.Add(new IrpVariableContainer("Demand", _coreService.DemandVariables));
@@ -65,8 +69,6 @@ namespace IRPSIM.ViewModels
             _containers.Add(new IrpVariableContainer("Cost", _coreService.CostVariables));
             _containers.Add(new IrpVariableContainer("Variables", _coreService.Variables));
             _containers.Add(new IrpObjectContainer("Definitions", _coreService.Definitions));
-            _containers.Add(_scenarios = new IrpObjectContainer("Scenarios", _coreService.Scenarios));
-            _containers.Add(_scripts = new IrpObjectContainer("Scripts", _coreService.Scripts));
             _containers.Add(new IrpObjectContainer("Categories", _coreService.Categories));
            // _containers.Add(new IrpObjectContainer("Options", _coreService.Options));
             _containers.Add(new IrpObjectContainer("Simulations", _coreService.Simulations));
@@ -115,10 +117,19 @@ namespace IRPSIM.ViewModels
         private void selectIrpObjectDelegate()
         {
             CMWrappedIrpObject irpObject = SelectedObject as CMWrappedIrpObject;
-            if (irpObject != null && irpObject.FileId >= 0)
+            if (irpObject == null)
+                return;
+
+            if (irpObject is CMWrappedSimulation)
+            {
+                Debug.WriteLine("Selecting simulation");
+                _openSimulationService.RequestOpenSimulation(irpObject as CMWrappedSimulation);
+            }
+            
+            if (irpObject.FileId >= 0)
             {
                 Debug.WriteLine("Opening file with index {0}", irpObject.FileIndex);
-                _openFileService.RequestOpenFile(_coreService.GetFilePath(irpObject.FileId), irpObject.FileIndex);
+                _openFileService.RequestOpenFile(_coreService.GetFilePath(irpObject.FileId), irpObject.FileIndex, true);
             }
                 //irpObject.Selected = !irpObject.Selected;
         }
@@ -144,6 +155,11 @@ namespace IRPSIM.ViewModels
                     _coreService.UseScript(name);
 
                 irpObject.Chosen = !current;
+            }
+            else if (irpObject.Type == "CMVariable")
+            {
+                Debug.WriteLine(irpObject.Name);
+                (irpObject as CMWrappedVariable).ToggleSelected();
             }
         }
     }

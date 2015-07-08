@@ -22,5 +22,53 @@ namespace IRPSIM.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SaveArchive {
+            get {
+                return ((bool)(this["SaveArchive"]));
+            }
+            set {
+                this["SaveArchive"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SaveOutcomes {
+            get {
+                return ((bool)(this["SaveOutcomes"]));
+            }
+            set {
+                this["SaveOutcomes"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool SaveSummary {
+            get {
+                return ((bool)(this["SaveSummary"]));
+            }
+            set {
+                this["SaveSummary"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DebugOn {
+            get {
+                return ((bool)(this["DebugOn"]));
+            }
+            set {
+                this["DebugOn"] = value;
+            }
+        }
     }
 }

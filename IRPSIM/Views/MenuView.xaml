@@ -6,21 +6,75 @@
         xmlns:ignore="http://www.ignore.com"
         DataContext="{Binding Menu, Source={StaticResource Locator}}"
         mc:Ignorable="d ignore" d:DesignWidth="760" d:DesignHeight="35">
+    <UserControl.Resources>
+        <Style TargetType="Image">
+            <Setter Property="Height" Value="12"/>
+            <Setter Property="Width" Value="12"/>
+        </Style>
+    </UserControl.Resources>
     <Menu Name="mainMenu" DockPanel.Dock="Top">
         <MenuItem Header="_File">
-            <MenuItem Header="Open _Project... (Ctrl+P)" Command="{Binding Main.ProjectOpenCommand, Source={StaticResource Locator}}"/>
-            <MenuItem Header="Open _File... (Ctrl+O)" Command="{Binding DisplayCollection.FileOpenCommand, Source={StaticResource Locator}}" ToolTip="Open a text file"/>
-            <Separator/>
-            <MenuItem Header="_Reload Project" Command="{Binding Main.ProjectReloadCommand, Source={StaticResource Locator}}"/>
+            <MenuItem Header="Open _Project... (Ctrl+P)" Command="{Binding Main.ProjectOpenCommand, Source={StaticResource Locator}}">
+                <MenuItem.Icon>
+                    <Image Source="/Images/commandOpenProject.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="_Reload Project" Command="{Binding Main.ProjectReloadCommand, Source={StaticResource Locator}}">
+                <MenuItem.Icon>
+                    <Image Source="/Images/commandReload.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
             <MenuItem Header="_Close Project" Command="{Binding Main.ProjectCloseCommand, Source={StaticResource Locator}}"/>
             <Separator/>
-            <MenuItem Header="_Exit"/>
+            <MenuItem Header="Open _File... (Ctrl+O)" Command="{Binding DisplayCollection.FileOpenCommand, Source={StaticResource Locator}}" ToolTip="Open a text file">
+                <MenuItem.Icon>
+                    <Image Source="/Images/commandOpenFile.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
+            <MenuItem Header="Save _File (Ctrl+S)" Command="{Binding DisplayCollection.FileSaveCommand, Source={StaticResource Locator}}" ToolTip="Save file"/>
+            <MenuItem Header="Save _All" Command="{Binding DisplayCollection.FileSaveAllCommand, Source={StaticResource Locator}}" ToolTip="Save all text files"/>
+            <Separator/>
+            <MenuItem Header="_Preferences">
+                <MenuItem.Icon>
+                    <Image Source="/Images/commandPreferences.png"/>
+                </MenuItem.Icon>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <CheckBox Content="Save Simulation Archive" IsChecked="{Binding SaveArchive}"/>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <CheckBox Content="Save Simulation Outcomes" IsChecked="{Binding SaveOutcomes}"/>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <CheckBox Content="Save Simulation Summary" IsChecked="{Binding SaveSummary}"/>
+                    </MenuItem.Header>
+                </MenuItem>
+                <MenuItem>
+                    <MenuItem.Header>
+                        <CheckBox Content="Debugger On" IsChecked="{Binding DebugOn}"/>
+                    </MenuItem.Header>
+                </MenuItem>
+            </MenuItem>
+            <Separator/>
+            <MenuItem Header="_Exit" Command="{Binding Main.ShutdownCommand, Source={StaticResource Locator}}">
+                <MenuItem.Icon>
+                    <Image Source="/Images/commandExit.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
         </MenuItem>
         <MenuItem Header="_Edit">
-            <MenuItem Header="_Find in Files..." Command="{Binding Main.FindInFilesCommand, Source={StaticResource Locator}}"/>
+            <MenuItem Header="_Find" Command="{Binding DisplayCollection.FileSearchCommand, Source={StaticResource Locator}}"/>
         </MenuItem>
         <MenuItem Header="_Project">
-            <MenuItem Header="_Run Simulation" Command="{Binding Main.RunSimulationCommand, Source={StaticResource Locator}}"/>
+            <MenuItem Header="_Run Simulation" Command="{Binding Main.RunSimulationCommand, Source={StaticResource Locator}}">
+                <MenuItem.Icon>
+                    <Image Source="/Images/commandRunSimulation.png"/>
+                </MenuItem.Icon>
+            </MenuItem>
         </MenuItem>
     </Menu>
 </UserControl>

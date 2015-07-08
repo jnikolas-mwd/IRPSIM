@@ -66,14 +66,14 @@
     <Reference Include="Microsoft.Practices.ServiceLocation">
       <HintPath>..\packages\CommonServiceLocator.1.3\lib\portable-net4+sl5+netcore45+wpa81+wp8\Microsoft.Practices.ServiceLocation.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Unity">
-      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.dll</HintPath>
+    <Reference Include="OxyPlot">
+      <HintPath>..\packages\OxyPlot.Core.2014.1.546\lib\portable-net4+sl4+wp71+win8\OxyPlot.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Unity.Configuration">
-      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.Configuration.dll</HintPath>
+    <Reference Include="OxyPlot.Wpf">
+      <HintPath>..\packages\OxyPlot.Wpf.2014.1.546\lib\net45\OxyPlot.Wpf.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Practices.Unity.RegistrationByConvention">
-      <HintPath>..\packages\Unity.3.5.1404.0\lib\net45\Microsoft.Practices.Unity.RegistrationByConvention.dll</HintPath>
+    <Reference Include="OxyPlot.Xps">
+      <HintPath>..\packages\OxyPlot.Wpf.2014.1.546\lib\net45\OxyPlot.Xps.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -91,20 +91,43 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Xceed.Wpf.AvalonDock">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Aero">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.Aero.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.Metro">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.Metro.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.AvalonDock.Themes.VS2010">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.AvalonDock.Themes.VS2010.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.DataGrid">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.DataGrid.dll</HintPath>
+    </Reference>
+    <Reference Include="Xceed.Wpf.Toolkit">
+      <HintPath>..\packages\Extended.Wpf.Toolkit.2.4\lib\net40\Xceed.Wpf.Toolkit.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Behaviors\TextBoxBehavior.cs" />
-    <Compile Include="Controls\ExtendedTextBox.cs" />
+    <Compile Include="Controls\SimulationSummaryPlotView.cs" />
+    <Compile Include="Controls\FileTextBox.cs" />
     <Compile Include="Models\ErrorModel.cs" />
     <Compile Include="Services\CanCloseService.cs" />
     <Compile Include="Services\ChooseFileNameService.cs" />
+    <Compile Include="Services\IPersist.cs" />
+    <Compile Include="Services\SaveFileService.cs" />
     <Compile Include="Services\CoreApplicationService.cs" />
+    <Compile Include="Services\DialogService.cs" />
     <Compile Include="Services\FindInFilesService.cs" />
     <Compile Include="Services\OpenFileService.cs" />
+    <Compile Include="Services\OpenSimulationService.cs" />
+    <Compile Include="ViewModels\ClosableViewModel.cs" />
     <Compile Include="ViewModels\Converters.cs" />
     <Compile Include="ViewModels\ErrorViewModel.cs" />
     <Compile Include="ViewModels\DisplayViewModel.cs" />
@@ -118,6 +141,7 @@
     <Compile Include="ViewModels\MenuViewModel.cs" />
     <Compile Include="ViewModels\NotifyViewModel.cs" />
     <Compile Include="ViewModels\OptionsViewModel.cs" />
+    <Compile Include="ViewModels\SimulationViewModel.cs" />
     <Compile Include="ViewModels\ViewModelLocator.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -151,6 +175,9 @@
     </Compile>
     <Compile Include="Views\OptionsView.xaml.cs">
       <DependentUpon>OptionsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SimulationView.xaml.cs">
+      <DependentUpon>SimulationView.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -204,6 +231,10 @@
       <SubType>Form</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\SimulationView.xaml">
+      <SubType>Form</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -233,7 +264,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <BootstrapperPackage Include=".NETFramework,Version=v4.5">
       <Visible>False</Visible>
@@ -252,26 +282,46 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <WCFMetadata Include="Service References\" />
+    <Resource Include="Images\category.png" />
+    <Resource Include="Images\commandOpenProject.png" />
+    <Resource Include="Images\commandReload.png" />
+    <Resource Include="Images\cost.png" />
+    <Resource Include="Images\definition.png" />
+    <Resource Include="Images\demand.png" />
+    <Resource Include="Images\simulation.png" />
+    <Resource Include="Images\storage.png" />
+    <Resource Include="Images\supply.png" />
+    <Resource Include="Images\variable.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\aggregate.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\scenario.png" />
+    <Resource Include="Images\script.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\commandOpenFile.png" />
+    <Resource Include="Images\commandRunSimulation.png" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\IrpsimEngineWrapper\IrpsimEngineWrapper.vcxproj">
       <Project>{95243521-1858-4a9f-8418-869d85bcea41}</Project>
       <Name>IrpsimEngineWrapper</Name>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\Aggregate.png" />
-    <Resource Include="Images\Category.png" />
-    <Resource Include="Images\Cost.png" />
-    <Resource Include="Images\Definition.png" />
-    <Resource Include="Images\Demand.png" />
-    <Resource Include="Images\Scenario.png" />
-    <Resource Include="Images\Script.png" />
-    <Resource Include="Images\Storage.png" />
-    <Resource Include="Images\Supply.png" />
-    <Resource Include="Images\Variable.png" />
+    <Resource Include="Images\commandPreferences.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\commandExit.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\search.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\error.png" />
+    <Resource Include="Images\warning.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

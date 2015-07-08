@@ -302,3 +302,24 @@ if(pvid_option [_y-1] >= (102500 * 0.9), 1, 0)
             }
         }
     }
+
+	           <Canvas Grid.Row="1">
+                <Canvas.LayoutTransform>
+                    <ScaleTransform ScaleX="{Binding ScaleX}" ScaleY="{Binding ScaleY}"/>
+                </Canvas.LayoutTransform>
+                <Canvas.RenderTransform>
+                    <TranslateTransform Y="{Binding TranslateY}"/>
+                </Canvas.RenderTransform>
+                <ItemsControl ItemsSource="{Binding Summaries}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <Canvas/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Polyline Points="{Binding Mean}" Stroke="Red" StrokeThickness="{Binding Path=Parent.LineThickness}"/>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            </Canvas>

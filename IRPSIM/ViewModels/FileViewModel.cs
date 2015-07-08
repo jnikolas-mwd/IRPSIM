@@ -10,48 +10,19 @@ using System.IO;
 
 namespace IRPSIM.ViewModels
 {
-    public class ClosableViewModel : ViewModelBase
-    {
-        private ICanCloseService _canCloseService;
-
-        public ClosableViewModel(ICanCloseService canCloseService)
-        {
-            _canCloseService = canCloseService;
-        }
-
-        ~ClosableViewModel()
-        {
-            Debug.WriteLine("Disposing Closable View Model");
-        }
-
-        RelayCommand _closeMeCommand;
-        public RelayCommand CloseMeCommand
-        {
-            get
-            {
-                if (_closeMeCommand == null)
-                    _closeMeCommand = new RelayCommand(() => _canCloseService.Close(this));
-                return _closeMeCommand;
-            }
-        }
-        
-        public virtual string PathName { get; set; }
-
-        public virtual string Name {get; set;}
-       
-        public virtual bool Modified {get; set;}
-    }
-
     public class FileViewModel : ClosableViewModel
     {
+        private ISaveFileService _saveFileService;
 
-        public FileViewModel(ICanCloseService canCloseService) : base(canCloseService)
+        public FileViewModel(ICanCloseService canCloseService, ISaveFileService saveFileService)
+            : base(canCloseService)
         {
+            _saveFileService = saveFileService;
         }
   
         ~FileViewModel()
         {
-            Debug.WriteLine("Disposing FileView");
+            Debug.WriteLine("Disposing FileViewModel");
         }
 
         private string _pathName;
@@ -82,13 +53,6 @@ namespace IRPSIM.ViewModels
             set { }
         }
 
-        private bool _modified = false;
-        public override bool Modified
-        {
-            get { return _modified; }
-            set { Set("Modified", ref _modified, value); }
-        }
-        
         private string _contents;
         public string Contents
         {
@@ -110,13 +74,6 @@ namespace IRPSIM.ViewModels
             set { Set("SelectedCharacterIndex", ref _selectedCharacterIndex, value); }
         }
 
-        private bool _searching;
-        public bool Searching
-        {
-            get { return _searching; }
-            set { Set("Searching", ref _searching, value); }
-        }
-
         private string _searchText;
         public string SearchText
         {
@@ -129,6 +86,14 @@ namespace IRPSIM.ViewModels
             set { SelectedLine = getLineFromObjectIndex(value); }
         }
 
+        public override void Save()
+        {
+            base.Save();
+            StreamWriter streamWriter = new StreamWriter(PathName,false);
+            streamWriter.Write(Contents);
+            streamWriter.Close();
+        }
+
         private string _oldSearchText;
         private void search()
         {
@@ -138,6 +103,24 @@ namespace IRPSIM.ViewModels
                 SelectedCharacterIndex = -1;
             }
             SelectedCharacterIndex = Contents.IndexOf(SearchText, SelectedCharacterIndex + 1, StringComparison.CurrentCultureIgnoreCase);
+        }
+
+        protected override bool closeIfModified()
+        {
+            SaveFileResponse response = _saveFileService.SaveFilePrompt(
+                String.Format("Contents have been modified. Do you wish to save {0}?", this.Name),
+                "Save File");
+
+            if (response==SaveFileResponse.Save)
+            {
+                Save();
+                return true;
+            }
+
+            if (response == SaveFileResponse.Close)
+                return true;
+
+            return false;
         }
 
         private int getLineFromObjectIndex(int index)
@@ -192,6 +175,28 @@ namespace IRPSIM.ViewModels
                 if (_searchCommand == null)
                     _searchCommand = new RelayCommand(search);
                 return _searchCommand;
+            }
+        }
+
+        RelayCommand _startSearchCommand;
+        public RelayCommand StartSearchCommand
+        {
+            get
+            {
+                if (_startSearchCommand == null)
+                    _startSearchCommand = new RelayCommand(() => Searching = true);
+                return _startSearchCommand;
+            }
+        }
+
+        RelayCommand _stopSearchCommand;
+        public RelayCommand StopSearchCommand
+        {
+            get
+            {
+                if (_stopSearchCommand == null)
+                    _stopSearchCommand = new RelayCommand(()=>Searching=false);
+                return _stopSearchCommand;
             }
         }
     }

@@ -35,7 +35,7 @@ class _IRPCLASS CMOption : public CMIrpObject {
 	CMString value;
 public:
 	CMOption() : CMIrpObject() , value(L"") {}
-	CMOption(const CMString& n, const CMString& v, int app_id) : CMIrpObject(n, app_id) { SetValue(v); }
+	CMOption(const CMString& n, const CMString& v, int app_id);
 	CMOption(const CMOption& o) : CMIrpObject(o.name) { value= o.value; app_id = o.app_id; }
 	CMOption& operator = (const CMOption& o) { name = o.name; value = o.value; app_id = o.app_id; return *this; }
 //	int operator == (const CMOption& o) {return name==o.name;}
@@ -62,7 +62,6 @@ class _IRPCLASS CMOptions
 	int app_id = -1;
 	long app_index = 0;
 public:
-	static struct _def { const wchar_t* name; const wchar_t* value; } defaults[];
 	CMOptions();
 	CMOptions(const CMOptions& op);
 	~CMOptions() {options.ResetAndDestroy(1);}
@@ -72,8 +71,6 @@ public:
 	void   SetApplicationIndex(long index) { this->app_index = index; }
 	int	   GetApplicationIndex() { return this->app_id; }
 	
-	//void   SetDefaults();
-
 	CMString GetOption(const CMString& option);
 	const  wchar_t* GetOptionString(const CMString& option);
 	double GetOptionDouble(const CMString& option);

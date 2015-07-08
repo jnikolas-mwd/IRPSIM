@@ -76,6 +76,10 @@ class _IRPCLASS CMSimulation : public CMIrpObject
 	CMTimeMachine*		  timemachine;
 	CMOptions	  		  options;
 
+	static BOOL _saveArchive;
+	static BOOL _saveOutcomes;
+	static BOOL _saveSummary;
+
 	double get_cost(int region = -1);
    void set_variables_inuse(BOOL action);
 	int  find_missing_variables();
@@ -100,6 +104,10 @@ public:
 
 	static CMSimulation* ActiveSimulation() {return active_simulation;}
 
+	static void SetSaveArchive(BOOL value) { _saveArchive = value; }
+	static void SetSaveOutcomes(BOOL value) { _saveOutcomes = value; }
+	static void SetSaveSummary(BOOL value) { _saveSummary = value; }
+
 	//MString GetName() const {return simname;}
 	//CMString GetFileName() const {return m_strFileName;}
 	CMString GetId() const { return loadtime.GetString(); }
@@ -121,6 +129,7 @@ public:
    CMTime CurrentTimeStep() {return timemachine->Now();}
 	const CMTimeMachine* TimeMachine() {return timemachine;}
 	void GetOptions(CMOptions& op) {op = options;}
+	const CMOptions& GetOptions() { return options; }
 	void SetOptions(const CMOptions& op);
 	CMString GetOption(const CMString& opname) {return options.GetOption(opname);}
 	int GetOptionInt(const CMString& opname) { return options.GetOptionInt(opname); }

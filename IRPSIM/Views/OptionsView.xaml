@@ -3,20 +3,31 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewmodel="clr-namespace:IRPSIM.ViewModels"
         xmlns:s="clr-namespace:IRPSIM.Services"
         xmlns:ignore="http://www.ignore.com"
         mc:Ignorable="d ignore"
         DataContext="{Binding Options, Source={StaticResource Locator}}" 
         d:DesignWidth="300" d:DesignHeight="480">
     <UserControl.Resources>
-        <DataTemplate  x:Key="OptionTemplate">
+        <DataTemplate DataType="{x:Type viewmodel:SimulationTextOption}">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition SharedSizeGroup="Col1" Width="100"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding Name}"/>
-                <TextBox Grid.Column="1" Text="{Binding Value}"/>
+                <TextBlock Text="{Binding Title}" VerticalAlignment="Center"/>
+                <TextBox Grid.Column="1" Text="{Binding Value}" Width="100" Margin="0,3,0,3"/>
+            </Grid>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type viewmodel:SimulationSelectOption}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition SharedSizeGroup="Col1" Width="100"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding Title}" VerticalAlignment="Center"/>
+                <ComboBox Grid.Column="1" ItemsSource="{Binding Items}" SelectedItem="{Binding Value}"  Width="100" Margin="0,3,0,3"/>
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
@@ -34,6 +45,6 @@
             <GridSplitter Width="2"/>
             <TextBlock Text="Value" Grid.Column="1"/>
         </Grid>
-        <ListBox Grid.Row="1" ItemsSource="{Binding Options}" ItemTemplate="{StaticResource OptionTemplate}"/>
+        <ListBox Grid.Row="1" ItemsSource="{Binding Options}"/>
     </Grid>
 </UserControl>

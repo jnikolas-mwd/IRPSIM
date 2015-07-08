@@ -16,7 +16,7 @@
                 <TextBlock x:Name="header" Text="{Binding Name}" Focusable="True"/>
             </StackPanel>
             <HierarchicalDataTemplate.Triggers>
-                <DataTrigger Binding="{Binding Selected}" Value="True">
+                <DataTrigger Binding="{Binding SaveOutcomes}" Value="True">
                     <Setter Property="Foreground" Value="Red" TargetName="header"/>
                 </DataTrigger>
             </HierarchicalDataTemplate.Triggers>
@@ -33,15 +33,52 @@
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate DataType="{x:Type viewmodel:IrpVariableContainer}" ItemsSource="{Binding Collection}" ItemTemplate="{StaticResource VariableTemplate}">
             <StackPanel Orientation="Horizontal">
-                <Image x:Name="headerimage" Width="16" Height="16" Margin="3,0" Source="/Images/Supply.png" />
+                <Image x:Name="headerimage" Width="12" Height="12" Margin="3,0" Source="/Images/supply.png" />
                 <TextBlock Text="{Binding Name}" Focusable="True"/>
             </StackPanel>
+            <HierarchicalDataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Name}" Value="Aggregates">
+                    <Setter Property="Source" Value="/Images/aggregate.png" TargetName="headerimage"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="Supply">
+                    <Setter Property="Source" Value="/Images/supply.png" TargetName="headerimage"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="Demand">
+                    <Setter Property="Source" Value="/Images/demand.png" TargetName="headerimage"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="Storage">
+                    <Setter Property="Source" Value="/Images/storage.png" TargetName="headerimage"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="Cost">
+                    <Setter Property="Source" Value="/Images/cost.png" TargetName="headerimage"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="Variables">
+                    <Setter Property="Source" Value="/Images/variable.png" TargetName="headerimage"/>
+                </DataTrigger>
+            </HierarchicalDataTemplate.Triggers>
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate  DataType="{x:Type viewmodel:IrpObjectContainer}" ItemsSource="{Binding Collection}" ItemTemplate="{StaticResource IrpObjectTemplate}">
             <StackPanel Orientation="Horizontal">
-                <Image x:Name="headerimage" Width="16" Height="16" Margin="3,0" Source="/Images/Supply.png" />
+                <Image x:Name="headerimage" Width="12" Height="12" Margin="3,0" Source="/Images/supply.png" />
                 <TextBlock Text="{Binding Name}" Focusable="True"/>
             </StackPanel>
+            <HierarchicalDataTemplate.Triggers>
+                <DataTrigger Binding="{Binding Name}" Value="Scripts">
+                    <Setter Property="Source" Value="/Images/script.png" TargetName="headerimage"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="Scenarios">
+                    <Setter Property="Source" Value="/Images/scenario.png" TargetName="headerimage"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="Definitions">
+                    <Setter Property="Source" Value="/Images/definition.png" TargetName="headerimage"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="Categories">
+                    <Setter Property="Source" Value="/Images/category.png" TargetName="headerimage"/>
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Name}" Value="Simulations">
+                    <Setter Property="Source" Value="/Images/simulation.png" TargetName="headerimage"/>
+                </DataTrigger>
+            </HierarchicalDataTemplate.Triggers>
         </HierarchicalDataTemplate>
      </UserControl.Resources>
     <Grid>

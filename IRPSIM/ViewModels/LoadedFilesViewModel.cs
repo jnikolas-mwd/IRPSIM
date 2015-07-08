@@ -70,7 +70,7 @@ namespace IRPSIM.ViewModels
             Debug.WriteLine(SelectedItem);
             CMLoadedFile file = SelectedItem as CMLoadedFile;
             if (file != null)
-                _openFileService.RequestOpenFile(file.Path, 0);
+                _openFileService.RequestOpenFile(file.Path, 0, false);
         }
 
         private void findInFileDelegate()

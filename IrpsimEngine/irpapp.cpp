@@ -42,8 +42,8 @@
 #include <iomanip>
 #include <ctype.h>
 
-#include <fstream>
-static wofstream sdebug(L"debug_irpapp.txt");
+//#include <fstream>
+//static wofstream sdebug(L"debug_irpapp.txt");
 
 //template class _IRPCLASS CMPSSmallArray<CMVariable>;
 
@@ -554,7 +554,7 @@ int CMIrpApplication::WriteOutcomes(const CMString& filename,CMSimulation* sim)
 	CMVariableIterator iter;
    CMVariable* v;
    while ((v=iter())!=0)
-   	if (v->GetState(CMVariable::vsSelected) && !outputvars.Contains(v->GetName()))
+	   if (v->GetState(CMVariable::vsSaveOutcomes) && !outputvars.Contains(v->GetName()))
 	   	report.AddOutputVariable(v->GetName());
    return report.Outcomes(filename);
 }
@@ -568,8 +568,8 @@ int CMIrpApplication::WriteSummary(const CMString& filename,CMSimulation* sim)
 	CMVariableIterator iter;
    CMVariable* v;
    while ((v=iter())!=0)
-   	if (v->GetState(CMVariable::vsSelected) && !outputvars.Contains(v->GetName()))
-	   	report.AddOutputVariable(v->GetName());
+	   if (v->GetState(CMVariable::vsSaveOutcomes) && !outputvars.Contains(v->GetName()))
+	   	   report.AddOutputVariable(v->GetName());
    return report.Summary(filename);
 }
 

@@ -8,6 +8,12 @@
         DataContext="{Binding IrpLog, Source={StaticResource Locator}}"
         d:DesignHeight="300" d:DesignWidth="300">
      <Grid>
-        <TextBox Text="{Binding Log}" VerticalScrollBarVisibility="Auto"/>
+        <TextBox Text="{Binding Log}" VerticalScrollBarVisibility="Auto">
+            <TextBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Clear" Command="{Binding ClearCommand}"/>
+                </ContextMenu>
+            </TextBox.ContextMenu>
+        </TextBox>
     </Grid>
 </UserControl>

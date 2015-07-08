@@ -26,8 +26,8 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <fstream>
-static wofstream sdebug("debug_simarray.txt");
+//#include <fstream>
+//static wofstream sdebug("debug_simarray.txt");
 
 static const wchar_t* simid = L"simarray0001";
 
@@ -345,8 +345,6 @@ float CMSimulationArray::Aggregate(const CMTime& time,const CMString& var,long t
 CMTime CMSimulationArray::Aggregate(const CMTime& time, long trial, int resolution, unsigned* varindex, float* results, unsigned n)
 {
 	if (Fail()) return time;
-
-	sdebug << "Calling Aggregate: time=" << time << " trial = " << trial << " resolution = " << resolution << " n = " << n << endl;
 
 	CMTime begt(time);
 	int nstep = 1;

@@ -24,116 +24,45 @@
 
 #include "cmlib.h"
 #include "token.h"
+#include "notify.h"
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <iomanip>
 
-#include <fstream>
-static wofstream sdebug("debug_options.txt");
+//#include <fstream>
+//static wofstream sdebug("debug_options.txt");
 
-CMOptions::_def CMOptions::defaults[] = {
-{L"simbegin",L"2016"},
-{L"simend",L"2025"},
-{L"siminterval",L"monthly"},
-{L"numtrials",L"1000"},
-{0,0}
+const wchar_t* allowedOptions[] = {
+	L"simbegin",
+	L"simend",
+	L"siminterval",	L"simulationname",	L"costprecision",	L"numtrials",	L"outputfolder",	L"precision",	L"randomseed",	L"tracebegin",	L"traceend",	L"tracemode",	L"tracestart",	L"yearend",
+	0
 };
 
-/*
-traceBegin               1922
-traceEnd                 1930
-traceStart               1922
-traceMode                Dynamic
-focusPeriod              201907
-yearEnd                  Jun
-updateInterval           1
-precision                1
-volumeUnits              AFX1000
-costUnits                DX1000
-supplyRule               Rank
-transferRule             Rank
-storageRule              MaxTake
-defaultDivisible         notDivisible
-defaultTake              partialTake
-defaultDraw              dontDraw
-costFocus                <default>
-supplyCost               Net
-grossReliability         (10%,1%)  (5%,5.5%)  (0%,10%)
-netReliability           (10%,1%)  (5%,5.5%)  (0%,10%)
-discountRates            (1995,6%)
-defaultDiscount          5
-valuationYear            1994
-valuationMode            Begin
-graphType                TimeSeries
-graphPrimary             _supply
-graphSecondary           _demand 
-graphCostFormat          SingleYear  Nominal  
-graphShortageFormat      Percent
-graphBins                20
-graphPeriod              1995  2020
-summaryFile              Test.sum
-summaryOpenMode          Replace
-outcomeFile              Test.out
-outcomeOpenMode          Replace
-outputVariables	   aggregate user
-outputCostFormat         SingleYear  Nominal
-outputSortBy             None
-outputSortOrder          Ascending
-outputFormat             ByTrial
-ouputPercentile          100
-outputHeader             No
-outputPeriod             0
-outputResolution         monthly
-outputDelimiter          S1
-outputReliability        Yes
-saveIncrementSize        1
-simulationFile           sim.sim
-autosummary	  yes
-pbTier			3
-pbSupplyVar		swp_3
-pbContractorConveyanceVar  contractor_conveyance
-pbContractorAllocationVar 	contractor_allocation
-pbMWDAllocationVar	mwd_allocation
-*/
+CMOption::CMOption(const CMString& n, const CMString& v, int app_id) : CMIrpObject(n, app_id) 
+{ 
+	BOOL bFound = FALSE;
+	const wchar_t* name = n.c_str();
+	for (unsigned i = 0; allowedOptions[i] != 0; i++)
+	{
+		if (!_wcsicmp(name, allowedOptions[i]))
+		{
+			bFound = TRUE;
+			break;
+		}
+	}
 
-/*
-CMOption::CMOption(const CMString& n,const CMString& v , int app_id) :
-name(n)
-{
-  name.to_lower();
-   name = stripends(name);
-	if (name.length() && name[0]==L'#')
-		name = name.substr(1,name.length()-1);
-	SetValue(v);
+	if (!bFound)
+		CMNotifier::Notify(CMNotifier::WARNING, L"Option " + n + L" is not recognized or is deprecated");
+
+	SetValue(v); 
 }
-*/
 
 void CMOption::SetValue(const CMString& v)
 {
 	value = stripends(v);
 }
-
-/*
-wostream& CMOption::WriteBinary(wostream& s)
-{
-	writestringbinary(name,s);
-	writestringbinary(value,s);
-	return s;
-}
-
-wistream& CMOption::ReadBinary(wistream& s)
-{
-	name = readstringbinary(s);
-	value = readstringbinary(s);
-	return s;
-}
-
-short CMOption::BinarySize()
-{
-	return (stringbinarylength(name) + stringbinarylength(value));
-}
-*/
 
 CMOptions::CMOptions() :
 options(),
@@ -153,18 +82,6 @@ maxwidth(0)
 	}
 }
 
-/*
-void CMOptions::SetDefaults()
-{
-	options.ResetAndDestroy(1);
-	maxwidth=0;
-	for (int i=0;defaults[i].name;i++) {
-		int len = wcslen(defaults[i].name);
-		if (len>maxwidth) maxwidth = len;
-		options.Add(new CMOption(defaults[i].name,defaults[i].value,-1));
-	}
-}
-*/
 CMString CMOptions::GetOption(const CMString& name)
 {
 	CMString ret;
@@ -209,8 +126,6 @@ CMOption* CMOptions::SetOption(const CMString& line, int id)
 
 CMOption* CMOptions::SetOption(const CMString& name, const CMString& value, int id)
 {
-	sdebug << "Setting option name=" << name << " value=" << value << " id=" << id << endl;
-
 	CMString nm = stripends(name);
 	nm.to_lower();
 	int len = nm.length();
@@ -262,8 +177,6 @@ wistream& operator >> (wistream& s, CMOptions& o)
 		line.read_line(s);
 		line = stripends(line);
 
-		sdebug << "Line = " << line << endl;
-
 		if (line.is_null() || line[0] == L'*') {
 			continue;
 		}
@@ -294,39 +207,3 @@ wistream& operator >> (wistream& s, CMOptions& o)
 
 	return s;
 }
-
-/*
-wostream& CMOptions::WriteBinary(wostream& s)
-{
-	unsigned short len = options.Count();
-	s.write((const wchar_t*)&len,sizeof(len));
-	for (unsigned short i=0;i<len;i++)
-		options[i]->WriteBinary(s);
-	return s;
-}
-
-wistream& CMOptions::ReadBinary(wistream& s)
-{
-	unsigned short len;
-	s.read((wchar_t*)&len,sizeof(len));
-	maxwidth = 0;
-	for (unsigned i=0;i<len;i++) {
-		CMOption* o = new CMOption;
-		o->ReadBinary(s);
-		unsigned short len = o->GetName().length();
-		if (len>maxwidth) maxwidth=len;
-		options.Add(o);
-	}
-	options.Sort();
-	return s;
-}
-
-long CMOptions::BinarySize()
-{
-	long ret = 0;
-	for (unsigned i=0;i<options.Count();i++)
-		ret += options[i]->BinarySize();
-	return ret;
-}
-
-*/

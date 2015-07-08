@@ -25,11 +25,18 @@ namespace IRPSIM.ViewModels
     {
         private ICoreApplicationService _coreService;
         private IChooseFileNameService _chooseFileNameService;
+        private IOpenSimulationService _openSimulationService;
+        private IPersist _persist;
 
-        public MainViewModel(ICoreApplicationService coreService, IChooseFileNameService chooseFileNameService)
+        public MainViewModel(ICoreApplicationService coreService, 
+            IChooseFileNameService chooseFileNameService,
+            IPersist persist,
+            IOpenSimulationService openSimulationService)
         {
             _coreService = coreService;
             _chooseFileNameService = chooseFileNameService;
+            _openSimulationService = openSimulationService;
+            _persist = persist;
 
             _coreService.IrpSimulationProgress += (s,e) => Progress=e.Value;
             _coreService.IrpProjectLoaded += (s, e) => OnProjectLoaded(e.Value);
@@ -52,6 +59,8 @@ namespace IRPSIM.ViewModels
        void OnSimulationCompleted(bool success)
         {
             IsSimulationRunning = false;
+           if (success && _coreService.CurrentSimulation!=null)
+                _openSimulationService.RequestOpenSimulation(_coreService.CurrentSimulation);
         }
         
         #region Properties
@@ -145,6 +154,17 @@ namespace IRPSIM.ViewModels
             }
         }
 
+        RelayCommand _shutdownCommand;
+        public RelayCommand ShutdownCommand
+        {
+            get
+            {
+                if (_shutdownCommand == null)
+                    _shutdownCommand = new RelayCommand(() => Application.Current.Shutdown());
+                return _shutdownCommand;
+            }
+        }
+
         #endregion
 
         #region Command Delegates
@@ -195,6 +215,9 @@ namespace IRPSIM.ViewModels
                 return;
             }
             */
+            _coreService.SetSaveArchive(_persist.SaveArchive);
+            _coreService.SetSaveOutcomes(_persist.SaveOutcomes);
+            _coreService.SetSaveSummary(_persist.SaveSummary);
             IsSimulationRunning = true;
             _coreService.RunSimulation();
         }

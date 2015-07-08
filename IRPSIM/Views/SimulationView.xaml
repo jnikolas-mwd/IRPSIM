@@ -1,0 +1,54 @@
+﻿<UserControl x:Class="IRPSIM.Views.SimulationView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:ctrl="clr-namespace:IRPSIM.Controls"
+        xmlns:oxy="http://oxyplot.org/wpf"
+        xmlns:ignore="http://www.ignore.com"
+        mc:Ignorable="d ignore"
+        d:DesignWidth="900" d:DesignHeight="505">
+    <Grid Background="White">
+        <Grid.Resources>
+            <DataTemplate x:Key="summaryVariableTemplate">
+                <TextBlock x:Name="varname"  Text="{Binding Name, Mode=OneWay}"/>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding Selected}" Value="True">
+                        <Setter Property="FontWeight" Value="Bold" TargetName="varname"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+            <DataTemplate x:Key="optionTemplate">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="{Binding Name}"/>
+                    <TextBlock Text=" = "/>
+                    <TextBlock Text="{Binding Value}"/>
+                </StackPanel>
+            </DataTemplate>
+        </Grid.Resources>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <ctrl:SimulationSummaryPlotView Grid.Row="0" SimulationSummaries="{Binding Summaries}" ShowStandardError="{Binding ShowStandardError}" Title="{Binding Title}"/>
+            <CheckBox Grid.Row="1" HorizontalAlignment="Center" Content="Show Standard Error" IsChecked="{Binding ShowStandardError}"/>
+        </Grid>
+        <GridSplitter Grid.Column="0" Width="3"/>
+        <Grid Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20"/>
+                <RowDefinition Height="3*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Button Grid.Row="0" Content="Clear" Command="{Binding ClearSummaries}"/>
+            <ListBox  Grid.Row="1" ItemsSource="{Binding Variables}" SelectedItem="{Binding SelectedVariable}" ItemTemplate="{StaticResource summaryVariableTemplate}" PreviewKeyDown="ListBox_KeyDown"/>
+            <GridSplitter Grid.Row="1" Height="3" ResizeDirection="Rows" VerticalAlignment="Bottom" HorizontalAlignment="Stretch"/>
+            <ListBox Grid.Row="2" ItemsSource="{Binding Options}" ItemTemplate="{StaticResource optionTemplate}"/>
+        </Grid>
+    </Grid>
+</UserControl>

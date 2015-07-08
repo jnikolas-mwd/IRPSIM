@@ -79,7 +79,7 @@
 		CMTime beg;          // beginning of period
 		CMTime end;          // end of period
 		unsigned short nvars;        // number of variables being recorded
-		long	 periodlength; // length of period (e.g. # of months)
+		unsigned	 _timesteps; // length of period (e.g. # of months)
 		short	 state;
 		long	 count;
 		unsigned get_variable_index(const CMString& name);
@@ -98,11 +98,17 @@
 		}
 		void  AddAt(const CMTime& t, unsigned var, double val);
 
-		double Mean(const CMTime& t, unsigned var) const;
-		double StdDev(const CMTime& t, unsigned var) const;
-		double Variance(const CMTime& t, unsigned var) const;
-		double Min(const CMTime& t, unsigned var) const;
-		double Max(const CMTime& t, unsigned var) const;
+		double Mean(unsigned index, unsigned var) const;
+		double StdDev(unsigned index, unsigned var) const;
+		double Variance(unsigned index, unsigned var) const;
+		double Min(unsigned index, unsigned var) const;
+		double Max(unsigned index, unsigned var) const;
+
+		double Mean(const CMTime& t, unsigned var) const { return Mean(CMTime::Diff(t, beg, incunits, inclength), var); }
+		double StdDev(const CMTime& t, unsigned var) const { return StdDev(CMTime::Diff(t, beg, incunits, inclength), var); }
+		double Variance(const CMTime& t, unsigned var) const { return Variance(CMTime::Diff(t, beg, incunits, inclength), var); }
+		double Min(const CMTime& t, unsigned var) const { return Min(CMTime::Diff(t, beg, incunits, inclength), var); }
+		double Max(const CMTime& t, unsigned var) const { return Max(CMTime::Diff(t, beg, incunits, inclength), var); }
 
 		double Mean(const CMTime& t, const CMString& var) const	{ return Mean(t, VariableIndex(var)); }
 		double StdDev(const CMTime& t, const CMString& var) const { return StdDev(t, VariableIndex(var)); }
@@ -110,11 +116,11 @@
 		double Min(const CMTime& t, const CMString& var) const { return Min(t, VariableIndex(var)); }
 		double Max(const CMTime& t, const CMString& var) const { return Max(t, VariableIndex(var)); }
 
-		long Trials() const { return (nvars&&periodlength) ? count / (periodlength*nvars) : 0; }
+		long Trials() const { return (nvars&&_timesteps) ? count / (_timesteps*nvars) : 0; }
 		unsigned Variables() const { return nvars; }
 		CMTime BeginPeriod() const { return beg; }
 		CMTime EndPeriod() const { return end; }
-		long TimeSteps() const { return periodlength; }
+		unsigned TimeSteps() const { return _timesteps; }
 		long GetPeriod(CMTime& b, CMTime& e, CMTIMEUNIT& units, int& length) const;
 		CMString GetVariableName(unsigned n) const;
 		CMString GetVariableType(unsigned n) const;

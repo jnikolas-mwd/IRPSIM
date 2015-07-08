@@ -97,6 +97,8 @@ public:
 	CMIrpApplication();
 	~CMIrpApplication();
 
+	static const wchar_t* GetVersionInfo() { return L"Irpsim Engine version 9.0"; }
+
 	// Open an IRPSIM project, which is essentially a collection of files (vardef, scripts, etc.)
 	void OpenProject(const CMString& name);
 
