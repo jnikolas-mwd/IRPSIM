@@ -62,6 +62,8 @@ namespace IRPSIM.Services
 
         IrpObjectCollection AggregateVariables { get; }
 
+        IrpObjectCollection SystemVariables { get; }
+
         IrpObjectCollection DemandVariables { get; }
 
         IrpObjectCollection SupplyVariables { get; }
@@ -151,6 +153,8 @@ namespace IRPSIM.Services
         public IrpObjectDictionary VariableDictionary { get { return _app.VariableDictionary; } }
 
         public IrpObjectCollection Variables { get { return _app.Variables; } }
+
+        public IrpObjectCollection SystemVariables { get { return _app.SystemVariables; } }
 
         public IrpObjectCollection AggregateVariables { get { return _app.AggregateVariables; } }
 

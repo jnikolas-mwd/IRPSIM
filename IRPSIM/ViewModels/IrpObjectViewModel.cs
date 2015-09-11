@@ -68,9 +68,10 @@ namespace IRPSIM.ViewModels
             _containers.Add(new IrpVariableContainer("Storage", _coreService.StorageVariables));
             _containers.Add(new IrpVariableContainer("Cost", _coreService.CostVariables));
             _containers.Add(new IrpVariableContainer("Variables", _coreService.Variables));
+            //_containers.Add(new IrpVariableContainer("System", _coreService.SystemVariables));
             _containers.Add(new IrpObjectContainer("Definitions", _coreService.Definitions));
             _containers.Add(new IrpObjectContainer("Categories", _coreService.Categories));
-           // _containers.Add(new IrpObjectContainer("Options", _coreService.Options));
+            //_containers.Add(new IrpObjectContainer("Options", _coreService.Options));
             _containers.Add(new IrpObjectContainer("Simulations", _coreService.Simulations));
         }
 

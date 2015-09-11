@@ -88,7 +88,7 @@ state(0)
 //hRunEvent(NULL),
 //dwThreadId(0L)
 {
-	loadtime.SetOutputFormat(CMTime::YYYYMMDDHHMMSS);
+	loadtime.SetOutputFormat(CMTime::YYYY_MM_DD_HHMMSS);
 	timemachine = new CMTimeMachine(CMTime::StringToTimeUnit(options.GetOption(L"siminterval")), 1);
 	m_strProjectRoot = extractpath(a->GetProjectFile());
 	get_data_from_options();
@@ -421,8 +421,15 @@ BOOL CMSimulation::Run()
 				os << L"Simulation: " << GetName() << endl;
 				os << pApp->GetVersionInfo() << endl;
 				if (pApp->CurrentScript() != NULL)
-					os << L"Using Script " << pApp->CurrentScript()->GetName() << endl;
+					os << L"Using Script " << pApp->CurrentScript()->GetName() << endl << endl;
 
+				os << L"Files Used:" << endl << endl;
+
+				for (int i = 0; i < pApp->LoadedFilesCount(); i++) {
+					fileName = pApp->LoadedFile(i);
+					os << strippath(fileName).c_str() << endl;
+				}
+				
 				os << endl << this->options << endl << endl;
 
 				os << L"#SCENARIO OutputVariables" << endl;

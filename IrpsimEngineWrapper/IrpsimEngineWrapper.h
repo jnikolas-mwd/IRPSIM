@@ -207,6 +207,11 @@ namespace IrpsimEngineWrapper
 			BOOL get() { return ((CMVariable*)UnmanagedObject)->IsRegional(); }
 		}
 
+		property BOOL IsSystem
+		{
+			BOOL get() { return ((CMVariable*)UnmanagedObject)->IsSystem(); }
+		}
+
 		property bool SaveOutcomes 
 		{
 			bool get() { return _saveOutcomes; }
@@ -410,6 +415,7 @@ namespace IrpsimEngineWrapper
 
 		IrpObjectCollection^ variableList = gcnew IrpObjectCollection();
 		IrpObjectCollection^ aggregateList = gcnew IrpObjectCollection();
+		IrpObjectCollection^ systemVariableList = gcnew IrpObjectCollection();
 		IrpObjectCollection^ demandList = gcnew IrpObjectCollection();
 		IrpObjectCollection^ supplyList = gcnew IrpObjectCollection();
 		IrpObjectCollection^ storageList = gcnew IrpObjectCollection();
@@ -450,6 +456,11 @@ namespace IrpsimEngineWrapper
 		property IrpObjectCollection^ Variables
 		{
 			IrpObjectCollection^ get() { return variableList; }
+		}
+
+		property IrpObjectCollection^ SystemVariables
+		{
+			IrpObjectCollection^ get() { return systemVariableList; }
 		}
 		
 		property IrpObjectCollection^ AggregateVariables
@@ -567,6 +578,7 @@ namespace IrpsimEngineWrapper
 				else if (wv->NType == IrpNodeType::Storage) StorageVariables->Add(wv);
 				else if (wv->NType == IrpNodeType::Cost) CostVariables->Add(wv);
 				else if (wv->IsAggregate && !wv->IsRegional) AggregateVariables->Add(wv);
+				else if (wv->IsSystem) SystemVariables->Add(wv);
 				else if (wv->FileId>=0) Variables->Add(wv);
 			}
 

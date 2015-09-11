@@ -69,7 +69,7 @@ class _IRPCLASS CMTime
 	static long seconds_in_increment(CMTIMEUNIT units,short length);
 	void set_to_string(const CMString& str);
 public:
-	enum {formatFull=1,formatDate,YYYYMMDDHHMMSS,YYYYMMDDHHMM,
+	enum {formatFull=1,formatDate,YYYY_MM_DD_HHMMSS, YYYYMMDDHHMMSS,YYYYMMDDHHMM,
 			YYYYMMDDHH,YYYYMMDD,YYYYMM,YYYY,MM};
 
 	// Constructors

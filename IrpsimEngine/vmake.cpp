@@ -51,7 +51,7 @@ CMString CMVariable::get_next_eval_type(wistream& s,CMString& aname)
 		}
 		else if (!begin)
 			continue;
-		else if (token == vardef_end)
+		else if (token(0, wcslen(vardef_end)) == vardef_end)  //                    token == vardef_end)
 			ret = CMVariable::GetEvalType();
 		else if (token[0] == L'#') {
 			if (token(1,6) == L"period")
@@ -106,6 +106,7 @@ CMVariable* CMVariable::Make(wistream& s)
 	else if (eval_type == CMVariable::GetEvalType())
 		v = new CMVariable(aname);
 	if (v) s >> *v;
+
 	return v;
 }
 

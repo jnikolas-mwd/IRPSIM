@@ -159,6 +159,7 @@ public:
 
 	BOOL IsAggregate() {return GetState(vsAggregate);}
 	BOOL IsRegional() { return GetState(vsRegional); }
+	BOOL IsSystem() { return GetState(vsSystem); }
 
 	CMString GetSpecialType();
 

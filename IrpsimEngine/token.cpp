@@ -44,7 +44,9 @@ CMSubString CMTokenizer::operator()(const wchar_t* ws)
 
 	size_t extent;
 	while (1) {
-		if (place >= eos) return (theString)(CM_NPOS,0);
+		if (place >= eos) {
+			return (theString)(CM_NPOS, 0);
+		}
 		//if (place >= eos) return (*(CMString*)theString)(CM_NPOS, 0);
 		place += wcsspn(place, ws);
 		extent = wcscspn(place, ws);

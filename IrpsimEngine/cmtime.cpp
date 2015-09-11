@@ -25,9 +25,8 @@
 #include <stdlib.h>
 #include <time.h>
 
-//#include <fstream.h>
-//#include <iomanip.h>
-//static ofstream sdebug("cmtime.deb");
+//#include <fstream>
+//static wofstream sdebug("debug_cmtime.txt");
 
 const int CMTime::daysinmonth[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
 const int CMTime::firstdayofmonth[12] = {1,32,60,91,121,152,182,213,244,274,305,335};
@@ -464,6 +463,8 @@ wchar_t* CMTime::GetString(wchar_t* buffer, size_t sz) const
 			swprintf_s(buffer, sz, L"%02d/%02d/%02d",m,d,y%100); break;
 		case formatFull:
 			swprintf_s(buffer, sz, L"%02d/%02d/%02d  %02d:%02d:%02d",m,d,y%100,h,mn,s); break;
+		case YYYY_MM_DD_HHMMSS:
+			swprintf_s(buffer, sz, L"%04d-%02d-%02d-%02d%02d%02d", y, m, d, h, mn, s); break;
 		case YYYYMMDDHHMM:
 			swprintf_s(buffer, sz, L"%04d%02d%02d%02d%02d",y,m,d,h,mn); break;
 		case YYYYMMDDHH:

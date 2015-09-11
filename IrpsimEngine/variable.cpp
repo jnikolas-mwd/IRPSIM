@@ -72,7 +72,7 @@ wchar_t* CMVariable::errorstrings[] =
 L"variable already exists",
 L"illegal variable name",
 L"circularity encountered",
-L"misplaced #ENDVAR",
+L"misplaced #END",
 L"incorrect number of row entries",
 L"incorrect number of column entries",
 L"bad variable definition",
@@ -82,7 +82,7 @@ L"can't find one or more associated variables"
 };
 
 const wchar_t* 	CMVariable::vardef_begin 		= L"#VARDEF";
-const wchar_t* 	CMVariable::vardef_end   		= L"#ENDVAR";
+const wchar_t* 	CMVariable::vardef_end   		= L"#END";
 int 				CMVariable::output_precision 	= 10;
 int 				CMVariable::column_width 		= 15;
 int				CMVariable::sort_method 		= CMVariable::byType;
@@ -102,9 +102,9 @@ types(0,1),
 realized(0),
 associations(0,16)
 {
-	if (Find(aName)) {
+   if (Find(aName)) {
 	  	ReportError(XAlreadyExists);
-   	SetState(vsFailed,TRUE);
+   		SetState(vsFailed,TRUE);
    }
    else {
 		for (int i=0;i<(int)aName.length();i++) {
@@ -430,6 +430,7 @@ wistream& CMVariable::read(wistream& s)
 	while(!s.eof()) {
 		pos = (long)s.tellg();
 		str.read_line(s);
+
 		if (str.is_null() || str[0] == L'*')
 			continue;
 		else if (str(0,wcslen(vardef_begin)) == vardef_begin) {
@@ -447,7 +448,7 @@ wistream& CMVariable::read(wistream& s)
 		else if (str[0] != L'#')
 			break;
 		//CMTokenizer next(str.substr(1,str.length()-2));
-		next.Reset(str.substr(1, str.length() - 2));
+		next.Reset(str.substr(1, str.length() - 1)); //** 2015-9-11 FIX
 
 		token = next(L" \t\r\n");
 
