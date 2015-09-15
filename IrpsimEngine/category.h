@@ -85,7 +85,9 @@ public:
 
 	int Fail() const {return (state&csFail);}
 
-   int  ContainsMember(const CMString& name);
+    int  ContainsMember(const CMString& name);
+	int  MemberCount() { return member_names.Count(); }
+	const CMString& GetMemberName(int n) { return  member_names.At(n); }
 
 	double Evaluate(double limit,int rule);
 	double CutBack(double limit,int rule,int ignorebalance,int nodetype);

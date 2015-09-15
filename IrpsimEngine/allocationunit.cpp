@@ -85,7 +85,7 @@ void CMAllocationUnit::init_process(int operation,int rule,int atype)
 		case TakeOperation: ability = -TakeAbility(); break;
 	}
 	if (allocation_mode==Preserve)
-   	ability = 0;
+   		ability = 0;
 	sort_value = (allocation_mode==ByRank) ? get_rank() : CM_BIGDOUBLE;
 }
 
@@ -129,24 +129,24 @@ void CMAllocationUnit::post_process(int reduceflag)
 CMString CMAllocationUnit::TranslateAllocationRule(int ruleid)
 {
 	CMString ret = L"preserve";
-   switch (ruleid) {
-		case ByRank: ret = L"byrank"; break;
-   	case BalancePercent: ret = L"balancepercent"; break;
-   	case BalanceAmount: ret = L"balanceamount"; break;
-   	case BalanceTake: ret = L"balancetake"; break;
-   	case BalancePut: ret = L"balanceput"; break;
-   	case BalancePercentCapacity: ret = L"balancepercentcapacity"; break;
-   }
-   return ret;
+	switch (ruleid) {
+	case ByRank: ret = L"byrank"; break;
+	case BalancePercent: ret = L"balancepercent"; break;
+	case BalanceAmount: ret = L"balanceamount"; break;
+	case BalanceTake: ret = L"balancetake"; break;
+	case BalancePut: ret = L"balanceput"; break;
+	case BalancePercentCapacity: ret = L"balancepercentcapacity"; break;
+	}
+	return ret;
 }
 
 int CMAllocationUnit::TranslateAllocationRule(const CMString& modename)
 {
 	if 	  (modename.contains(L"rank"))				return ByRank;
+	else if (modename.contains(L"capacity"))  		return BalancePercentCapacity;
 	else if (modename.contains(L"percent"))			return BalancePercent;
 	else if (modename.contains(L"amount"))			return BalanceAmount;
-	else if (modename.contains(L"take"))				return BalanceTake;
+	else if (modename.contains(L"take"))			return BalanceTake;
 	else if (modename.contains(L"put"))				return BalancePut;
-	else if (modename.contains(L"capacity"))  		return BalancePercentCapacity;
 	return Preserve;
 }

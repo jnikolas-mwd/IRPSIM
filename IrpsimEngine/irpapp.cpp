@@ -92,8 +92,10 @@ void CMIrpApplication::OpenProject(const CMString& name)
 	m_strProjectFile = name;
 	CMNotifier::Notify(CMNotifier::LOG, L"Opening Project: " + m_strProjectFile);
 	read_file(name, varsread);
-	if (varsread)
+	if (varsread) {
 		update_variable_links();
+		check_category_integrity();
+	}
 	//AddFiles(&strName,1);
 }
 
@@ -248,8 +250,9 @@ int CMIrpApplication::read_file(const CMString& name,int &varsread)
 	return err;
 }
 
-void CMIrpApplication::update_variable_links()
+BOOL CMIrpApplication::update_variable_links()
 {
+	BOOL ret = TRUE;
 	CMVariable* v;
     CMString region,vtype,vname;
 	const wchar_t* aggname;
@@ -323,7 +326,8 @@ void CMIrpApplication::update_variable_links()
 				//if (first)
 					//CMNotifier::Notify(CMNotifier::LOG, CMString(L"\r\n") + v->GetName() + L"\r\n missing:");
 				//first=0;
-				CMString msg(L"Missing variable or definition " + CMString(vname) + L" in definition of " + v->GetName());
+				ret = FALSE;
+				CMString msg(L"Undefined variable or definition " + CMString(vname) + L" in definition of " + v->GetName());
 				CMNotifier::Notify(CMNotifier::LOG, msg);
 				CMNotifier::Notify(CMNotifier::ERROR, msg);
 			}
@@ -331,6 +335,26 @@ void CMIrpApplication::update_variable_links()
 	}
 	//CMNotifier::Notify(CMNotifier::LOG, L"\r\nFinished\r\n");
 	//CMNotifier::Notify(CMNotifier::INFO, L"");
+	return ret;
+}
+
+BOOL CMIrpApplication::check_category_integrity()
+{
+	BOOL ret = TRUE;
+	unsigned short n = 0;
+	CMCategory *pCat;
+	while ((pCat = CMCategory::GetCategory(n)) != 0) {
+		for (int i = 0; i < pCat->MemberCount(); i++) {
+			const CMString& strName = pCat->GetMemberName(i);
+			if (CMVariable::Find(strName) == 0) {
+				CMString msg(L"Undefined variable " + strName + L" in definition of category " + pCat->GetName());
+				CMNotifier::Notify(CMNotifier::WARNING, msg);
+				ret = FALSE;
+			}
+		}
+		n++;
+	}
+	return ret;
 }
 
 CMString CMIrpApplication::GetObjectFileName(CMIrpObject* pObject)

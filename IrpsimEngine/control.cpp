@@ -27,8 +27,8 @@
 
 #include <limits.h>
 
-#include <fstream>
-static wofstream sdebug("debug-control.txt");
+//#include <fstream>
+//static wofstream sdebug("debug-control.txt");
 
 // a return value if time limit has been exceeded
 #define CM_TIME_LIMIT_EXCEEDED -10000
@@ -112,14 +112,10 @@ default_value(dv)
 
 void CMControl::Set(const CMString& def)
 {
-	sdebug << "Setting control: " << def.c_str() << endl;
-
 	control_items.ResetAndDestroy(1);
 	CMTokenizer next(def);
    CMString token;
    while (!(token = next(L";:,")).is_null()) {
-	   sdebug << "Adding control item: " << token.c_str() << endl;
-
 	   control_items.Add(new CMControlItem(token));
    }
 }

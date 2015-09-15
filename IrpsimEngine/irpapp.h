@@ -74,7 +74,8 @@ protected:
 	// Protected virtual functions
 
 	//static DWORD WINAPI add_file_proc(LPVOID lpParameter);
-	void CMIrpApplication::update_variable_links();
+	BOOL update_variable_links(); // Updates and checks integrity of variable links
+	BOOL check_category_integrity(); // Checks integrity of categories
 	int add_file_to_list(const CMString& name); // adds a file to appropriate list
 	int read_file(const CMString& name,int& varsread);
 

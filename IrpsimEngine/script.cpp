@@ -42,7 +42,7 @@ wchar_t* CMScript::error_strings[] =
 };
 
 wchar_t* CMScript::script_tokens[] = {
-	L"evaluate",
+   L"evaluate",
    L"cut",
    L"gain",
    L"loss",
@@ -447,6 +447,7 @@ int CMScript::SetSimulationContext(CMSimulation* s,CMIrpApplication* app)
 	  	categories.AddAt(i,cat);
    }
 
+	/* Iterate through variables and add them to a stage if the type attribute of the variable contains the stage name*/
 	if (stages) {
 		CMVariableIterator iter;
 		CMVariable* v;
