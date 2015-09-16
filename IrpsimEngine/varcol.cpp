@@ -238,9 +238,9 @@ void CMVariableCollection::create_storage_monitors(CMVariable* v)
 		create_monitor_variable(v,L".take",base+5);
 		create_monitor_variable(v,L".shiftin",base+6);
 		create_monitor_variable(v,L".shiftout",base+7);
-		create_monitor_variable(v,L".seasonalshift",base+8);
-		create_monitor_variable(v,L".carryover",base+9);
-		create_monitor_variable(v,L".age",base+9);
+		//create_monitor_variable(v,L".seasonalshift",base+8);
+		//create_monitor_variable(v,L".carryover",base+9);
+		create_monitor_variable(v,L".age",base+8);
    }
 }
 

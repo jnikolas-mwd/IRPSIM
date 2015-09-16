@@ -20,15 +20,13 @@
 #include "node.h"
 #include "simulat.h"
 
-const wchar_t* CMVSystem::varnames[] = { L"_putpotential", L"_takepotential",
-	L"_transferpotential", L"_trial"
-};
+const wchar_t* CMVSystem::varnames[] = { L"_putpotential", L"_takepotential", L"_trial" };
 
 CMVSystem::CMVSystem(int aType) :
 CMVariable(CMVSystem::varnames[aType]),
 system_type(aType)
 {
-   if (aType <= TransferPotential) {
+   if (aType <= TakePotential) {
 		SetType(aType-10000);
 		SetState(vsAlwaysEvaluate|vsAggregate|vsDontDestroy|vsSum,TRUE);
    }
@@ -41,7 +39,7 @@ double CMVSystem::evaluate(CMTimeMachine*,int,int)
 	switch (system_type) {
 		case PutPotential: return CMNode::PutPotential();
 		case TakePotential: return CMNode::TakePotential();
-		case TransferPotential: return CMNode::TransferPotential();
+		//case TransferPotential: return CMNode::TransferPotential();
       case Trial:
       	CMSimulation* activesim = CMSimulation::ActiveSimulation();
          return activesim ? (activesim->Trial()+1) : 0;

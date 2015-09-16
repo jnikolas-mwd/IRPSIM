@@ -13,7 +13,7 @@
     <UserControl.Resources>
         <HierarchicalDataTemplate x:Key="VariableTemplate" ItemsSource="{Binding AssociatedVariables}">
             <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="header" Text="{Binding Name}" Focusable="True"/>
+                <TextBlock x:Name="header" Text="{Binding Name}" Focusable="False"/>
             </StackPanel>
             <HierarchicalDataTemplate.Triggers>
                 <DataTrigger Binding="{Binding SaveOutcomes}" Value="True">
@@ -23,7 +23,7 @@
         </HierarchicalDataTemplate>
         <HierarchicalDataTemplate x:Key="IrpObjectTemplate">
             <StackPanel Orientation="Horizontal">
-                <TextBlock x:Name="header" Text="{Binding Name}" Focusable="True"/>
+                <TextBlock x:Name="header" Text="{Binding Name}" Focusable="False"/>
             </StackPanel>
             <HierarchicalDataTemplate.Triggers>
                 <DataTrigger Binding="{Binding Chosen}" Value="True">
@@ -34,7 +34,7 @@
         <HierarchicalDataTemplate DataType="{x:Type viewmodel:IrpVariableContainer}" ItemsSource="{Binding Collection}" ItemTemplate="{StaticResource VariableTemplate}">
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="headerimage" Width="12" Height="12" Margin="3,0" Source="/Images/supply.png" />
-                <TextBlock Text="{Binding Name}" Focusable="True"/>
+                <TextBlock Text="{Binding Name}" Focusable="False"/>
             </StackPanel>
             <HierarchicalDataTemplate.Triggers>
                 <DataTrigger Binding="{Binding Name}" Value="Aggregates">
@@ -60,7 +60,7 @@
         <HierarchicalDataTemplate  DataType="{x:Type viewmodel:IrpObjectContainer}" ItemsSource="{Binding Collection}" ItemTemplate="{StaticResource IrpObjectTemplate}">
             <StackPanel Orientation="Horizontal">
                 <Image x:Name="headerimage" Width="12" Height="12" Margin="3,0" Source="/Images/supply.png" />
-                <TextBlock Text="{Binding Name}" Focusable="True"/>
+                <TextBlock Text="{Binding Name}" Focusable="False"/>
             </StackPanel>
             <HierarchicalDataTemplate.Triggers>
                 <DataTrigger Binding="{Binding Name}" Value="Scripts">

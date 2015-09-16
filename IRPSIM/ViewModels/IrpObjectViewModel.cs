@@ -84,8 +84,8 @@ namespace IRPSIM.ViewModels
                 if (Set("SelectedObject", ref _selectedObject, value))
                 {
                     CMWrappedIrpObject o = _selectedObject as CMWrappedIrpObject;
-                    if (o != null)
-                        Debug.WriteLine(o.FileIndex);
+                    //if (o != null)
+                    //    _coreService.SelectVariable(o.Name, true);
                 }
             }
         }
@@ -138,12 +138,12 @@ namespace IRPSIM.ViewModels
         private void chooseIrpObjectDelegate()
         {
             CMWrappedIrpObject irpObject = SelectedObject as CMWrappedIrpObject;
+     
             if (irpObject == null)
                 return;
             
             if (irpObject.Type == "CMScenario" || irpObject.Type == "CMScript")
             {
-                Debug.WriteLine(irpObject.Name);
                 bool current = irpObject.Chosen;
                 IrpObjectContainer container = irpObject.Type == "CMScenario" ? _scenarios : _scripts;
                 foreach (CMWrappedIrpObject o in container.Objects)
@@ -151,7 +151,9 @@ namespace IRPSIM.ViewModels
                 string name = (current ? "" : irpObject.Name);
 
                 if (irpObject.Type == "CMScenario")
+                {
                     _coreService.UseScenario(name);
+                }
                 else
                     _coreService.UseScript(name);
 
@@ -159,9 +161,10 @@ namespace IRPSIM.ViewModels
             }
             else if (irpObject.Type == "CMVariable")
             {
-                Debug.WriteLine(irpObject.Name);
-                (irpObject as CMWrappedVariable).ToggleSelected();
-            }
+                //Debug.WriteLine(irpObject.Name);
+                CMWrappedVariable v = irpObject as CMWrappedVariable;
+                v.ToggleSaveOutcomes();
+             }
         }
     }
 }

@@ -51,13 +51,20 @@ protected:
    int state,region;
 	int transfer_type,maxpulls,istriggered,npulls,firststep,laststep;
 
+	/*
 	CMVariable *vmain,*vmonitorevaluated,*vmonitorresolved,*vmonitorcutback,
    				*vmonitorcarryover,*vmonitorgain,*vmonitorloss,*vmonitorput,
                *vmonitortake,*vmonitorshiftin,*vmonitorshiftout,
                *vmonitorseasonalshift,*vmonitorfirststep,*vmonitorlaststep,
                *vmonitorpulls,*vmonitorage;
+    */
+	CMVariable *vmain, *vmonitorevaluated, *vmonitorresolved, *vmonitorcutback,
+		*vmonitorgain, *vmonitorloss, *vmonitorput,
+		*vmonitortake, *vmonitorshiftin, *vmonitorshiftout,
+		*vmonitorfirststep, *vmonitorlaststep,
+		*vmonitorpulls, *vmonitorage;
 
-	CMVariableOrConstant vcrank,vcfloor,vctrigger,vcexpire,
+	CMVariableOrConstant vcrank, vcfloor, vctrigger, vcexpire,
    							vcmaxpulls,vcfulltake,vcfullput,vccapacity;
 
    CMControl ccutback,cput,ctake,cgain,closs,climit;
@@ -77,7 +84,7 @@ protected:
 	void 	 end_time_step(CMTimeMachine* t);
 	double max_cut();
 	double max_puttake(int which);
-	double adjust_shift_and_carryover(double aVal);
+	//double adjust_shift_and_carryover(double aVal);
 	void set_association(CMVariableOrConstant& vc,const wchar_t* varstr);
 	enum {tCore,tSpot,tOption,sPut,sTake};
 	enum {sAgeAll=0x0001};
@@ -112,7 +119,7 @@ public:
 	static CMNode* GetNode(unsigned short n) {return n<nodes.Count() ? nodes[n] : 0;}
    static double PutPotential();
    static double TakePotential();
-   static double TransferPotential();
+   //static double TransferPotential();
 
 	/* Call InitTimeStep at the beginning of each time step. The function
 		will determine whether this is a new trial */

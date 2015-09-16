@@ -27,7 +27,7 @@ class _IRPCLASS CMVSystem : public CMVariable
 protected:
 	virtual double evaluate(CMTimeMachine* t,int index1=0,int index2=0);
 public:
-	enum {First,PutPotential=First,TakePotential,TransferPotential,Trial,
+	enum {First,PutPotential=First,TakePotential,Trial,
          Last=Trial};
 	CMVSystem(int aType);
 	virtual CMString VariableType() {return GetEvalType();}

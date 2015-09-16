@@ -224,7 +224,7 @@ namespace IrpsimEngineWrapper
 			}
 		}
 
-		void ToggleSelected()
+		void ToggleSaveOutcomes()
 		{
 			SaveOutcomes = !SaveOutcomes;
 		}

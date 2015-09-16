@@ -368,17 +368,18 @@ CMScenario* CMIrpApplication::UseScenario(const CMString& name)
 {
 	try {
 		CMVariable::SetCollectionContext(variables);
+		ResetOutputVariables();
 		unsigned short n;
 		for (n = 0; n < scenarios.Count(); n++)
 			if (name == scenarios[n]->GetName())
 				break;
 		if (n < scenarios.Count()) {
 			currentscenario = scenarios[n];
-			ResetOutputVariables();
 			scenarios[n]->Use(options);
 			for (unsigned i = 0; i < scenarios[n]->Variables(); i++) {
 				CMString varname = scenarios[n]->VariableName(i);
 				outputvars.Add(varname);
+				/*
 				for (unsigned j = 0; j < simulations.Count(); j++) {
 					CMSimulationArray* array = simulations[j]->SimArray();
 					CMAccumulatorArray* accum = simulations[j]->Accumulator();
@@ -387,6 +388,7 @@ CMScenario* CMIrpApplication::UseScenario(const CMString& name)
 					if (accum)
 						accum->SetVariableState(accum->VariableIndex(varname), CMVariableDescriptor::vdOutput, TRUE);
 				}
+				*/
 			}
 		}
 		else {
@@ -569,18 +571,18 @@ BOOL CMIrpApplication::PauseSimulation(CMSimulation* pSim,BOOL bAction)
 	return TRUE;
 }
 
-int CMIrpApplication::WriteOutcomes(const CMString& filename,CMSimulation* sim)
+int CMIrpApplication::WriteOutcomes(const CMString& filename, CMSimulation* sim)
 {
 	if (!sim) return -1;
-	CMSaveSimulationAscii report(*sim,this);
-	for (unsigned i=0;i<outputvars.Count();i++)
-   	report.AddOutputVariable(outputvars[i]);
+	CMSaveSimulationAscii report(*sim, this);
+	for (unsigned i = 0; i < outputvars.Count(); i++)
+		report.AddOutputVariable(outputvars[i]);
 	CMVariableIterator iter;
-   CMVariable* v;
-   while ((v=iter())!=0)
-	   if (v->GetState(CMVariable::vsSaveOutcomes) && !outputvars.Contains(v->GetName()))
-	   	report.AddOutputVariable(v->GetName());
-   return report.Outcomes(filename);
+	CMVariable* v;
+	while ((v = iter()) != 0)
+		if (v->GetState(CMVariable::vsSaveOutcomes) && !outputvars.Contains(v->GetName()))
+			report.AddOutputVariable(v->GetName());
+	return report.Outcomes(filename);
 }
 
 int CMIrpApplication::WriteSummary(const CMString& filename,CMSimulation* sim)

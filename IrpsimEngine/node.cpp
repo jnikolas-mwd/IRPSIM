@@ -30,8 +30,8 @@
 #include "token.h"
 #include "cmlib.h"
 
-//#include <fstream.h>
-//static ofstream sdebug("f:\\node.deb");
+//#include <fstream>
+//static wofstream sdebug("debug_node.txt");
 
 CMTimeMachine* CMNode::time = 0;
 unsigned short CMNode::naggregates;
@@ -73,14 +73,14 @@ vmain(v),
 vmonitorevaluated(0),
 vmonitorresolved(0),
 vmonitorcutback(0),
-vmonitorcarryover(0),
+//vmonitorcarryover(0),
 vmonitorgain(0),
 vmonitorloss(0),
 vmonitorput(0),
 vmonitortake(0),
 vmonitorshiftin(0),
 vmonitorshiftout(0),
-vmonitorseasonalshift(0),
+//vmonitorseasonalshift(0),
 vmonitorfirststep(0),
 vmonitorlaststep(0),
 vmonitorpulls(0),
@@ -125,14 +125,14 @@ maxtake(0)
 	vmonitorevaluated = CMVariable::Find(v->GetName() + L".evaluated");
 	vmonitorresolved = CMVariable::Find(v->GetName() + L".resolved");
 	vmonitorcutback = CMVariable::Find(v->GetName() + L".cutback");
-	vmonitorcarryover = CMVariable::Find(v->GetName() + L".carryover");
+	//vmonitorcarryover = CMVariable::Find(v->GetName() + L".carryover");
 	vmonitorgain = CMVariable::Find(v->GetName() + L".gain");
 	vmonitorloss = CMVariable::Find(v->GetName() + L".loss");
 	vmonitorput = CMVariable::Find(v->GetName() + L".put");
 	vmonitortake = CMVariable::Find(v->GetName() + L".take");
 	vmonitorshiftin = CMVariable::Find(v->GetName() + L".shiftin");
 	vmonitorshiftout = CMVariable::Find(v->GetName() + L".shiftout");
-	vmonitorseasonalshift = CMVariable::Find(v->GetName() + L".seasonalshift");
+	//vmonitorseasonalshift = CMVariable::Find(v->GetName() + L".seasonalshift");
 	vmonitorfirststep = CMVariable::Find(v->GetName() + L".firstactivestep");
 	vmonitorlaststep = CMVariable::Find(v->GetName() + L".lastactivestep");
 	vmonitorpulls = CMVariable::Find(v->GetName() + L".pulls");
@@ -257,6 +257,7 @@ double CMNode::full_take()
 	return vcfulltake.IsNull() ? max_puttake(sTake) : vcfulltake.GetValue(time,CM_BIGDOUBLE);
 }
 
+/*
 double CMNode::adjust_shift_and_carryover(double aVal)
 {
 	if (aVal > 0) sumin += aVal;
@@ -267,6 +268,7 @@ double CMNode::adjust_shift_and_carryover(double aVal)
 
 	return (sumin-sumout);
 }
+*/
 
 void CMNode::init_time_step(CMTimeMachine* t)
 {
@@ -284,8 +286,9 @@ void CMNode::init_time_step(CMTimeMachine* t)
       climit.Initialize(0);
    }
 	CMTime current = time->At(0).Current();
-	if (current.Month() == time->At(0).Begin().Month())
+	if (current.Month() == time->At(0).Begin().Month()) {
 		sumin = sumout = 0;
+	}
 	if (vmonitorfirststep)	vmonitorfirststep->SetValue(time,firststep);
 	if (vmonitorlaststep)	vmonitorlaststep->SetValue(time,laststep);
 	if (vmonitorpulls)	vmonitorpulls->SetValue(time,npulls);
@@ -297,8 +300,8 @@ void CMNode::init_time_step(CMTimeMachine* t)
 	if (vmonitortake)	vmonitortake->SetValue(time,0);
 	if (vmonitorshiftin)	vmonitorshiftin->SetValue(time,0);
 	if (vmonitorshiftout)	vmonitorshiftout->SetValue(time,0);
-	if (vmonitorseasonalshift)	vmonitorseasonalshift->SetValue(time,sumin<sumout ? sumin : sumout);
-	if (vmonitorcarryover)	vmonitorcarryover->SetValue(time,sumin-sumout);
+	//if (vmonitorseasonalshift)	vmonitorseasonalshift->SetValue(time,sumin<sumout ? sumin : sumout);
+	//if (vmonitorcarryover)	vmonitorcarryover->SetValue(time,sumin-sumout);
    if (allocation_type==aStorage) {
  		double initstorage = atbeginning ? vmain->GetValue(time) : vmonitorresolved->GetValue(time);
 		if (atbeginning) {
@@ -364,7 +367,7 @@ double CMNode::Evaluate(double limit)
    	int sgn = (allocation_type==aDemand) ? -1 : 1;
 		int tp = CMVariableTypes::aDemand;
       if (allocation_type==aSupply) tp = CMVariableTypes::aSupply;
-      else if (allocation_type==aTransfer) tp = CMVariableTypes::aTransfer;
+      //else if (allocation_type==aTransfer) tp = CMVariableTypes::aTransfer;
       aggregates[tp]->AddTo(time,amt);
       if (allocation_type != aTransfer) aggregates[CMVariableTypes::aSurplus]->AddTo(time,sgn*amt);
 		aggregates[CMVariableTypes::aNetSurplus]->AddTo(time,sgn*amt);
@@ -388,7 +391,7 @@ double CMNode::CutBack(double aVal)
   	int sgn = (allocation_type==aDemand) ? 1 : -1;
    int tp = CMVariableTypes::aDemandCut;
    if (allocation_type==aSupply) tp = CMVariableTypes::aSupplyCut;
-   else if (allocation_type==aTransfer) tp = CMVariableTypes::aTransferCut;
+   //else if (allocation_type==aTransfer) tp = CMVariableTypes::aTransferCut;
 
 	double cutability = CutAbility();
 	double amt = (aVal < cutability) ? aVal : cutability;
@@ -421,7 +424,7 @@ double CMNode::Put(double aVal,int isshift)
 	cput.Add(amt);
 	if (vmonitorput) vmonitorput->SetValue(time,amtput);
 	vmonitorresolved->AddTo(time,amt);
-	adjust_shift_and_carryover(amt);
+	//adjust_shift_and_carryover(amt);
 	if (isshift) {
 	   if (vmonitorshiftin) vmonitorshiftin->AddTo(time,amt);
 		aggregates[CMVariableTypes::aStorageShift]->AddTo(time,amt);
@@ -454,10 +457,10 @@ double CMNode::Take(double aVal,int isshift)
 	if (amt <= 0) return 0;
 
 	amttake += amt;
-   ctake.Add(amt);
+    ctake.Add(amt);
 	if (vmonitortake) vmonitortake->SetValue(time,amttake);
 	vmonitorresolved->AddTo(time,-amt);
-	adjust_shift_and_carryover(-amt);
+	//adjust_shift_and_carryover(-amt);
 
 	if (isshift) {
 	   if (vmonitorshiftout) vmonitorshiftout->AddTo(time,amt);
@@ -551,7 +554,7 @@ CMNode* CMNode::AddNode(const CMString& name)
       return 0;
    }
 
-   v->SetState(CMVariable::vsSelected,TRUE);
+   //v->SetState(CMVariable::vsSelected,TRUE);
    CMNode* n = new CMNode(v);
    nodes.Add(n);
    return n;
@@ -587,8 +590,9 @@ double CMNode::TakePotential()
 	return ret;
 }
 
+/*
 double CMNode::TransferPotential()
 {
 	return 0;
 }
-
+*/
